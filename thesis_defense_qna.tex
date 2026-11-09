@@ -1,0 +1,577 @@
+\documentclass[a4paper, 11pt]{article}
+
+% --- Geometry & Margins ---
+\usepackage[top=0.9in, bottom=0.9in, left=1.0in, right=1.0in]{geometry}
+\usepackage{times}
+\usepackage{setspace}
+\onehalfspacing
+
+% --- Math & Symbols ---
+\usepackage{amsmath, amssymb, amsfonts}
+
+% --- Tables & Arrays ---
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{array}
+
+% --- Colors & Graphics ---
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+% --- Framing & Boxes ---
+\usepackage[most]{tcolorbox}
+
+% --- Header, Footer & Lists ---
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\setlist{noitemsep, topsep=3pt}
+
+% --- Hyperlinks ---
+\usepackage[colorlinks=true, linkcolor=blue!70!black, urlcolor=blue!70!black, citecolor=blue!70!black]{hyperref}
+
+% --- Colors Palette ---
+\definecolor{primaryblue}{RGB}{20, 45, 110}
+\definecolor{secondaryblue}{RGB}{41, 128, 185}
+\definecolor{accentdark}{RGB}{44, 62, 80}
+\definecolor{qboxbg}{RGB}{245, 248, 255}
+\definecolor{qboxborder}{RGB}{41, 128, 185}
+\definecolor{tipbg}{RGB}{254, 249, 231}
+\definecolor{tipborder}{RGB}{243, 156, 18}
+
+% --- Custom Question Box ---
+\newtcolorbox{questionbox}[2][]{%
+  enhanced,
+  colback=qboxbg,
+  colframe=qboxborder,
+  arc=3mm,
+  boxrule=1pt,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  colbacktitle=primaryblue,
+  title={#2},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={arc=2mm, boxrule=0pt, colback=primaryblue},
+  top=4mm, bottom=3mm, left=4mm, right=4mm,
+  breakable,
+  #1
+}
+
+% --- Custom Tip Box ---
+\newtcolorbox{tipbox}[1][Viva Defense Tip]{%
+  enhanced,
+  colback=tipbg,
+  colframe=tipborder,
+  arc=2mm,
+  boxrule=0.8pt,
+  fonttitle=\bfseries\color{tipborder!80!black},
+  title={#1},
+  top=2mm, bottom=2mm, left=3mm, right=3mm,
+  breakable
+}
+
+% --- Header & Footer ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textsf{\color{gray}Tribhuvan University (IoST) — Master's Thesis Defense Q\&A}}
+\fancyhead[R]{\small\textsf{\color{gray}Erize Rai (8025006)}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% =============================================================================
+\begin{document}
+
+% --- Title Banner ---
+\begin{center}
+  {\fontsize{18}{22}\selectfont \textbf{\color{primaryblue}COMPREHENSIVE THESIS DEFENSE Q\&A GUIDE}}\\[4pt]
+  {\fontsize{13}{16}\selectfont \textbf{\color{accentdark}Master of Science in Information Technology (M.Sc. IT / MIT)}}\\[2pt]
+  {\fontsize{11}{14}\selectfont Institute of Science and Technology (IoST), Tribhuvan University, Nepal}\\[6pt]
+  \rule{\textwidth}{1.2pt}\\[6pt]
+  {\fontsize{11}{14}\selectfont \textbf{Thesis Title:} \textit{Enhancing Self-Supervised Video Representations with HAF-STD Net:}}\\
+  {\fontsize{11}{14}\selectfont \textit{A Comparative Evaluation Against VLM for Action Recognition}}\\[6pt]
+  \textbf{Candidate:} Erize Rai \quad$|$ \quad \textbf{Roll No:} 8025006 \quad$|$ \quad \textbf{Reg. No:} 5-3-28-193-2023\\
+  \textbf{Supervisor:} Asst. Prof. Dr. Dhiraj Kedar Pandey\\[2pt]
+  \rule{\textwidth}{0.6pt}
+\end{center}
+
+\vspace{0.2cm}
+\tableofcontents
+\newpage
+
+% =============================================================================
+\section{Category 1: Computer Vision \& Mathematical Foundations}
+% =============================================================================
+
+\begin{questionbox}{Q1. How many bits are in a color image? What does "bit depth" mean?}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{Bit Depth (Color Depth):} The number of binary bits utilized to specify the color or intensity of a single individual pixel.
+    \item \textbf{Binary Image (1-bit):} $2^1 = 2$ states (0 = black, 1 = white).
+    \item \textbf{Grayscale Image (8-bit):} Single channel with 8 bits per pixel, yielding $2^8 = 256$ intensity levels (0 to 255).
+    \item \textbf{Standard True Color Image (24-bit RGB):} Composed of three independent channels: Red, Green, and Blue. Each channel has an 8-bit depth ($3 \times 8 = \mathbf{24\text{ bits}}$ per pixel).
+    \item \textbf{Total Possible Colors:}
+    \[
+    2^{24} = 16,777,216 \text{ distinct colors } (\approx 16.78 \text{ million colors})
+    \]
+    \item \textbf{RGBA (32-bit):} 24-bit true color + 8-bit Alpha channel (transparency).
+    \item \textbf{High Dynamic Range (HDR):} 10-bit ($2^{30} \approx 1.07\text{ billion}$), 12-bit, or 16-bit float per channel.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q2. How is a video represented mathematically as a digital tensor?}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{Static Grayscale Image:} 2D matrix $\mathbf{I} \in \mathbb{R}^{H \times W}$, where $H$ is height and $W$ is width.
+    \item \textbf{Static Color (RGB) Image:} 3D tensor $\mathbf{I} \in \mathbb{R}^{H \times W \times C}$ (or in PyTorch channel-first format: $\mathbb{R}^{C \times H \times W}$), where $C=3$.
+    \item \textbf{Video Clip (Spatiotemporal Volume):} 4D tensor adding the temporal frame index $T$:
+    \[
+    \mathbf{V} \in \mathbb{R}^{T \times H \times W \times C} \quad \text{or} \quad \mathbf{V} \in \mathbb{R}^{C \times T \times H \times W}
+    \]
+    \item \textbf{Batch of Videos (Neural Network Input):} 5D tensor:
+    \[
+    \mathbf{X} \in \mathbb{R}^{B \times C \times T \times H \times W}
+    \]
+    where $B$ is batch size. In your thesis, V-JEPA~2 takes $T=8$ uniform frames resized to $224 \times 224$ with $C=3$.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q3. What is the exact mathematical formula and step-by-step derivation of PCA?}
+\textbf{Answer:}
+Given a dataset matrix $\mathbf{X} \in \mathbb{R}^{N \times D}$ ($N$ samples, $D$ original feature dimensions):
+
+\begin{enumerate}
+    \item \textbf{Step 1: Mean Centering (Standardization):}
+    Compute the empirical feature-wise mean vector:
+    \[
+    \mathbf{\mu} = \frac{1}{N}\sum_{i=1}^N \mathbf{x}_i \in \mathbb{R}^{1 \times D}, \quad \mathbf{\tilde{X}} = \mathbf{X} - \mathbf{1}_N \mathbf{\mu}
+    \]
+    \item \textbf{Step 2: Sample Covariance Matrix:}
+    Compute the $D \times D$ symmetric covariance matrix $\mathbf{\Sigma}$:
+    \[
+    \mathbf{\Sigma} = \frac{1}{N - 1}\mathbf{\tilde{X}}^T \mathbf{\tilde{X}} \in \mathbb{R}^{D \times D}
+    \]
+    where element $\mathbf{\Sigma}_{jk} = \operatorname{Cov}(X_j, X_k)$ quantifies pairwise variance and co-dependence.
+    \item \textbf{Step 3: Eigen-Decomposition:}
+    Solve the eigenvalue problem for $\mathbf{\Sigma}$:
+    \[
+    \mathbf{\Sigma} \mathbf{v}_j = \lambda_j \mathbf{v}_j, \quad \text{subject to } \|\mathbf{v}_j\|_2 = 1, \quad \mathbf{v}_j^T \mathbf{v}_k = 0 \; (\forall j \neq k)
+    \]
+    where $\lambda_j$ is the variance captured along the principal axis eigenvector $\mathbf{v}_j$.
+    \item \textbf{Step 4: Sorting and 95\% Variance Retention Criterion:}
+    Order eigenvalues in descending order: $\lambda_1 \ge \lambda_2 \ge \dots \ge \lambda_D$. Find minimal cutoff $k^*$:
+    \[
+    k^* = \arg\min_{k} \left( \frac{\sum_{j=1}^k \lambda_j}{\sum_{j=1}^D \lambda_j} \ge 0.95 \right)
+    \]
+    \item \textbf{Step 5: Projection to Uncorrelated Subspace:}
+    Form the projection matrix $\mathbf{W}_{k^*} = [\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_{k^*}] \in \mathbb{R}^{D \times k^*}$. The dimensionally reduced representation is:
+    \[
+    \mathbf{Z} = \mathbf{\tilde{X}} \mathbf{W}_{k^*} \in \mathbb{R}^{N \times k^*} \quad (k^* \ll D)
+    \]
+\end{enumerate}
+\end{questionbox}
+
+\begin{questionbox}{Q4. Why is StandardScaler strictly required prior to fitting PCA?}
+\textbf{Answer:}
+PCA is an unsupervised variance-maximization technique. If features exist on different numerical scales, features with arbitrarily larger numerical variance will artificially dominate the first few eigenvectors $\mathbf{v}_j$, irrespective of their true informational content. Applying standard normalization:
+\[
+\tilde{z}_{ij} = \frac{z_{ij} - \mu_j}{\sigma_j}
+\]
+ensures every feature dimension has zero mean ($\mu = 0$) and unit variance ($\sigma^2 = 1$), preventing scale-induced distortion of principal components.
+\end{questionbox}
+
+\begin{questionbox}{Q5. What is the mathematical formula for the 1D Haar Discrete Wavelet Transform (DWT)?}
+\textbf{Answer:}
+Given a 1D discrete temporal sequence $\mathbf{h} = [h_0, h_1, \dots, h_{T-1}]$ along the video frame dimension:
+\begin{itemize}
+    \item \textbf{Low-Frequency Approximation (Appearance/Trend stream):}
+    \[
+    a_t = \frac{h_{2t} + h_{2t+1}}{2}
+    \]
+    Captures static, slowly-varying background and visual context.
+    \item \textbf{High-Frequency Detail (Motion Dynamics stream):}
+    \[
+    d_t = \frac{h_{2t} - h_{2t+1}}{2}
+    \]
+    Captures temporal differences, sudden velocity shifts, and transient motion between consecutive frames.
+    \item \textbf{Computational Advantage:} Haar DWT provides time-frequency localization in $\mathcal{O}(T)$ linear time with \textbf{zero learnable parameters}, ideal for short temporal tokens ($T=8$).
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q6. What is Cosine Similarity vs. Euclidean Distance, and why is a Cosine Head used in HAF-STD Net?}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{Euclidean Distance:} $d(\mathbf{u}, \mathbf{v}) = \|\mathbf{u} - \mathbf{v}\|_2 = \sqrt{\sum (u_i - v_i)^2}$. Sensitive to the magnitude/norm of embeddings.
+    \item \textbf{Cosine Similarity:} $\operatorname{CosSim}(\mathbf{u}, \mathbf{v}) = \frac{\mathbf{u}^T \mathbf{v}}{\|\mathbf{u}\|_2 \|\mathbf{v}\|_2} = \cos(\theta)$. Measures directional alignment on the unit hypersphere, strictly invariant to vector norm.
+    \item \textbf{Why Cosine Classification Head:}
+    \[
+    p(y=c \mid \mathbf{f}) = \frac{\exp\left(\tau \cdot \hat{\mathbf{f}}^T \hat{\mathbf{w}}_c\right)}{\sum_{j=1}^C \exp\left(\tau \cdot \hat{\mathbf{f}}^T \hat{\mathbf{w}}_j\right)}, \quad \text{where } \hat{\mathbf{f}} = \frac{\mathbf{f}}{\|\mathbf{f}\|_2}, \; \hat{\mathbf{w}} = \frac{\mathbf{w}}{\|\mathbf{w}\|_2}
+    \]
+    In deep self-supervised embedding spaces, semantic class identity is encoded in the \textbf{angular orientation} of feature vectors, while norm variations can occur from LayerNorm and pooling. Normalizing features and class prototypes with a learnable temperature scale $\tau$ stabilizes gradient propagation and prevents saturation.
+\end{itemize}
+\end{questionbox}
+
+\newpage
+% =============================================================================
+\section{Category 2: Theoretical Framework \& Paradigm Comparison (SSL vs. VLM)}
+% =============================================================================
+
+\begin{questionbox}{Q7. What is the fundamental difference between SSL (V-JEPA 2) and VLM (Qwen2.5-VL)?}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{Self-Supervised Learning (V-JEPA 2):} Trained purely on unlabelled video data using predictive visual pretext tasks (masked latent feature prediction). It learns intrinsic visual-geometric, motion, and temporal dynamics without linguistic supervision.
+    \item \textbf{Vision-Language Modeling (Qwen2.5-VL):} Trained multimodally on paired image/video-text descriptions via autoregressive next-token prediction. Features are aligned with language semantic tokens, prioritizing nameable objects and static scene context over low-level motion nuances.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q8. What is JEPA, and how does it differ from generative models and contrastive models?}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{Generative Models (e.g., VideoMAE):} Reconstruct masked pixels in image space ($\min \| \hat{I} - I \|$). Pixel reconstruction wastes significant network capacity predicting high-frequency visual noise (e.g., grass blades, arena lighting variations) that has no relevance to semantic action recognition.
+    \item \textbf{Contrastive Models (e.g., SimCLR, CLIP):} Enforce invariance by pulling positive views together and pushing negative views apart using InfoNCE loss. They require extensive data augmentations and large negative sample batches, which can be computationally prohibitive.
+    \item \textbf{JEPA (Joint-Embedding Predictive Architecture):} Predicts missing target representations \textbf{directly in latent feature space}:
+    \[
+    \min_{\theta, \phi} \| P_\phi(\Delta_y, E_\theta(x)) - \operatorname{sg}(E_{\bar{\theta}}(y)) \|_1
+    \]
+    It discards unpredictable pixel-level noise while preserving high-level semantic dynamics.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q9. How does JEPA prevent representation collapse without negative pairs?}
+\textbf{Answer:}
+Contrastive learning relies on negative pairs to prevent all outputs collapsing to a constant vector. JEPA prevents collapse through three architectural mechanisms:
+\begin{enumerate}
+    \item \textbf{Stop-Gradient Operator $\operatorname{sg}(\cdot)$:} Applied to the target encoder $E_{\bar{\theta}}(y)$, preventing gradients from pulling targets toward zero.
+    \item \textbf{Exponential Moving Average (EMA):} The target encoder weights $\bar{\theta}$ are updated slowly via EMA:
+    \[
+    \bar{\theta} \leftarrow \alpha \bar{\theta} + (1 - \alpha)\theta
+    \]
+    \item \textbf{Predictor Information Bottleneck:} The predictor network $P_\phi$ operates only on the context representation $E_\theta(x)$ with mask tokens $\Delta_y$, making trivial constant collapse non-viable.
+\end{enumerate}
+\end{questionbox}
+
+\begin{questionbox}{Q10. What is the mathematical objective function of V-JEPA 2 and V-JEPA 2.1?}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{V-JEPA 2 (Global Mask-Denoising Latent Loss):}
+    \[
+    \mathcal{L}_{\text{V-JEPA 2}} = \|P_\phi(\Delta_y, E_\theta(x)) - \operatorname{sg}(E_{\bar{\theta}}(y))\|_1
+    \]
+    where $x$ is context tokens, $y$ is the target video, $\Delta_y$ are mask tokens, and $\operatorname{sg}$ is stop-gradient.
+    \item \textbf{V-JEPA 2.1 (Dense Per-Token Prediction Loss):}
+    \[
+    \mathcal{L}_{\text{predict}} = \frac{1}{|M|} \sum_{i \in M} \|P_\phi(E_\theta(x), \Delta_y)_i - \operatorname{sg}(E_{\bar{\theta}}(y)_i)\|_1
+    \]
+    where $M$ denotes the set of masked spatiotemporal token indices and $i$ indexes individual tokens. Multi-layer intermediate supervision ensures that intermediate encoder layers also develop rich semantic features.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q11. Explain the architecture of Qwen2.5-VL and the role of MRoPE.}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{Vision Backbone:} ViT with 3D Convolution patch embedding layer (Conv3D) and window-partitioned attention, allowing native variable-resolution and dynamic FPS frame sampling.
+    \item \textbf{Decoder:} 7B parameter autoregressive Transformer LM decoder.
+    \item \textbf{MRoPE (Multimodal Rotary Position Embedding):} Decomposes rotational position encoding into three independent geometric dimensions:
+    \[
+    \mathbf{R}_{\Theta, m} = \mathbf{R}_{\Theta_{\text{temporal}}, t} \oplus \mathbf{R}_{\Theta_{\text{vertical}}, h} \oplus \mathbf{R}_{\Theta_{\text{horizontal}}, w}
+    \]
+    This provides spatial coordinate grounding and temporal sequence synchronization for interleaved video and text tokens.
+\end{itemize}
+\end{questionbox}
+
+\newpage
+% =============================================================================
+\section{Category 3: Your Novel Contribution — HAF-STD Net}
+% =============================================================================
+
+\begin{questionbox}{Q12. What is HAF-STD Net, and what was the core motivation behind it?}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{Full Name:} \textbf{H}ierarchical \textbf{A}daptive \textbf{F}usion with \textbf{S}pectral-\textbf{T}emporal \textbf{D}ecomposition \textbf{Net}work.
+    \item \textbf{Core Motivation:} Standard probing methods discard critical signals by applying global temporal pooling on the final encoder layer:
+    \begin{enumerate}
+        \item \textit{Temporal Dynamic Loss:} Global pooling flattens motion transients into static averages.
+        \item \textit{Depth Hierarchy Loss:} Intermediate layers encode low-level kinematic motion, whereas the final layer concentrates on abstract visual semantics.
+    \end{enumerate}
+    \item \textbf{Proposed Solution:} HAF-STD Net extracts 4 intermediate layers (at 25\%, 50\%, 75\%, and 100\% depth) and decomposes them into 12 distinct feature streams using Haar wavelets and inter-layer velocity.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q13. Walk through the complete mathematical workflow of HAF-STD Net.}
+\textbf{Answer:}
+\begin{enumerate}
+    \item \textbf{Input:} A 4D spatiotemporal tensor $\mathbf{X} \in \mathbb{R}^{B \times 4 \times T \times 1280}$ extracted from 4 encoder layers across $T$ frames.
+    \item \textbf{Component 1: Spectral-Temporal Decomposition via 1D Haar DWT:}
+    For each layer $k \in \{0, 1, 2, 3\}$, decompose temporally:
+    \[
+    \mathbf{a}_k = \frac{1}{2}(\mathbf{h}_{2t} + \mathbf{h}_{2t+1}) \quad (\text{Appearance / Low-Frequency Trend})
+    \]
+    \[
+    \mathbf{d}_k = \frac{1}{2}(\mathbf{h}_{2t} - \mathbf{h}_{2t+1}) \quad (\text{Motion Dynamics / High-Frequency Detail})
+    \]
+    \item \textbf{Component 2: Depth Representation Velocity (3 Streams):}
+    Compute inter-layer delta between consecutive layers:
+    \[
+    \Delta \mathbf{H}_k = \bar{\mathbf{H}}_{k+1} - \bar{\mathbf{H}}_k \quad \text{for } k \in \{0, 1, 2\}
+    \]
+    where $\bar{\mathbf{H}}_k$ is the temporally mean-pooled representation at layer $k$, yielding 3 velocity vectors across the 4 layers.
+    \item \textbf{Component 3: Dedicated Projection Heads (11 Streams Total):}
+    Each stream $\mathbf{s}_i \in \mathbb{R}^{1280}$ (4 appearance, 4 motion, 3 velocity) is projected into $\mathbb{R}^{256}$:
+    \[
+    \mathbf{s}_i' = \operatorname{Dropout}(\operatorname{GELU}(\operatorname{LayerNorm}(\mathbf{W}_i \mathbf{s}_i + \mathbf{b}_i)))
+    \]
+    \item \textbf{Component 4: Adaptive Routing Network:}
+    Concatenate all 11 projected streams into a vector of length $11 \times 256 = 2816$, passed through a router MLP with softmax:
+    \[
+    \mathbf{w} = \operatorname{Softmax}\left(\operatorname{MLP}([\mathbf{s}_1'; \mathbf{s}_2'; \dots; \mathbf{s}_{11}'])\right) \in \mathbb{R}^{11}, \quad \mathbf{f} = \sum_{i=1}^{11} w_i \cdot \mathbf{s}_i' \in \mathbb{R}^{256}
+    \]
+    \item \textbf{Component 5: Cosine Similarity Classification Head:}
+    \[
+    \operatorname{Logits} = \tau \cdot \left( \frac{\mathbf{f}}{\|\mathbf{f}\|_2} \right) \left( \frac{\mathbf{W}_{\text{class}}}{\|\mathbf{W}_{\text{class}}\|_2} \right)^T
+    \]
+    where $\tau$ is a learnable scaling factor initialized to 16.0.
+\end{enumerate}
+\end{questionbox}
+
+\begin{questionbox}{Q14. Why did HAF-STD Net bypass PCA while other baseline classifiers used PCA?}
+\textbf{Answer:}
+PCA requires flattening multi-dimensional features into a 2D matrix $(N \times D_{\text{total}})$, which destroys the ordered temporal dimension ($T$) and discrete layer-depth indexing ($K=4$). 
+\begin{itemize}
+    \item HAF-STD Net strictly depends on the structured 4D tensor $(B, K=4, T, D=1280)$ to compute temporal differences along time ($T$) and velocity deltas across layer depth ($K$).
+    \item In contrast, baseline classifiers (MLP, SVM, Random Forest) operate on flat vectors and require PCA to reduce dimensionality, eliminate multicollinearity, and prevent overfitting.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q15. What is the parameter footprint and training efficiency of HAF-STD Net?}
+\textbf{Answer:}
+\begin{itemize}
+    \item HAF-STD Net introduces only \textbf{4.8 million trainable parameters}.
+    \item Relative to V-JEPA~2's backbone (654M parameters), HAF-STD Net adds \textbf{less than 0.74\% overhead}.
+    \item It trains in under 2 minutes with early stopping on a single T4 GPU, providing an efficient, lightweight downstream classification head.
+\end{itemize}
+\end{questionbox}
+
+\newpage
+% =============================================================================
+\section{Category 4: Methodology, Datasets \& Implementation Details}
+% =============================================================================
+
+\begin{questionbox}{Q16. What is the Frozen-Feature Protocol, and why was it chosen over full fine-tuning?}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{Protocol Definition:} Backbone weights $\mathbf{\Theta}_{\text{frozen}}$ remain locked throughout downstream training ($\nabla_{\mathbf{\Theta}}\mathcal{L} = \mathbf{0}$). Only the downstream probe weights $\mathbf{W}_{\text{head}}$ are optimized.
+    \item \textbf{Two Primary Reasons:}
+    \begin{enumerate}
+        \item \textit{Isolates Pretrained Representation Quality:} End-to-end fine-tuning modifies backbone weights, making it unclear whether performance gains come from the pretraining paradigm or downstream tuning hyperparameters. Frozen evaluation directly measures intrinsic feature quality.
+        \item \textit{Hardware Feasibility:} Full fine-tuning of a 7B VLM and 654M ViT-Huge requires multi-node A100 clusters, exceeding the single T4 GPU resource budget.
+    \end{enumerate}
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q17. Detail the two datasets used. Why choose both FineGym and HMDB51?}
+\textbf{Answer:}
+\begin{center}
+\small
+\begin{tabular}{lrrcc}
+\toprule
+\textbf{Dataset} & \textbf{Clips} & \textbf{Classes} & \textbf{Granularity} & \textbf{Key Challenge} \\
+\midrule
+\textbf{FineGym} & 1,200 & 4 & Fine-Grained & Identical backgrounds, athlete attire; subtle kinematics \\
+\textbf{HMDB51}  & 6,754 & 51 & Coarse-Grained & Diverse scenes, lighting, camera angles, distinct actions \\
+\bottomrule
+\end{tabular}
+\end{center}
+\textbf{Rationale:} Evaluating both datasets allows testing whether model advantages persist across both \textbf{fine-grained kinematic actions} (where scene context is uninformative) and \textbf{coarse-grained actions} (where static scene and object cues are prominent).
+\end{questionbox}
+
+\begin{questionbox}{Q18. What was your hardware infrastructure and software stack?}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{Hardware:} Kaggle Cloud environment, $1 \times$ NVIDIA Tesla T4 GPU (15.6 GB VRAM), Intel Xeon @ 2.20 GHz (2 vCPUs), 13 GB RAM.
+    \item \textbf{Software:} Python 3.10, PyTorch 2.1.2 with CUDA 12.1, Hugging Face Transformers 4.38.0, BitsAndBytes 0.42.0 (NF4 quantization), scikit-learn 1.4.1, OpenCV 4.9.0.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q19. What is 4-bit NF4 Quantization, and why was it necessary for Qwen2.5-VL?}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{Why Necessary:} Qwen2.5-VL has 7 billion parameters. In standard 16-bit float (`fp16`), weights alone require:
+    \[
+    7 \times 10^9 \times 2 \text{ bytes} \approx 14\text{ GB VRAM}
+    \]
+    Adding video input tokens and activation memory immediately causes Out-Of-Memory (OOM) on a 15.6 GB T4 GPU.
+    \item \textbf{What is NF4 (NormalFloat4):} An information-theoretically optimal quantile quantization data type designed for normally distributed neural network weights (from QLoRA). It compresses weights to 4 bits per parameter, reducing the model footprint to $\sim 4\text{ GB}$ while retaining high fidelity.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q20. What prompt and chat template were used for Qwen2.5-VL feature extraction?}
+\textbf{Answer:}
+Frames were passed to the processor using a neutral prompt with no leading task bias:
+\begin{verbatim}
+messages = [{'role': 'user', 'content': [
+    {'type': 'video', 'video': frames},
+    {'type': 'text', 'text': 'Describe.'}
+]}]
+\end{verbatim}
+The model ran with \texttt{output\_hidden\_states=True}, extracting the final hidden state ($D=3584$) averaged across visual-text tokens.
+\end{questionbox}
+
+\begin{questionbox}{Q21. Explain the training regularization techniques used: Label Smoothing and Mixup.}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{Label Smoothing ($\epsilon = 0.1$):} Softens one-hot target vectors to prevent overconfidence:
+    \[
+    y_c^{\text{smooth}} = (1 - \epsilon)y_c + \frac{\epsilon}{C}
+    \]
+    \item \textbf{Feature-Space Mixup ($\alpha = 0.2$):} Synthesizes virtual training samples by taking convex combinations of feature vectors and targets:
+    \[
+    \tilde{\mathbf{z}} = \lambda \mathbf{z}_i + (1 - \lambda)\mathbf{z}_j, \quad \tilde{y} = \lambda y_i + (1 - \lambda)y_j, \quad \lambda \sim \operatorname{Beta}(\alpha, \alpha)
+    \]
+    This regularizes decision boundaries and mitigates overfitting on frozen feature spaces.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q22. How did you ensure zero data leakage during feature preprocessing?}
+\textbf{Answer:}
+Data was first partitioned into \textbf{80\% training} and \textbf{20\% evaluation} splits. The \texttt{StandardScaler} and \texttt{PCA} transformations were \textbf{fitted strictly on the 80\% training split}. The resulting scaling statistics and projection matrices were then applied to transform the 20\% evaluation split. The evaluation split was never seen during preprocessing fitting.
+\end{questionbox}
+
+\newpage
+% =============================================================================
+\section{Category 5: Experimental Results, Metrics \& Statistical Analysis}
+% =============================================================================
+
+\begin{questionbox}{Q23. What are the headline quantitative results of your thesis?}
+\textbf{Answer:}
+\begin{center}
+\small
+\textbf{Comprehensive Comparison of Best Performing Models across Benchmarks}\\[4pt]
+\begin{tabular}{llrrr}
+\toprule
+\textbf{Dataset} & \textbf{Metric} & \textbf{V-JEPA 2 (HAF-STD Net)} & \textbf{Qwen2.5-VL (DeepMLP)} & \textbf{Margin} \\
+\midrule
+\multirow{4}{*}{\textbf{FineGym} (4-class)} 
+ & \textbf{Accuracy}  & \textbf{98.1\%} & 89.1\% & \textbf{+9.0\%} \\
+ & \textbf{Macro F1}  & \textbf{97.8\%} & 88.4\% & \textbf{+9.4\%} \\
+ & \textbf{MCC}       & \textbf{0.974}  & 0.855  & \textbf{+0.119} \\
+ & \textbf{Kappa}     & \textbf{0.974}  & 0.854  & \textbf{+0.120} \\
+\midrule
+\multirow{5}{*}{\textbf{HMDB51} (51-class)} 
+ & \textbf{Top-1 Acc} & \textbf{84.7\%} & 77.1\% & \textbf{+7.6\%} \\
+ & \textbf{Top-5 Acc} & \textbf{95.8\%} & 93.0\% & \textbf{+2.8\%} \\
+ & \textbf{Macro F1}  & \textbf{85.3\%} & 79.1\% & \textbf{+6.2\%} \\
+ & \textbf{MCC}       & \textbf{0.843}  & 0.765  & \textbf{+0.078} \\
+ & \textbf{Kappa}     & \textbf{0.842}  & 0.765  & \textbf{+0.077} \\
+\bottomrule
+\end{tabular}
+\end{center}
+Across all 9 classifiers and both benchmarks, \textbf{V-JEPA 2 outperforms Qwen2.5-VL on every single evaluation metric}.
+\end{questionbox}
+
+\begin{questionbox}{Q24. How did HAF-STD Net perform compared to other baseline classifiers?}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{FineGym:} HAF-STD Net achieved \textbf{98.1\% accuracy} and \textbf{97.8\% F1}, outperforming ResMLP (97.9\% / 97.5\%), DeepMLP (97.1\% / 96.8\%), and Logistic Regression (94.2\% / 93.9\%).
+    \item \textbf{HMDB51:} HAF-STD Net achieved \textbf{84.7\% Top-1 accuracy} and \textbf{85.3\% Macro F1}, outperforming the best neural baselines (DeepMLP and ResMLP at 82.9\% / 83.6\%) by \textbf{+1.7\% F1}.
+    \item This demonstrates that multi-layer decomposition into appearance/motion wavelets and depth velocity provides meaningful discriminative gains over standard single-layer pooling.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q25. Why did V-JEPA 2 outperform Qwen2.5-VL despite having 10x fewer parameters?}
+\textbf{Answer:}
+\begin{enumerate}
+    \item \textbf{Task Specialization:} V-JEPA 2 (654M) was pretrained specifically for video understanding via masked spatiotemporal prediction in latent space, forcing the model to learn physics, motion dynamics, and temporal continuity.
+    \item \textbf{Linguistic Bias in VLMs:} Qwen2.5-VL (7B) aligns visual features with natural language. Text descriptions naturally emphasize static objects and scenes ("athlete on beam"), but rarely encode millisecond kinematic rotations or joint velocities.
+    \item \textbf{Temporal Sampling:} V-JEPA 2 natively processed 8 uniform frames per clip, whereas Qwen2.5-VL processed 4 frames due to context window and memory constraints.
+\end{enumerate}
+\end{questionbox}
+
+\begin{questionbox}{Q26. Why was V-JEPA 2's margin larger on FineGym (+9.4\% F1) than on HMDB51 (+6.2\% F1)?}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{FineGym is Fine-Grained:} All 4 classes occur in visually homogeneous gymnastics halls with identical apparel. Static scene cues provide zero discriminative signal; classification depends entirely on fine kinematic limb movement and trajectory over time, strongly favoring V-JEPA 2.
+    \item \textbf{HMDB51 is Coarse-Grained:} Classes occur in distinct visual settings (e.g., swimming pool vs. horse field vs. city street). Static background and object semantics—which Qwen2.5-VL captures well—partially compensate for weaker temporal modeling, narrowing the margin.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q27. Why did Conv1DNet perform poorly on Qwen2.5-VL features on HMDB51 (11.5\% Top-1)?}
+\textbf{Answer:}
+\texttt{Conv1DNet} applies 1D convolutions with local receptive fields (kernel size 3 or 5) across adjacent feature indices. In convolutional feature maps, adjacent pixels have spatial correlation. In a 3,584-dimensional latent embedding from an LLM, adjacent feature dimensions \textbf{have no spatial or physical neighborhood locality}. Convolving across arbitrary feature dimensions imposes an invalid inductive bias, hindering effective optimization.
+\end{questionbox}
+
+\begin{questionbox}{Q28. What are MCC and Cohen's Kappa, and why are they included alongside Accuracy?}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{Matthews Correlation Coefficient (MCC):} Evaluates all four quadrants of the multiclass confusion matrix (TP, TN, FP, FN) in balanced proportion. Values range from $-1$ (complete disagreement) to $+1$ (perfect prediction):
+    \[
+    \text{MCC} = \frac{TP \times TN - FP \times FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}
+    \]
+    \item \textbf{Cohen's Kappa ($\kappa$):} Measures inter-rater agreement adjusted for agreement expected purely by random chance:
+    \[
+    \kappa = \frac{p_o - p_e}{1 - p_e}
+    \]
+    where $p_o$ is observed accuracy and $p_e$ is chance-expected agreement. Both metrics show near-perfect agreement ($\kappa = 0.974$ on FineGym, $\kappa = 0.842$ on HMDB51), confirming classification robustness.
+\end{itemize}
+\end{questionbox}
+
+\newpage
+% =============================================================================
+\section{Category 6: Examiner Traps, Counter-Questions \& Defense Strategy}
+% =============================================================================
+
+\begin{questionbox}{Q29. "Is it fair to compare V-JEPA 2 at 16-bit precision against Qwen2.5-VL at 4-bit precision?"}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{Acknowledge the practical constraint:} 4-bit NF4 quantization was necessary to fit the 7B parameter model onto the 15.6 GB T4 GPU, as documented in Section 1.6 (Limitations).
+    \item \textbf{Cite empirical literature:} Extensive research on NF4 quantization (Dettmers et al., QLoRA) demonstrates that NF4 retains over 98--99\% of full 16-bit float representation quality.
+    \item \textbf{Highlight the margin size:} The \textbf{9.4\% F1 gap} on FineGym and \textbf{6.2\% F1 gap} on HMDB51 far exceed any typical 1--2\% quantization drop, demonstrating that the performance divergence is primarily driven by architectural and pretraining differences rather than quantization.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q30. "Why didn't you apply HAF-STD Net to Qwen2.5-VL features as well?"}
+\textbf{Answer:}
+\begin{itemize}
+    \item HAF-STD Net relies on two key architectural properties:
+    \begin{enumerate}
+        \item Extracting per-frame spatial representations across multiple intermediate encoder layers to compute depth velocity $\Delta \mathbf{H}_k$.
+        \item Operating on an uncompressed temporal sequence of frames.
+    \end{enumerate}
+    \item In Qwen2.5-VL, extracting multi-layer intermediate 4D tensors for 6,754 videos exceeded the 15.6 GB VRAM budget due to the 7B decoder and dynamic token compression.
+    \item Furthermore, V-JEPA~2.1 was pretrained with explicit intermediate-layer supervision, making multi-layer representations well-suited for HAF-STD Net.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q31. "Why did you evaluate only 4 classes in FineGym instead of 288 or 530 classes?"}
+\textbf{Answer:}
+\begin{itemize}
+    \item \textbf{Hierarchy Level:} FineGym has three annotation levels: Event (4 classes), Set (288 classes), and Element (530 classes). Event-level routines span several seconds, providing sufficient temporal duration to evaluate temporal dynamics.
+    \item \textbf{Dataset Balance:} It allowed downloading a strictly balanced benchmark of 300 verified clips per apparatus category (1,200 total).
+    \item \textbf{Granularity Contrast:} Evaluating 4 fine-grained classes on FineGym versus 51 coarse-grained classes on HMDB51 provided a clear experimental contrast to study task granularity.
+\end{itemize}
+\end{questionbox}
+
+\begin{questionbox}{Q32. "If you had 6 more months and an A100 GPU cluster, what would you do next?"}
+\textbf{Answer:}
+\begin{enumerate}
+    \item \textbf{Full Precision \& Fine-Tuning Study:} Evaluate Qwen2.5-VL in \texttt{bfloat16} without quantization, and perform Parameter-Efficient Fine-Tuning (LoRA) to examine if VLMs close the performance gap under task-specific adaptation.
+    \item \textbf{Cross-Paradigm Fusion Architecture:} Implement a multimodal cross-attention head fusing V-JEPA~2's temporal representations with Qwen2.5-VL's language-grounded semantic tokens.
+    \item \textbf{FineGym Sub-Action Granularity:} Extend HAF-STD Net to FineGym's Element-level (530 classes) to evaluate split-second acrobatics and gymnastic maneuvers.
+\end{enumerate}
+\end{questionbox}
+
+\vspace{0.4cm}
+\begin{tipbox}[Oral Defense Presentation Checklist]
+\begin{itemize}
+    \item \textbf{Whiteboard Readiness:} Be prepared to sketch the \textbf{HAF-STD Net pipeline} (4 layers $\rightarrow$ Haar DWT low/high + velocity $\rightarrow$ 12 heads $\rightarrow$ router MLP $\rightarrow$ cosine head) and write the \textbf{PCA covariance and eigenvalue equations}.
+    \item \textbf{Key Numbers to Memorize:}
+    \begin{itemize}
+        \item FineGym: V-JEPA 2 + HAF-STD Net = \textbf{98.1\% Acc}, \textbf{97.8\% F1}, \textbf{0.974 MCC} vs. Qwen2.5-VL = \textbf{89.1\% Acc}, \textbf{88.4\% F1}, \textbf{0.855 MCC} (\textbf{+9.4\% F1 gap}).
+        \item HMDB51: V-JEPA 2 + HAF-STD Net = \textbf{84.7\% Top-1}, \textbf{95.8\% Top-5}, \textbf{85.3\% F1}, \textbf{0.843 MCC} vs. Qwen2.5-VL = \textbf{77.1\% Top-1}, \textbf{93.0\% Top-5}, \textbf{79.1\% F1}, \textbf{0.765 MCC} (\textbf{+6.2\% F1 gap}).
+        \item Model Scale: V-JEPA 2 (654M params) vs. Qwen2.5-VL (7B params, $\approx 10\times$ larger).
+        \item HAF-STD Net Scale: \textbf{4.8M parameters} ($<0.74\%$ of backbone size).
+    \end{itemize}
+    \item \textbf{Tone:} Confident, analytical, and scientifically grounded. Frame hardware limits as pragmatic engineering design choices.
+\end{itemize}
+\end{tipbox}
+
+\end{document}

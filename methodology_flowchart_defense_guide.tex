@@ -1,0 +1,434 @@
+\documentclass[a4paper, 11pt]{article}
+
+% --- Page Geometry ---
+\usepackage[top=0.85in, bottom=0.85in, left=0.9in, right=0.9in]{geometry}
+\usepackage{times}
+\usepackage{setspace}
+\onehalfspacing
+
+% --- Math & Symbols ---
+\usepackage{amsmath, amssymb, amsfonts, bm}
+
+% --- Tables & Arrays ---
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{array}
+
+% --- Colors & Graphics ---
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,fit}
+
+% --- Framing & Callout Boxes ---
+\usepackage[most]{tcolorbox}
+
+% --- Header, Footer & Lists ---
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\setlist{noitemsep, topsep=2pt}
+
+% --- Hyperlinks ---
+\usepackage[colorlinks=true, linkcolor=blue!70!black, urlcolor=blue!70!black, citecolor=blue!70!black]{hyperref}
+
+% --- Palette Definition ---
+\definecolor{primaryblue}{RGB}{20, 45, 110}
+\definecolor{secondaryblue}{RGB}{41, 128, 185}
+\definecolor{accentdark}{RGB}{44, 62, 80}
+\definecolor{flowgreen}{RGB}{27, 120, 55}
+\definecolor{floworange}{RGB}{185, 90, 15}
+\definecolor{flowred}{RGB}{180, 40, 40}
+
+% --- Custom Question & Answer Box ---
+\newtcolorbox{defensebox}[2][]{%
+  enhanced,
+  colback=blue!3!white,
+  colframe=primaryblue,
+  arc=2.5mm,
+  boxrule=1.1pt,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  colbacktitle=primaryblue,
+  title={#2},
+  attach boxed title to top left={yshift=-2.5mm, xshift=4mm},
+  boxed title style={arc=1.5mm, boxrule=0pt, colback=primaryblue},
+  top=4.5mm, bottom=3mm, left=4mm, right=4mm,
+  breakable,
+  #1
+}
+
+% --- Trap / Killer Defense Callout ---
+\newtcolorbox{trapbox}[1][Critical Defense Shield]{%
+  enhanced,
+  colback=red!4!white,
+  colframe=flowred,
+  arc=2mm,
+  boxrule=1pt,
+  fonttitle=\bfseries\color{white},
+  colbacktitle=flowred,
+  title={#1},
+  top=2.5mm, bottom=2.5mm, left=3.5mm, right=3.5mm,
+  breakable
+}
+
+% --- Formula / Architecture Highlight Box ---
+\newtcolorbox{techbox}[1][Flowchart Block Specifications]{%
+  enhanced,
+  colback=green!4!white,
+  colframe=flowgreen,
+  arc=2mm,
+  boxrule=0.9pt,
+  fonttitle=\bfseries\color{white},
+  colbacktitle=flowgreen,
+  title={#1},
+  top=2.5mm, bottom=2.5mm, left=3.5mm, right=3.5mm,
+  breakable
+}
+
+% --- Header & Footer Configuration ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textsf{\color{gray}Master's Thesis Defense Guide: Methodology Flowchart (Figure 3)}}
+\fancyhead[R]{\small\textsf{\color{gray}Erize Rai (Roll: 8025006)}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% =============================================================================
+\begin{document}
+
+% --- Title Banner ---
+\begin{center}
+  {\fontsize{17}{21}\selectfont \textbf{\color{primaryblue}MASTERING THE METHODOLOGY FLOWCHART (FIGURE 3)}}\\[3pt]
+  {\fontsize{12}{15}\selectfont \textbf{\color{accentdark}Complete Block-by-Block Technical Breakdown \& Question-Dodge Defense Guide}}\\[3pt]
+  {\fontsize{10}{13}\selectfont Institute of Science and Technology (IoST), Tribhuvan University, Nepal}\\[4pt]
+  \rule{\textwidth}{1.2pt}\\[4pt]
+  \textbf{Candidate:} Erize Rai \quad$|$ \quad \textbf{Roll No:} 8025006 \quad$|$ \quad \textbf{Date:} NOVEMBER, 2026\\
+  \textbf{Thesis:} \textit{Enhancing Self-Supervised Video Representations with HAF-STD Net: A Comparative Evaluation Against VLM for Action Recognition}\\
+  \textbf{Supervisor:} Asst. Prof. Dr. Dhiraj Kedar Pandey\\
+  \rule{\textwidth}{0.6pt}
+\end{center}
+
+\vspace{0.2cm}
+\tableofcontents
+\newpage
+
+% =============================================================================
+\section{Overview: The Architecture of Figure 3}
+% =============================================================================
+
+Figure~3 in your thesis represents the entire end-to-end experimental pipeline. It connects:
+\begin{itemize}
+    \item \textbf{Input Data (Stage 1):} Dual benchmark selection representing contrasting granularities (FineGym vs. HMDB51).
+    \item \textbf{Ingestion (Stage 2):} Standardized uniform frame extraction and spatial normalization via OpenCV.
+    \item \textbf{Backbone Encoding (Stage 3):} A dual-stream frozen foundation model evaluation comparing Self-Supervised Learning (V-JEPA~2) against Vision-Language Modeling (Qwen2.5-VL).
+    \item \textbf{Data Sanitization (Stage 4a):} Zero-leakage standardization and train/eval partitioning.
+    \item \textbf{Dimensionality Transformation (Stage 4b):} 95\% explained variance PCA reduction for 1D baseline classifiers, bypassed by the 4D spatiotemporal tensor of the novel HAF-STD Net.
+    \item \textbf{Downstream Probing (Stage 5):} Comparative classification across 9 classifiers (3 Classical ML + 5 Neural Baselines + 1 Novel HAF-STD Net).
+    \item \textbf{Statistical Evaluation (Stage 6):} Multi-metric evaluation including chance-corrected and agreement metrics (Accuracy, Macro/Weighted F1, MCC, Cohen's $\kappa$).
+\end{itemize}
+
+\begin{figure}[h!]
+\centering
+\begin{tcolorbox}[colback=yellow!5!white, colframe=orange!80!black, arc=2mm, title=\textbf{Defense Key Takeaway}]
+Examiners evaluate whether your pipeline introduces hidden confounds, data leakage, or unfair advantages. The answers in this document prove that every design decision in Figure~3 was dictated by mathematical principles, GPU hardware constraints, and information-theoretic rigor.
+\end{tcolorbox}
+\end{figure}
+
+% =============================================================================
+\section{Stage 1: Benchmark Data Sources}
+% =============================================================================
+
+\begin{techbox}[Block Details: FineGym \& HMDB51]
+\begin{itemize}
+    \item \textbf{FineGym (Left Block):} 1,200 video clips across 4 Olympic gymnastics event classes: Vault (VT), Uneven Bars (UB), Balance Beam (BB), and Floor Exercise (FX). Exact balanced distribution: 300 clips per class.
+    \item \textbf{HMDB51 (Right Block):} 6,754 video clips across 51 diverse coarse-grained human action classes (e.g., \textit{chew, climb, draw sword, kick, sword exercise, laugh}). Sourced from movies and digitized web footage.
+\end{itemize}
+\end{techbox}
+
+\begin{defensebox}{Defense Q1: Why did you evaluate on two datasets? Why FineGym and HMDB51?}
+\textbf{Examiner's Angle:} They want to see if you picked random datasets or had a deliberate scientific rationale.
+
+\textbf{Your Bulletproof Answer:}
+\begin{itemize}
+    \item \textbf{Complementary Granularities:} FineGym represents \textbf{fine-grained} motion, while HMDB51 represents \textbf{coarse-grained} actions.
+    \item \textbf{Eliminating Scene/Background Shortcuts:} In coarse datasets (e.g., UCF101 or HMDB51), models can cheat by recognizing static background objects (e.g., a horse $\rightarrow$ \textit{ride horse}; an ocean $\rightarrow$ \textit{surf}). In FineGym, all 4 events occur in the \textbf{identical gymnastic hall} with identical lighting, identical athletes, and similar apparatus mats. The model \textbf{cannot} use background cues; it is forced to encode pure limb kinematics, body trajectory, and temporal dynamics.
+    \item \textbf{Revealing the Paradigm Gap:} This dual-dataset design proved that while VLMs can compete on coarse actions (+6.2\% gap on HMDB51), they suffer severely on subtle fine-grained motion (+9.4\% gap on FineGym).
+\end{itemize}
+\end{defensebox}
+
+\begin{defensebox}{Defense Q2: FineGym has 288 sub-actions and 530 element classes. Why only 4 classes?}
+\textbf{Examiner's Angle:} They want to accuse you of simplifying the problem.
+
+\textbf{Your Bulletproof Answer:}
+\begin{enumerate}
+    \item \textbf{Severe Long-Tail Imbalance in FineGym-288/530:} In the 288/530 element splits, hundreds of classes have fewer than 2 to 4 video clips in total. Under a frozen-feature evaluation protocol, such extreme sparsity prevents downstream classifiers from learning stable decision boundaries without massive class-weight distortions.
+    \item \textbf{Sufficient Data Density:} The 4 event classes provide an exact, balanced 300 clips per class (1,200 total), providing statistical power without class-imbalance artifacts.
+    \item \textbf{High Inter-Class Homogeneity:} Distinguishing a \textit{Floor Exercise} from a \textit{Vault} or \textit{Beam} requires tracking rapid body flips, vertical flight, and apparatus interaction in milliseconds.
+    \item \textbf{Acknowledged as Future Scope:} I explicitly documented extension to FineGym-288/530 in Chapter~5 (Recommendations) when dense feature caching infrastructure becomes available.
+\end{enumerate}
+\end{defensebox}
+
+% =============================================================================
+\section{Stage 2: Frame Extraction Pipeline}
+% =============================================================================
+
+\begin{techbox}[Block Details: OpenCV VideoCapture $\rightarrow$ Uniform Temporal Sampling $\rightarrow$ Resize to $224 \times 224$]
+\begin{itemize}
+    \item \textbf{OpenCV Engine:} \texttt{cv2.VideoCapture} handles decoding of variable framerate (VFR) and constant framerate (CFR) MP4/AVI containers.
+    \item \textbf{Uniform Temporal Sampling Equation:} For a clip containing $N_{\text{total}}$ frames, to sample $T$ frames:
+    \[
+    t_k = \left\lfloor k \cdot \frac{N_{\text{total}}}{T} \right\rfloor, \quad k \in \{0, 1, \dots, T-1\}
+    \]
+    \item \textbf{Spatial Resizing:} Bilinear/Bicubic interpolation resizing frames to canonical resolution $H \times W = 224 \times 224$ pixels.
+\end{itemize}
+\end{techbox}
+
+\begin{defensebox}{Defense Q3: Why uniform temporal sampling instead of dense optical flow or consecutive frames?}
+\textbf{Examiner's Angle:} Testing your knowledge of video representations and computational complexity.
+
+\textbf{Your Bulletproof Answer:}
+\begin{itemize}
+    \item \textbf{Consecutive Frames Miss the Action:} Action clips in HMDB51 and FineGym last between 2 to 10 seconds (60 to 300 frames at 30 fps). Taking consecutive frames (e.g., frames 1 to 8) covers only 0.25 seconds of the video, completely missing the complete action arc (e.g., run-up $\rightarrow$ hurdle $\rightarrow$ vault $\rightarrow$ landing).
+    \item \textbf{Uniform Sampling Covers Full Duration:} Sampling across the entire temporal span ensures the extracted tensor captures the initiation, peak, and conclusion of the action.
+    \item \textbf{Why Not Optical Flow (TV-L1 / Farneback):} Optical flow computation is computationally prohibitive, requiring hundreds of hours for 6,754 clips, and modern Vision Transformers (like V-JEPA~2's 3D tubelets) learn motion fields implicitly in latent space, eliminating the need for handcrafted optical flow.
+\end{itemize}
+\end{defensebox}
+
+% =============================================================================
+\section{Stage 3: Feature Extraction (The Core Paradigm Comparison)}
+% =============================================================================
+
+\begin{techbox}[Block Details: V-JEPA~2 (Left) vs. Qwen2.5-VL (Right)]
+\begin{itemize}
+    \item \textbf{V-JEPA~2 (Meta AI):}
+    \begin{itemize}
+        \item Parameters: \textbf{654 Million} (ViT-Huge architecture).
+        \item Precision \& Backend: \textbf{float16} with Scaled Dot-Product Attention (SDPA / FlashAttention).
+        \item Spatiotemporal Tubelets: $2 \text{ frames} \times 16 \times 16 \text{ pixels}$.
+        \item Temporal Dimension: 8 frames $\rightarrow T' = 4$ temporal tokens.
+        \item Layer Depth: 32 Transformer blocks. Hidden size $D = 1,280$.
+        \item Multi-Layer Tensors Extracted: Layers 6, 12, 18, 24 $\rightarrow \mathbf{F}_{\text{multi}} \in \mathbb{R}^{4 \times T' \times 1280}$.
+        \item Mean-Pooled Vector (for baselines): $\mathbf{f} \in \mathbb{R}^{1280}$.
+    \end{itemize}
+    \item \textbf{Qwen2.5-VL (Alibaba Cloud):}
+    \begin{itemize}
+        \item Parameters: \textbf{7 Billion} (Large Multimodal Vision-Language Model).
+        \item Quantization: \textbf{4-bit NormalFloat (NF4)} with double quantization via \texttt{bitsandbytes}.
+        \item Frames: 4 frames uniformly sampled.
+        \item Architecture: Dynamic ViT vision encoder + Causal LM Transformer decoder.
+        \item Sequence Length: 4 frames $\times 256$ visual tokens $= 1,024$ tokens + chat template tokens.
+        \item Feature Pooling: Mean pooling over final hidden states $\rightarrow \mathbf{f} \in \mathbb{R}^{3584}$.
+    \end{itemize}
+\end{itemize}
+\end{techbox}
+
+\begin{trapbox}[THE \#1 CRITICAL DEFENSE TRAP: "8 Frames vs. 4 Frames"]
+\textbf{The Examiner's Trap:} \textit{"You gave V-JEPA 2 eight frames and Qwen2.5-VL only four frames. Isn't this an unfair comparison that deliberately handicapped Qwen?"}
+
+\textbf{Your Three-Step Knockout Answer:}
+\begin{enumerate}
+    \item \textbf{The Token Sequence Explosion on Single GPU:} Qwen2.5-VL operates via a 2D patch encoder producing 256 tokens per frame. 4 frames $= 1,024$ image tokens. With system prompts and chat tokens, sequence length approaches 1,150. If we fed 8 frames, the sequence length exceeds 2,100 multi-modal tokens. Inside a 7B autoregressive transformer, the self-attention KV-cache and forward activations scale quadratically $\mathcal{O}(S^2)$, producing an immediate \textbf{CUDA Out-of-Memory (OOM)} crash on our 16~GB Tesla T4 GPU.
+    \item \textbf{V-JEPA 2's 3D Tubelet Compression:} V-JEPA~2 natively uses 3D tubelets of temporal size 2. Thus, 8 frames are condensed into just $T'=4$ temporal tokens! In terms of temporal latent tokens processed by the transformer, \textbf{both models process a comparable sequence bottleneck ($T'=4$ vs. 4 frames)}.
+    \item \textbf{The $10\times$ Parameter Scale Advantage:} Qwen2.5-VL possessed \textbf{7,000,000,000 parameters} vs. V-JEPA 2's \textbf{654,000,000 parameters} ($10.7\times$ larger!). If temporal frame count alone determined performance, Qwen's $10\times$ representational capacity should have easily bridged a 4-frame difference. It failed to do so because its text-aligned training lacks motion sensitivity.
+\end{enumerate}
+\end{trapbox}
+
+\begin{trapbox}[THE \#2 CRITICAL DEFENSE TRAP: "4-bit NF4 vs. float16 Precision"]
+\textbf{The Examiner's Trap:} \textit{"Qwen2.5-VL was run in 4-bit quantization, while V-JEPA 2 was in float16. Did quantization destroy Qwen's accuracy?"}
+
+\textbf{Your Three-Step Knockout Answer:}
+\begin{enumerate}
+    \item \textbf{Hardware Feasibility Requirement:} A 7B parameter model in FP16 requires $7 \times 10^9 \times 2\text{ bytes} \approx \mathbf{14.0\text{ GB}}$ of memory purely to store static weights. Loading this on an NVIDIA Tesla T4 (15.6 GB VRAM) leaves less than 1.6 GB for intermediate activations, causing instant crash on video tensors. 4-bit NF4 with double quantization reduced static weight memory to $\sim 4.5\text{ GB}$, permitting forward pass inference.
+    \item \textbf{Information-Theoretic Optimality of NF4:} As mathematically demonstrated by Dettmers et al. (NeurIPS 2023, QLoRA), NormalFloat4 is theoretically optimal for zero-mean normally distributed weights. Empirical evaluations across LLMs demonstrate that NF4 preserves $>99\%$ of FP16 performance, with less than 0.5\% degradation in classification tasks.
+    \item \textbf{The Failure Mode is Not Precision, but Inductive Bias:} Qwen2.5-VL's best classifier achieved 89.1\% on FineGym and 77.1\% on HMDB51—very strong scores that prove its representations were completely intact and high-quality! The 6.2\% to 9.4\% gap exists because text-aligned decoders represent \textit{"what objects are present"} rather than \textit{"how fast and in what direction the joints are rotating"}.
+\end{enumerate}
+\end{trapbox}
+
+\begin{defensebox}{Defense Q4: What does "Frozen-Feature Protocol" mean, and why didn't you fine-tune the backbones?}
+\textbf{Examiner's Angle:} They want to know why you didn't do end-to-end backpropagation.
+
+\textbf{Your Bulletproof Answer:}
+\begin{itemize}
+    \item \textbf{Definition:} Backbone parameters $\mathbf{\Theta}$ are frozen ($\nabla_{\mathbf{\Theta}} \mathcal{L} = \mathbf{0}$). Only downstream probe heads are optimized.
+    \item \textbf{Direct Representation Quality Assessment:} If you fine-tune a 7B model on 1,200 clips, you are evaluating the downstream optimizer's ability to adapt parameters rather than evaluating the \textbf{intrinsic quality of the pre-trained feature representation}. Frozen probing isolates the exact geometric properties of the pre-trained latent space.
+    \item \textbf{Computational Reality:} Fine-tuning a 7B parameter vision-language model end-to-end requires multi-node A100/H100 clusters (tens of thousands of dollars of compute), whereas frozen-feature extraction democratizes foundation model benchmarking on commodity single-GPU hardware.
+\end{itemize}
+\end{defensebox}
+
+% =============================================================================
+\section{Stage 4: Feature Preprocessing \& PCA Dimensionality Reduction}
+% =============================================================================
+
+\begin{techbox}[Block Details: StandardScaler $\rightarrow$ 80/20 Split $\rightarrow$ PCA]
+\begin{itemize}
+    \item \textbf{StandardScaler:} Centers feature distributions to mean $\mu=0$ and standard deviation $\sigma=1$:
+    \[
+    \tilde{z}_{ij} = \frac{z_{ij} - \mu_j}{\sigma_j}
+    \]
+    \item \textbf{Train/Eval Partitioning:} Stratified 80\% training split, 20\% evaluation split (preserving exact per-class balance).
+    \item \textbf{PCA (95\% Variance):} Eigen-decomposition of sample covariance matrix $\mathbf{\Sigma} = \frac{1}{N-1}\tilde{\mathbf{X}}^T\tilde{\mathbf{X}}$. Retains minimal principal components $k^*$ such that:
+    \[
+    \frac{\sum_{i=1}^{k^*} \lambda_i}{\sum_{j=1}^D \lambda_j} \ge 0.95
+    \]
+\end{itemize}
+\end{techbox}
+
+\begin{trapbox}[THE \#3 CRITICAL DEFENSE TRAP: "Did You Have Data Leakage in Preprocessing?"]
+\textbf{The Examiner's Trap:} \textit{"Did you fit StandardScaler and PCA on the entire dataset before doing your 80/20 train/eval split? That is data leakage!"}
+
+\textbf{Your Immediate Firm Answer:}
+\begin{itemize}
+    \item \textbf{"No, absolutely not. There is zero data leakage in my pipeline."}
+    \item \textbf{The Exact Code Execution Sequence:}
+    \begin{enumerate}
+        \item The dataset was split \textbf{first} into $X_{\text{train}}, y_{\text{train}}$ and $X_{\text{test}}, y_{\text{test}}$ using stratified sampling.
+        \item \texttt{StandardScaler} was fitted \textbf{only} on $X_{\text{train}}$ using \texttt{scaler.fit(X\_train)}. The test set was transformed using \texttt{scaler.transform(X\_test)}.
+        \item PCA was fitted \textbf{only} on the standardized training features using \texttt{pca.fit(X\_train\_scaled)}. The test features were projected using \texttt{pca.transform(X\_test\_scaled)}.
+        \item The test split never influenced the mean, standard deviation, or principal eigenvectors.
+    \end{enumerate}
+\end{itemize}
+\end{trapbox}
+
+\begin{trapbox}[THE \#4 CRITICAL DEFENSE TRAP: "Why Did HAF-STD Net Bypass PCA? (The Red Dashed Arrow)"]
+\textbf{The Examiner's Trap:} \textit{"In Figure 3, the red dashed line shows HAF-STD Net bypassing PCA. Did HAF-STD Net achieve 98.1\% and 84.7\% just because it had full feature dimensions while baselines were compressed?"}
+
+\textbf{Your Three-Step Knockout Answer:}
+\begin{enumerate}
+    \item \textbf{Tensor Geometry Incompatibility:}
+    Baseline classifiers receive a collapsed \textbf{1D global feature vector} per clip ($\mathbf{f} \in \mathbb{R}^{1280}$ or $\mathbb{R}^{3584}$). In 1D vectors, overparameterized ViTs produce heavy multicollinearity. Applying PCA removes redundancy and prevents SVM/Random Forest from failing in high dimensions.
+    \item \textbf{PCA Would Destroy Temporal and Depth Topology:}
+    HAF-STD Net receives a \textbf{4D spatiotemporal tensor} ($\mathbf{F}_{\text{multi}} \in \mathbb{R}^{B \times 4 \times T' \times 1280}$). Its internal modules perform:
+    \begin{itemize}
+        \item \textbf{1D Haar Wavelet Transform} along the physical time axis $T'$.
+        \item \textbf{Inter-Layer Velocity Deltas} ($\Delta_l = \mathbf{z}_{l+1} - \mathbf{z}_l$) along the vertical depth axis $L$.
+    \end{itemize}
+    If you apply standard PCA to a flattened multi-layer tensor, you scramble the time and depth order, destroying the physical meaning of velocity and frequency!
+    \item \textbf{95\% Variance Baselines Were NOT Handicapped:}
+    PCA retained \textbf{95\% of the total energy}. In fact, neural baselines like ResMLP achieved 97.9\% on FineGym and 82.9\% on HMDB51—extremely high scores proving that 95\% PCA retained all critical signal while preventing overfitting.
+\end{enumerate}
+\end{trapbox}
+
+% =============================================================================
+\section{Stage 5: Classifier Branches \& Downstream Probing}
+% =============================================================================
+
+\begin{techbox}[Block Details: 9 Total Classifiers]
+\begin{itemize}
+    \item \textbf{Classical ML (3):}
+    \begin{enumerate}
+        \item \textbf{SVM-RBF:} Radial Basis Function kernel ($C=1.0, \gamma=\text{'scale'}$), max-margin hyperplane.
+        \item \textbf{Random Forest:} Ensemble of 100 decision trees, Gini impurity criterion.
+        \item \textbf{Logistic Regression (LogReg):} Multiclass multinomial cross-entropy with $\ell_2$ regularization (L-BFGS solver).
+    \end{enumerate}
+    \item \textbf{Neural Network Baselines (5):}
+    \begin{enumerate}
+        \item \textbf{MLP:} 2-layer perceptron (Linear $d \rightarrow 512$, ReLU, Dropout 0.3, Linear $512 \rightarrow C$).
+        \item \textbf{DeepMLP:} 4-layer perceptron ($d \rightarrow 1024 \rightarrow 512 \rightarrow 256 \rightarrow C$) with BatchNorm and Dropout 0.4.
+        \item \textbf{ResMLP:} Deep residual MLP with skip connections ($\mathbf{x} + F(\mathbf{x})$), LayerNorm, and GELU activations.
+        \item \textbf{Conv1DNet:} Temporal 1D convolutional network with kernel size 3, BatchNorm, and max pooling.
+        \item \textbf{Mini Transformer:} 2 Transformer encoder layers with 4 self-attention heads and learnable positional encodings.
+    \end{enumerate}
+    \item \textbf{Proposed Novel Model (1):}
+    \begin{itemize}
+        \item \textbf{HAF-STD Net (4.8M parameters):} Hierarchical Adaptive Fusion with Spectral-Temporal Decomposition.
+    \end{itemize}
+\end{itemize}
+\end{techbox}
+
+\begin{defensebox}{Defense Q5: How does HAF-STD Net work inside, and where do the 4.8M parameters come from?}
+\textbf{Examiner's Angle:} They want to ensure you actually built the model and understand its internal mathematical mechanics.
+
+\textbf{Your Step-by-Step Architecture Explanation:}
+\begin{enumerate}
+    \item \textbf{Multi-Layer Extraction:} Extracts 4 intermediate layers (layers 6, 12, 18, 24) from V-JEPA~2.
+    \item \textbf{Stream 1: Appearance Trend (Low Frequency):} Applies 1D Haar Wavelet approximation filter $a_t = \frac{h_{2t} + h_{2t+1}}{2}$ along time to capture stable contextual scenery.
+    \item \textbf{Stream 2: Motion Dynamics (High Frequency):} Applies 1D Haar Wavelet detail filter $d_t = \frac{h_{2t} - h_{2t+1}}{2}$ along time to capture frame-to-frame velocity transients (zero parameters!).
+    \item \textbf{Stream 3: Depth Representation Velocity:} Computes inter-layer deltas:
+    \[
+    \mathbf{v}_l = \mathbf{z}_{l+1} - \mathbf{z}_l
+    \]
+    capturing how visual representations evolve from low-level edges (layer 6) to semantic concepts (layer 24).
+    \item \textbf{Adaptive Fusion Gating:} Lightweight cross-attention routers dynamically weigh each stream based on video content.
+    \item \textbf{Cosine Classification Head:} Normalizes feature vectors and class weights onto a unit hypersphere with temperature scaling $\tau$, preventing gradient saturation.
+    \item \textbf{Parameter Footprint:} The projection layers, gating channels, and classification head total \textbf{4.8 Million parameters}—less than 0.7\% of the V-JEPA~2 backbone!
+\end{enumerate}
+\end{defensebox}
+
+\begin{defensebox}{Defense Q6: Why did Conv1DNet collapse on HMDB51 (11.5\% accuracy) for Qwen features?}
+\textbf{Examiner's Angle:} Looking at Table~4.5 in your results where Conv1DNet got 11.5\% and 0.8\% F1.
+
+\textbf{Your Technical Explanation:}
+\begin{itemize}
+    \item \textbf{The Reason:} Qwen2.5-VL's output vector for baseline classifiers is a 1D sequence-mean-pooled vector ($\mathbf{f} \in \mathbb{R}^{3584}$), which was PCA-reduced to $\mathbb{R}^{k^*}$.
+    \item A 1D Convolution assumes a natural spatial or temporal neighborhood ordering across adjacent indices (like adjacent time steps or adjacent pixels). In PCA feature space, eigenvector indices have \textbf{no continuous spatial or temporal correlation}; adjacent PCA dimensions are orthogonal. A 1D convolution over orthogonal PCA dimensions applies an invalid inductive bias, causing optimization failure on the 51-class dataset.
+    \item This highlights why fully connected architectures (DeepMLP, ResMLP) excel on PCA features, while Conv1DNet requires raw temporal sequences.
+\end{itemize}
+\end{defensebox}
+
+% =============================================================================
+\section{Stage 6: Comparative Evaluation Metrics}
+% =============================================================================
+
+\begin{techbox}[Block Details: Accuracy, Macro/Weighted F1, MCC, Cohen's $\kappa$]
+\begin{itemize}
+    \item \textbf{Overall Accuracy:} $\frac{\text{Correct Predictions}}{\text{Total Samples}}$. Susceptible to majority-class dominance.
+    \item \textbf{Macro F1-Score (Primary Ranking Metric):} Unweighted arithmetic mean of individual class F1-scores:
+    \[
+    \text{Macro F1} = \frac{1}{C}\sum_{c=1}^C F1_c
+    \]
+    Treats rare and frequent classes with strict equal importance.
+    \item \textbf{Matthews Correlation Coefficient (MCC):} Multiclass formulation of Pearson correlation between ground-truth and prediction matrices. Completely robust to class imbalance; random guessing produces $\text{MCC} = 0.0$.
+    \item \textbf{Cohen's Kappa ($\kappa$):} Inter-rater agreement corrected for agreement occurring purely by chance:
+    \[
+    \kappa = \frac{p_o - p_e}{1 - p_e}
+    \]
+\end{itemize}
+\end{techbox}
+
+\begin{defensebox}{Defense Q7: Why did you declare Macro F1 as your primary metric instead of Accuracy?}
+\textbf{Examiner's Angle:} Standard machine learning evaluation rigor question.
+
+\textbf{Your Confident Defense:}
+\begin{itemize}
+    \item \textbf{"Accuracy is deceptive in multiclass settings."}
+    \item In HMDB51 (51 classes), if a model predicts the 10 most common classes accurately but fails on the 41 smaller classes, its overall Accuracy will appear deceptively high.
+    \item \textbf{Macro F1 forces true robustness:} Because Macro F1 averages per-class F1 with equal weight ($\frac{1}{C}$), a model cannot score 85.3\% on HMDB51 without demonstrating high precision and recall across \textbf{all 51 individual action classes}.
+    \item Furthermore, reporting \textbf{MCC (0.843)} and \textbf{Cohen's Kappa (0.842)} alongside Macro F1 proves that our performance gains represent genuine geometric class separation, not statistical artifacts.
+\end{itemize}
+\end{defensebox}
+
+% =============================================================================
+\section{The Defense Emergency Matrix: Instant Answers}
+% =============================================================================
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{p{3.8cm}p{4.8cm}X}
+\toprule
+\textbf{Examiner's Challenge} & \textbf{Core Trap / Concern} & \textbf{Your Instant 1-Sentence Killer Response} \\
+\midrule
+\textit{"Why V-JEPA 2 over VideoMAE?"} & Pixel reconstruction vs. Latent prediction. & \textit{"VideoMAE wastes network capacity reconstructing high-frequency visual noise, while JEPA predicts abstract semantics directly in latent space."} \\
+\midrule
+\textit{"Why didn't Qwen2.5-VL win with 7B parameters?"} & Parameter scale vs. Inductive bias. & \textit{"Task-specific temporal inductive bias outweighs raw parameter scale; language-aligned models represent static scene semantics rather than temporal dynamics."} \\
+\midrule
+\textit{"Why 4 intermediate layers in HAF-STD Net?"} & Arbitrary hyperparameter choice. & \textit{"Layers 6, 12, 18, and 24 evenly sample the representation hierarchy from low-level edges to mid-level body parts and high-level action semantics."} \\
+\midrule
+\textit{"Why early stopping at 15/30 epochs?"} & Underfitting / Overfitting risk. & \textit{"Frozen feature embeddings train very rapidly; validation loss plateaus within 10--20 epochs, and early stopping prevents overfitting on small datasets."} \\
+\midrule
+\textit{"Why didn't you use cross-entropy alone in HAF-STD Net?"} & Use of Cosine Head. & \textit{"In high-dimensional latent spaces, semantic identity is encoded in angular direction rather than vector magnitude; the Cosine head with learnable $\tau$ stabilizes margins."} \\
+\bottomrule
+\end{tabularx}
+\caption{Emergency quick-fire defense matrix for Figure 3.}
+\end{table}
+
+\vspace{0.3cm}
+\begin{center}
+\rule{0.6\textwidth}{0.8pt}\\[4pt]
+\textbf{\color{primaryblue}YOU ARE FULLY EQUIPPED TO DEFEND FIGURE 3. GOOD LUCK!}
+\end{center}
+
+\end{document}

@@ -1,0 +1,13 @@
+\contentsline {section}{\numberline {1}Executive Rationale: Why Did You Design HAF-STD Net?}{2}{section.1}%
+\contentsline {section}{\numberline {2}The Multi-Layer Tensor Input Formulation}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Extraction from Frozen V-JEPA 2.1}{3}{subsection.2.1}%
+\contentsline {section}{\numberline {3}Layer-by-Layer Representation Dynamics: 25\% to 100\% Depth}{3}{section.3}%
+\contentsline {section}{\numberline {4}Detailed Mathematical Breakdown of HAF-STD Net Modules}{6}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Module 1: Spectral-Temporal Decomposition via 1D Haar DWT}{6}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Module 2: Depth Representation Velocity ($\Delta \mathbf {H}$)}{7}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Module 3: Dedicated Stream Projections}{7}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Module 4: Adaptive Routing Network}{8}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Module 5: Cosine Similarity Classification Head}{8}{subsection.4.5}%
+\contentsline {section}{\numberline {5}Source Code Implementation Walkthrough}{9}{section.5}%
+\contentsline {section}{\numberline {6}Viva Defense Practice: Tough Examiner Questions on HAF-STD Net}{11}{section.6}%
+\contentsline {section}{\numberline {7}Defense Quick-Recall Cheat Sheet for HAF-STD Net}{13}{section.7}%

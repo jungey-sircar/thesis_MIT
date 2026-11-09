@@ -1,0 +1,20 @@
+% =============================================================================
+%           CHAPTER 5: CONCLUSION AND RECOMMENDATIONS
+% =============================================================================
+\chapter{Conclusion and Recommendations}
+
+\section{Conclusions}
+
+This thesis presented a comprehensive comparative analysis of two fundamentally different video representation learning paradigms---self-supervised learning and vision-language modelling---evaluated across two complementary benchmark datasets. V-JEPA~2.1, a self-supervised video encoder, was compared against Qwen2.5-VL, a vision-language model, using a controlled frozen-feature evaluation protocol with nine downstream classifiers, including the proposed HAF-STD Net.
+
+The experimental results demonstrate that self-supervised video encoders produce superior temporal representations for video action recognition. V-JEPA~2.1 outperformed Qwen2.5-VL on both datasets---achieving 97.8\% vs.\ 88.4\% macro F1 (98.1\% vs.\ 89.1\% accuracy, MCC = 0.974 vs.\ 0.855) on FineGym with HAF-STD Net/DeepMLP, and 85.3\% vs.\ 79.1\% macro F1 (84.7\% vs.\ 77.1\% accuracy, MCC = 0.843 vs.\ 0.765) on HMDB51 with HAF-STD Net/DeepMLP. This advantage is most pronounced on fine-grained tasks: the 9.4 percentage point F1 gap on FineGym narrows to 6.2 percentage points on HMDB51, indicating that the JEPA paradigm's masked spatio-temporal prediction is especially valuable for discriminating subtle temporal motion patterns within a narrow visual domain.
+
+Furthermore, the results confirm that task specialization outweighs model scale. V-JEPA~2.1 achieves superior performance with roughly 10$\times$ fewer parameters (654M vs 7B), demonstrating that a video-native self-supervised architecture is more effective than a larger general-purpose VLM for action recognition.
+
+The proposed HAF-STD Net achieves the best performance on both benchmarks. The Hierarchical Adaptive Fusion with Spectral-Temporal Decomposition Network outperforms all eight baseline classifiers on both FineGym (98.1\% accuracy, 97.8\% F1, MCC = 0.974) and HMDB51 (84.7\% accuracy, 85.3\% F1, MCC = 0.843), demonstrating that exploiting multi-layer depth representations through wavelet frequency decomposition and adaptive routing yields consistent gains over standard feature pooling approaches.
+
+\section{Recommendations for Further Work}
+
+Based on the findings of this research, several directions are recommended for future investigation. The evaluation should be extended to FineGym's set-level (288 classes) and element-level (530 classes) tasks for deeper granularity analysis of fine-grained sub-action classification. The frozen-feature study should be complemented with end-to-end fine-tuning to assess whether VLM features benefit more from task-specific adaptation than SSL features. Additionally, evaluating Qwen2.5-VL at full precision (float16) on higher-end GPUs would help eliminate the potential confound of 4-bit quantization effects on representation quality.
+
+Future work should also investigate fusing V-JEPA~2.1 temporal representations with Qwen2.5-VL semantic representations through cross-attention mechanisms to explore whether complementary paradigm strengths can be combined for improved performance. Finally, benchmarking on specialized real-world domains such as surgical video analysis, physiotherapy monitoring, and fine-grained athletic motion analysis would establish the practical applicability of these findings beyond standard academic benchmarks.

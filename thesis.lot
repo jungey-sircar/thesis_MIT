@@ -1,0 +1,17 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {1}{\ignorespaces Summary of evaluation datasets.}}{12}{table.caption.12}%
+\contentsline {table}{\numberline {2}{\ignorespaces Hardware configuration for experiments.}}{30}{table.caption.17}%
+\contentsline {table}{\numberline {3}{\ignorespaces Software libraries and their roles in the experimental pipeline.}}{31}{table.caption.18}%
+\contentsline {table}{\numberline {4}{\ignorespaces Architectural specifications of V-JEPA 2.1 and Qwen2.5-VL.}}{31}{table.caption.19}%
+\contentsline {table}{\numberline {5}{\ignorespaces Execution timeline for both dataset experiments.}}{36}{table.caption.20}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {6}{\ignorespaces Classifier performance on FineGym --- V-JEPA~2.1 features.}}{37}{table.caption.21}%
+\contentsline {table}{\numberline {7}{\ignorespaces Classifier performance on FineGym --- Qwen2.5-VL features.}}{38}{table.caption.22}%
+\contentsline {table}{\numberline {8}{\ignorespaces FineGym: Comprehensive metric comparison (best classifiers).}}{39}{table.caption.23}%
+\contentsline {table}{\numberline {9}{\ignorespaces Classifier performance on HMDB51 --- V-JEPA~2.1 features.}}{39}{table.caption.24}%
+\contentsline {table}{\numberline {10}{\ignorespaces Classifier performance on HMDB51 --- Qwen2.5-VL features.}}{40}{table.caption.25}%
+\contentsline {table}{\numberline {11}{\ignorespaces HMDB51: Comprehensive metric comparison (best classifiers).}}{40}{table.caption.26}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }

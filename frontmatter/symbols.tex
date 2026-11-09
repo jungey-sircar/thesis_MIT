@@ -1,0 +1,37 @@
+% =============================================================================
+%                   APPENDIX J: LIST OF SYMBOLS
+% =============================================================================
+
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Symbols}
+
+\begin{center}
+{\fontsize{16}{20}\selectfont \textbf{List of Symbols}}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{longtable}{@{}p{3.5cm}p{10.5cm}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Description} \\
+\midrule
+\endhead
+$\mathbf{x}$ & Input Video Clip / Spatio-Temporal Frame Sequence \\
+$\mathbf{z}$ & Latent Feature Representation Vector \\
+$\mathbf{y}$ & Ground-Truth Action Class Label \\
+$\hat{\mathbf{y}}$ & Predicted Action Class Label Probability Distribution \\
+$\mathcal{L}_{\text{CE}}$ & Cross-Entropy Loss Function \\
+$\mathcal{L}_{\text{Smooth}}$ & Label-Smoothing Cross-Entropy Loss Function \\
+$\epsilon$ & Label-Smoothing Hyperparameter ($\epsilon = 0.1$) \\
+$\alpha$ & Mixup Interpolation Beta Distribution Parameter ($\alpha = 0.2$) \\
+$\lambda$ & Weight Decay / Regularization Parameter ($\lambda = 10^{-4}$) \\
+$\eta$ & Learning Rate \\
+$\kappa$ & Cohen's Kappa Coefficient \\
+$\sigma(\cdot)$ & Softmax / Sigmoid Activation Function \\
+$\mathbb{E}$ & Mathematical Expectation Operator \\
+$d_{\text{embed}}$ & Embedding Dimension ($1280$ for V-JEPA 2, $3584$ for Qwen2.5-VL) \\
+$N_{\text{frames}}$ & Number of Sampled Video Frames ($8$ for V-JEPA 2, $4$ for Qwen2.5-VL) \\
+$C$ & Number of Target Action Classes ($4$ for FineGym, $51$ for HMDB51) \\
+\bottomrule
+\end{longtable}

@@ -1,0 +1,29 @@
+% =============================================================================
+%               CHAPTER 1: INTRODUCTION
+% =============================================================================
+\chapter{Introduction}
+
+\section{Introduction}
+
+Video understanding represents one of the most challenging frontiers in computer vision and artificial intelligence research. Unlike static image recognition, which has seen remarkable progress over the past decade, video comprehension demands that models capture not only spatial features within individual frames but also the complex temporal dynamics that unfold across sequences of frames \citep{bardes2024vjepa}. This temporal dimension introduces an exponential increase in computational complexity and representational challenges, making video understanding a substantially more demanding task than its image-based counterpart.
+
+Action recognition---the task of identifying human activities from video data---is a central problem in video understanding with broad applications spanning sports analytics, surveillance, human-computer interaction, healthcare monitoring, and content-based video retrieval \citep{bordes2024vlm}. The difficulty of action recognition varies dramatically depending on the granularity of the target classes: coarse-grained recognition of clearly distinct activities (e.g., ``running'' vs.\ ``swimming'') differs fundamentally from fine-grained recognition of visually similar activities (e.g., distinguishing between gymnastics events that occur in similar arenas).
+
+Two fundamentally different paradigms have emerged for learning video representations in recent years. Self-Supervised Learning (SSL) enables models to learn representational features from unlabeled video data by solving predictive latent pretext tasks, such as predicting masked spatiotemporal regions without pixel reconstruction \citep{assran2023ijepa, assran2025vjepa2}. Vision-Language Modeling (VLM), on the other hand, pre-trains models on massive multimodal paired visual and textual datasets using visual instruction tuning and autoregressive language modeling objectives \citep{bordes2024vlm, qwen2025qwen3vl}.
+
+Both paradigms have produced models that achieve impressive state-of-the-art results on standard benchmarks, yet their relative representational capabilities across different levels of recognition granularity remain insufficiently explored. This research proposes a systematic comparative analysis between a leading model from each paradigm: \vjepaa{} \citep{assran2025vjepa2}, a self-supervised video encoder developed by Meta AI with 654 million parameters, and \qwenvl{} \citep{qwen2025qwen3vl}, an instruction-tuned vision-language model with 7 billion parameters. The evaluation is conducted on two benchmark datasets: FineGym (fine-grained gymnastics event classification) and HMDB51 (coarse-grained human action recognition).
+
+\section{Problem Statement}
+
+Despite recent advancements in video foundation models, several critical research gaps persist in the literature. Existing studies evaluate self-supervised video encoders and vision-language models in isolation, using disparate datasets, evaluation protocols, and fine-tuning setups, and direct controlled comparisons of their representation quality under identical frozen-feature evaluation protocols are missing. Furthermore, while both paradigms excel on specific benchmarks, how their relative performance changes across different levels of task granularity---from fine-grained domain-specific actions (FineGym, 4 classes) to coarse-grained general actions (HMDB51, 51 classes)---has not been systematically investigated. \vjepaa{} (654M parameters) is approximately $10\times$ smaller than \qwenvl{} (7B parameters), and it remains an open question whether massive parameter scale in general-purpose VLMs translates to superior video action representations compared to compact, video-specialized self-supervised encoders.
+
+The problem is therefore not only whether frozen self-supervised latent prediction encoders can learn more discriminative temporal representations than large vision-language models, but whether compact, video-specialized architectures can match or exceed the representational quality of models with an order-of-magnitude more parameters across varying task granularities.
+
+\section{Objectives}
+
+The objectives of this study are:
+\begin{enumerate}[leftmargin=*]
+    \item To evaluate and compare the effectiveness of self-supervised video representations (\vjepaa{}) and vision-language representations (\qwenvl{}) for video action recognition across fine-grained (FineGym) and coarse-grained (HMDB51) task granularities.
+    \item To design, implement, and evaluate a specialized classification architecture HAF-STD Net (Hierarchical Adaptive Fusion with Spectral-Temporal Decomposition) tailored for frozen self-supervised video representations.
+\end{enumerate}
+

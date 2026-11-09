@@ -1,0 +1,750 @@
+% ============================================================================
+%  METHODOLOGY FLOWCHART — EXPLAINED LIKE YOU'RE 15
+%  A plain-English, step-by-step walkthrough of Figure 3
+% ============================================================================
+\documentclass[12pt, a4paper]{article}
+
+% --- packages ---
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tcolorbox}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usepackage{setspace}
+\usepackage{float}
+
+\tcbuselibrary{skins,breakable}
+
+% --- colors ---
+\definecolor{stageblue}{HTML}{1565C0}
+\definecolor{analogygreen}{HTML}{2E7D32}
+\definecolor{warnred}{HTML}{C62828}
+\definecolor{lightbg}{HTML}{F5F5F5}
+\definecolor{boxblue}{HTML}{E3F2FD}
+\definecolor{boxgreen}{HTML}{E8F5E9}
+\definecolor{boxorange}{HTML}{FFF3E0}
+\definecolor{boxred}{HTML}{FFEBEE}
+\definecolor{boxpurple}{HTML}{F3E5F5}
+\definecolor{boxyellow}{HTML}{FFFDE7}
+
+% --- tcolorbox styles ---
+\newtcolorbox{analogybox}[1][]{%
+    colback=boxgreen, colframe=analogygreen!70!black,
+    fonttitle=\bfseries, title={#1},
+    arc=3mm, boxrule=0.8pt, breakable
+}
+
+\newtcolorbox{keybox}[1][]{%
+    colback=boxblue, colframe=stageblue!70!black,
+    fonttitle=\bfseries, title={#1},
+    arc=3mm, boxrule=0.8pt, breakable
+}
+
+\newtcolorbox{warnbox}[1][]{%
+    colback=boxred, colframe=warnred!70!black,
+    fonttitle=\bfseries, title={#1},
+    arc=3mm, boxrule=0.8pt, breakable
+}
+
+\newtcolorbox{examplebox}[1][]{%
+    colback=boxorange, colframe=orange!70!black,
+    fonttitle=\bfseries, title={#1},
+    arc=3mm, boxrule=0.8pt, breakable
+}
+
+\newtcolorbox{summarybox}[1][]{%
+    colback=boxpurple, colframe=purple!70!black,
+    fonttitle=\bfseries, title={#1},
+    arc=3mm, boxrule=0.8pt, breakable
+}
+
+\newtcolorbox{yellowbox}[1][]{%
+    colback=boxyellow, colframe=yellow!50!black,
+    fonttitle=\bfseries, title={#1},
+    arc=3mm, boxrule=0.8pt, breakable
+}
+
+% --- heading styles ---
+\titleformat{\section}
+  {\LARGE\bfseries\color{stageblue}}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\Large\bfseries\color{stageblue!80!black}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\large\bfseries\color{stageblue!60!black}}{\thesubsubsection}{1em}{}
+
+% --- header/footer ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textit{Methodology Flowchart — Explained}}
+\fancyhead[R]{\small\textit{Thesis Defense Guide}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\hypersetup{colorlinks=true, linkcolor=stageblue, urlcolor=stageblue}
+
+\setstretch{1.4}
+
+% ============================================================================
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{3cm}
+{\Huge\bfseries\color{stageblue} The Methodology Flowchart\\[0.3cm]
+Explained Like You're 15\par}
+\vspace{1.5cm}
+{\Large A Complete, Plain-English Guide to\\Every Box and Arrow in Figure~3\par}
+\vspace{2cm}
+{\large Thesis Defense Companion Document\par}
+\vspace{0.5cm}
+{\large November, 2026\par}
+\vspace{3cm}
+{\normalsize
+This guide walks you through the entire experimental pipeline from top to bottom,\\
+using everyday language, real examples, and zero intimidating math.\\[0.5cm]
+\textit{If you can follow a recipe, you can understand this flowchart.}}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ============================================================================
+\section{The Big Picture — What Is This Flowchart About?}
+% ============================================================================
+
+\begin{analogybox}[Think of It Like This]
+Imagine you're building a system that watches sports videos and figures out what sport is being played. You can't just show a whole video to a computer — that's like dumping a 300-page book on someone's desk and saying ``tell me what it's about in 2 seconds.'' Instead, you need a smart pipeline: pick the right pages, read them carefully, summarize what you read, and then make your decision.
+
+That's exactly what this flowchart does, but for gymnastics videos and human action videos.
+\end{analogybox}
+
+The flowchart has \textbf{8 stages} flowing from top to bottom, like water flowing downhill. Each stage takes the output of the previous stage and does something useful with it. Here they are at a glance:
+
+\begin{enumerate}[label=\textbf{Stage \arabic*:}, leftmargin=2.5cm, itemsep=0.3cm]
+    \item \textbf{Datasets} — Where do the videos come from?
+    \item \textbf{Frame Extraction} — Pull out key snapshots from each video
+    \item \textbf{Feature Extraction} — Let a super-smart AI ``look'' at those snapshots
+    \item \textbf{Feature Preprocessing} — Clean and standardize the AI's notes
+    \item \textbf{PCA Dimensionality Reduction} — Shrink the notes to only the important stuff
+    \item \textbf{Classifiers} — Different ``judges'' that make the final decision
+    \item \textbf{Training} — How those judges learn to get better
+    \item \textbf{Evaluation} — How we score each judge's performance
+\end{enumerate}
+
+Now let's zoom into each box in the flowchart, one by one.
+
+\newpage
+% ============================================================================
+\section{Stage 1 — The Datasets (Top Two Blue Boxes)}
+% ============================================================================
+
+At the very top of the flowchart, you see \textbf{two blue boxes} sitting side by side. These are your two video collections — the ``raw material'' that the entire pipeline feeds on.
+
+% --- FineGym ---
+\subsection{Box 1: FineGym — 1,200 clips, 4 event classes}
+
+\begin{keybox}[What is FineGym?]
+FineGym is a collection of \textbf{1,200 gymnastics video clips} downloaded from YouTube. Every clip shows \textit{one} gymnast doing \textit{one} routine on \textit{one} apparatus. There are exactly 4 types (``classes''):
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Balance Beam (BB)} — 300 clips
+    \item \textbf{Floor Exercise (FX)} — 300 clips
+    \item \textbf{Uneven Bars (UB)} — 300 clips
+    \item \textbf{Vault (VT)} — 300 clips
+\end{itemize}
+That's 300 clips per class, perfectly balanced — like having exactly 300 red balls, 300 blue balls, 300 green balls, and 300 yellow balls.
+\end{keybox}
+
+\begin{analogybox}[Why Is FineGym Hard?]
+Here's the tricky part: all four categories look \textit{almost the same}. Every single clip shows a lone gymnast in a leotard, performing acrobatic moves inside a competition arena. The background is nearly identical. The lighting is the same. The person looks similar.
+
+Imagine being shown 4 photos of the same park at the same time of day, and being told ``which photo was taken on Monday?'' The differences are incredibly subtle. That's FineGym — the AI has to notice things like ``is the gymnast touching a bar?'' or ``is there a beam beneath them?'' to tell the classes apart. This is called a \textbf{fine-grained} classification problem.
+\end{analogybox}
+
+\begin{examplebox}[Concrete Example]
+\begin{itemize}[leftmargin=0.5cm]
+    \item \textbf{Vault clip:} A gymnast sprints down a runway, jumps on a springboard, vaults over the apparatus, and lands — all in about 5--8 seconds.
+    \item \textbf{Balance Beam clip:} A gymnast performs jumps, turns, and tumbles on a narrow 10 cm wide beam — typically 60--90 seconds long.
+    \item The AI must figure out which one is which, even though both show ``a gymnast doing flips in a gym.''
+\end{itemize}
+\end{examplebox}
+
+% --- HMDB51 ---
+\subsection{Box 2: HMDB51 — 6,754 clips, 51 action classes}
+
+\begin{keybox}[What is HMDB51?]
+HMDB51 is a much bigger and messier collection of \textbf{6,754 video clips} covering \textbf{51 completely different human actions}. These clips come from Hollywood movies, YouTube, and old archive footage. Examples of the 51 classes include:
+\begin{itemize}[leftmargin=1cm]
+    \item \textbf{Facial actions:} smiling, laughing, chewing
+    \item \textbf{Actions with objects:} eating, drinking, brushing hair, shooting a gun
+    \item \textbf{Body movements:} running, climbing, jumping, doing a cartwheel
+    \item \textbf{Human interactions:} hugging, fencing, kicking, punching
+\end{itemize}
+\end{keybox}
+
+\begin{analogybox}[Why Is HMDB51 Different From FineGym?]
+HMDB51 is the \textit{opposite} challenge. Instead of 4 similar-looking categories, you have \textbf{51 very different} categories. But the videos themselves are messy — different camera angles, different lighting, blurry footage, shaky cameras, various backgrounds. 
+
+Think of it this way:
+\begin{itemize}
+    \item \textbf{FineGym} = Spotting the difference between 4 nearly identical siblings in a school photo (hard because they look alike)
+    \item \textbf{HMDB51} = Identifying 51 different animals at a chaotic zoo during a rainstorm (hard because the conditions are terrible)
+\end{itemize}
+\end{analogybox}
+
+\begin{summarybox}[Why Use Both Datasets?]
+By testing on \textit{both} datasets, we prove that our system works in two very different scenarios:
+\begin{enumerate}
+    \item \textbf{Fine-grained:} Can it tell apart things that look almost identical? (FineGym)
+    \item \textbf{Coarse-grained:} Can it handle lots of different categories under messy conditions? (HMDB51)
+\end{enumerate}
+If a system aces both tests, it's genuinely good — not just a one-trick pony.
+\end{summarybox}
+
+\newpage
+% ============================================================================
+\section{Stage 2 — Frame Extraction (Green Box)}
+% ============================================================================
+
+Both arrows from the two dataset boxes point down into a single green box labeled \textbf{``Frame Extraction.''} This is where we go from videos to still images.
+
+\subsection{Why Can't We Just Feed the Whole Video?}
+
+\begin{analogybox}[Think of It Like This]
+A video is just a rapid slideshow of still pictures (called ``frames''), shown so fast (usually 30 frames per second) that your eyes see smooth motion. An 8-second vault clip at 30 fps contains $8 \times 30 = 240$ individual frames — that's 240 separate photos!
+
+Feeding all 240 frames to an AI is wasteful. Most consecutive frames are almost identical — frame 57 and frame 58 look 99\% the same because only $\frac{1}{30}$th of a second has passed. It's like reading every single page of a book when you could just read every 30th page and still understand the plot.
+\end{analogybox}
+
+\subsection{How Frame Extraction Works}
+
+The flowchart says: \textbf{``OpenCV VideoCapture $\rightarrow$ Uniform temporal sampling $\rightarrow$ Resize to 224 $\times$ 224''}
+
+Let's break this down into three mini-steps:
+
+\subsubsection{Step 2a: Open the Video (OpenCV VideoCapture)}
+
+\begin{keybox}[What Happens]
+We use a software library called \textbf{OpenCV} (Open Computer Vision) — think of it as a Swiss Army knife for working with images and videos. The \texttt{VideoCapture} function opens each video file and reads it frame by frame, like opening a flipbook and being able to jump to any page you want.
+\end{keybox}
+
+\subsubsection{Step 2b: Pick Evenly Spaced Frames (Uniform Temporal Sampling)}
+
+This is the most important part. Instead of grabbing all 240 frames, we pick only a \textit{handful} of frames, spread out \textit{evenly} across the video's timeline.
+
+\begin{examplebox}[Concrete Example — A 240-Frame Vault Video, Picking 8 Frames]
+Imagine your video has 240 frames numbered 0 through 239. We want exactly 8 frames. So we divide the video into 8 equal chunks:
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{cccl}
+\toprule
+\textbf{Frame \#} & \textbf{Position in Video} & \textbf{Time (at 30 fps)} & \textbf{What's Happening} \\
+\midrule
+\textbf{Frame 0} & Very start & 0.0 seconds & Gymnast standing at the start of the runway \\
+\textbf{Frame 30} & $\frac{1}{8}$ through & 1.0 second & Running down the runway \\
+\textbf{Frame 60} & $\frac{2}{8}$ through & 2.0 seconds & Approaching the springboard \\
+\textbf{Frame 90} & $\frac{3}{8}$ through & 3.0 seconds & Jumping onto the springboard \\
+\textbf{Frame 120} & Halfway & 4.0 seconds & In the air, hands on the vault table \\
+\textbf{Frame 150} & $\frac{5}{8}$ through & 5.0 seconds & Flying through the air, mid-flip \\
+\textbf{Frame 180} & $\frac{6}{8}$ through & 6.0 seconds & Starting to land \\
+\textbf{Frame 210} & $\frac{7}{8}$ through & 7.0 seconds & Sticking the landing \\
+\bottomrule
+\end{tabular}
+\end{center}
+The spacing between each picked frame is $\frac{240}{8} = 30$ frames. So we pick frame 0, 30, 60, 90, 120, 150, 180, and 210. We skip frames 1--29, 31--59, etc. because they're nearly identical to the frames we already picked.
+\end{examplebox}
+
+\begin{examplebox}[Another Example — A 150-Frame HMDB51 ``Running'' Video, Picking 8 Frames]
+Video has 150 frames. Spacing = $\frac{150}{8} \approx 19$ frames.
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{ccl}
+\toprule
+\textbf{Frame \#} & \textbf{Time (at 30 fps)} & \textbf{What's Happening} \\
+\midrule
+\textbf{Frame 0} & 0.0 s & Person starting to run \\
+\textbf{Frame 19} & 0.6 s & Mid-stride, left foot forward \\
+\textbf{Frame 38} & 1.3 s & Right foot forward \\
+\textbf{Frame 56} & 1.9 s & Full stride in motion \\
+\textbf{Frame 75} & 2.5 s & Halfway through the clip \\
+\textbf{Frame 94} & 3.1 s & Still running, background changes \\
+\textbf{Frame 112} & 3.7 s & Arms pumping \\
+\textbf{Frame 131} & 4.4 s & Nearing end of clip \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{examplebox}
+
+\begin{warnbox}[Key Insight for Defense]
+The word ``uniform'' is critical. It means \textit{evenly spaced}, not random. We don't just grab 8 random frames — we \textit{guarantee} that every phase of the action is represented. If we picked 8 random frames, they might all come from the first 2 seconds and miss the landing entirely!
+\end{warnbox}
+
+\subsubsection{Step 2c: Resize to 224 × 224 Pixels}
+
+\begin{keybox}[What Happens]
+Every selected frame is resized (squished or stretched) to exactly \textbf{224 pixels wide $\times$ 224 pixels tall}. 
+
+Why 224? Because the AI models we use in the next step were trained on images of this exact size. It's like how a specific key only fits a specific lock — the model expects 224$\times$224 images, so that's what we give it.
+
+Original videos might be 1920$\times$1080 (Full HD), 1280$\times$720, or any other size. By resizing everything to 224$\times$224, we make sure every video is treated the same way, regardless of its original resolution.
+\end{keybox}
+
+\newpage
+% ============================================================================
+\section{Stage 3 — Feature Extraction (Two Orange Boxes)}
+% ============================================================================
+
+Below the green Frame Extraction box, two arrows branch out to \textbf{two orange boxes} — one on the left and one on the right. These are the two ``AI brains'' that look at the extracted frames and convert them into numbers.
+
+\begin{analogybox}[Think of It Like This]
+Imagine you show 8 photos from a vault routine to two different expert judges:
+\begin{itemize}
+    \item \textbf{Judge A (V-JEPA 2)} was trained by watching millions of videos with \textit{no labels} — nobody told it ``this is gymnastics'' or ``this is cooking.'' It learned patterns on its own, like a child learning by watching the world.
+    \item \textbf{Judge B (Qwen2.5-VL)} was trained by looking at billions of images \textit{with descriptions} — it was told ``this photo shows a dog'' or ``this video shows someone cooking pasta.'' It learned by reading and watching together.
+\end{itemize}
+Both judges watch the same 8 frames, but they write down different kinds of notes because their training was completely different. We want to see whose notes are more useful for identifying actions.
+\end{analogybox}
+
+% --- V-JEPA 2 ---
+\subsection{Left Orange Box: V-JEPA 2 (654M)}
+
+The box says: \textbf{``V-JEPA 2 (654M) — ViT-Huge, float16+SDPA, 8 frames $\rightarrow$ 4 layers $\times$ T' $\times$ 1280''}
+
+Let's decode this piece by piece:
+
+\begin{keybox}[What Does Each Term Mean?]
+\begin{itemize}[leftmargin=0.5cm, itemsep=0.5cm]
+    \item \textbf{V-JEPA 2} = The name of the AI model, made by Meta (the company behind Facebook/Instagram). ``V'' stands for Video, ``JEPA'' stands for Joint Embedding Predictive Architecture. Think of it as ``Video Brain version 2.''
+    
+    \item \textbf{654M} = The model has \textbf{654 million} adjustable knobs (called ``parameters''). That's how complex its brain is. For comparison, a simple calculator has maybe a few thousand internal connections; this model has 654 million.
+    
+    \item \textbf{ViT-Huge} = The architecture is a ``Vision Transformer — Huge size.'' A Transformer is a specific type of AI architecture that's great at finding relationships between different parts of an image. ``Huge'' just means it's the largest version.
+    
+    \item \textbf{float16+SDPA} = Technical memory-saving tricks. ``float16'' means using half-precision numbers (which take half the memory), and ``SDPA'' (Scaled Dot-Product Attention) is a fast way to compute attention. Think of these as ``fuel-efficient mode'' — same power, less memory used.
+    
+    \item \textbf{8 frames} = We feed it exactly 8 frames per video (the ones we extracted in Stage 2).
+    
+    \item \textbf{4 layers $\times$ T' $\times$ 1280} = This is the shape of its output notes:
+    \begin{itemize}
+        \item \textbf{4 layers} = We collect notes from 4 different ``depths'' of the brain (layers 6, 12, 18, and 24 out of 24 total). Early layers notice simple things like edges and colors; deeper layers understand complex things like ``a person is flipping.''
+        \item \textbf{T'} = The number of time-steps (4 in our case, since 8 frames get grouped into 4 temporal tokens).
+        \item \textbf{1280} = Each note is a list of 1,280 numbers. Think of it like a very detailed survey with 1,280 questions, and each answer is a number.
+    \end{itemize}
+\end{itemize}
+\end{keybox}
+
+\begin{examplebox}[What V-JEPA 2 Actually Produces]
+For one vault video clip, V-JEPA 2 produces:
+\begin{itemize}
+    \item From Layer 6 (shallow): 4 time-steps, each with 1,280 numbers $\rightarrow$ focuses on basic shapes and textures
+    \item From Layer 12 (mid): 4 time-steps, each with 1,280 numbers $\rightarrow$ notices body parts and apparatus shapes
+    \item From Layer 18 (mid-deep): 4 time-steps, each with 1,280 numbers $\rightarrow$ understands poses and movements
+    \item From Layer 24 (deepest): 4 time-steps, each with 1,280 numbers $\rightarrow$ grasps the overall action category
+\end{itemize}
+For \textbf{baseline classifiers}, we only use the deepest layer (Layer 24), average all the time-steps together, and get a single list of 1,280 numbers per video. Think of it as: ``Just give me your final summary.''
+
+For \textbf{HAF-STD Net} (our special model), we use ALL 4 layers with all time-steps. Think of it as: ``Give me your rough draft, first revision, second revision, AND final summary — I want to see how your understanding evolved.''
+\end{examplebox}
+
+\begin{analogybox}[Dashed Red Arrow — Multi-Layer Features]
+Notice the \textbf{dashed red arrow} coming from V-JEPA 2's left side in the flowchart. This represents the multi-layer features (all 4 layers) that go on a special path directly to HAF-STD Net, \textit{bypassing} PCA. The regular solid arrows carry only the final-layer summary.
+
+This is like sending the full essay draft to one teacher and just the executive summary to the other teachers.
+\end{analogybox}
+
+% --- Qwen2.5-VL ---
+\subsection{Right Orange Box: Qwen2.5-VL (7B)}
+
+The box says: \textbf{``Qwen2.5-VL (7B) — 4-bit NF4 quantized, 4 frames $\rightarrow$ 3584-d, hidden-state pooling''}
+
+\begin{keybox}[What Does Each Term Mean?]
+\begin{itemize}[leftmargin=0.5cm, itemsep=0.5cm]
+    \item \textbf{Qwen2.5-VL} = An AI model made by Alibaba Cloud (the Chinese tech company). ``VL'' stands for Vision-Language — it understands both images \textit{and} text together.
+    
+    \item \textbf{7B} = This model has \textbf{7 billion} parameters — roughly \textbf{10 times bigger} than V-JEPA 2! It's like comparing a regular library (V-JEPA 2) to the Library of Congress (Qwen2.5-VL).
+    
+    \item \textbf{4-bit NF4 quantized} = Because 7 billion parameters would need about 14 GB of memory (which is almost all of our GPU's 15.6 GB), we compress the model using a technique called ``NF4 quantization.'' This is like converting a high-resolution photo to a slightly lower resolution to save phone storage — you lose a tiny bit of quality, but it still looks great, and now it fits. This shrinks the model from $\sim$14 GB down to $\sim$4 GB.
+    
+    \item \textbf{4 frames} = We only give it 4 frames per video (not 8 like V-JEPA 2), because the model is so much bigger that processing 8 frames would run out of memory.
+    
+    \item \textbf{3584-d} = Its output is a list of \textbf{3,584 numbers} per video. That's almost 3 times more than V-JEPA 2's 1,280 numbers.
+    
+    \item \textbf{hidden-state pooling} = We grab the model's internal ``thoughts'' (hidden states) from the last layer and average them all together to get one summary vector.
+\end{itemize}
+\end{keybox}
+
+\begin{warnbox}[Important Difference Between the Two Models]
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Feature} & \textbf{V-JEPA 2} & \textbf{Qwen2.5-VL} \\
+\midrule
+Parameters & 654 million & 7 billion \\
+How it learned & Watching videos \textit{without} labels & Reading image-text pairs \\
+Frames per video & 8 & 4 \\
+Output size per video & 1,280 numbers & 3,584 numbers \\
+Multi-layer extraction & Yes (4 layers) & No (final layer only) \\
+Memory trick & float16 (half precision) & 4-bit quantization \\
+Runs on & \multicolumn{2}{c}{Both on NVIDIA Tesla T4 (15.6 GB)} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{warnbox}
+
+\subsection{The ``Frozen'' Concept — Why We Don't Retrain These Models}
+
+\begin{analogybox}[Think of It Like This]
+Both AI models are used in ``frozen'' mode. This means we \textbf{do not change a single one of their internal parameters}. We just use them as-is, like borrowing a pre-built telescope from NASA to look at the sky — we don't modify the telescope; we just look through it.
+
+Why? Because these models were trained on millions (or billions) of images/videos by teams with hundreds of powerful GPUs. We only have 1 small GPU. Retraining them would be like trying to rebuild a car engine with a pocket screwdriver — not enough tools.
+
+Instead, we just let these frozen models ``look'' at our videos and write down their observations (the feature vectors). Then we train much smaller classifiers on top of those observations.
+\end{analogybox}
+
+\newpage
+% ============================================================================
+\section{Stage 4 — Feature Preprocessing (Green Box)}
+% ============================================================================
+
+Both orange model boxes have arrows pointing down into a green box that says: \textbf{``Feature Preprocessing — StandardScaler (zero mean, unit variance) $\rightarrow$ 80/20 Train/Eval Split''}
+
+\subsection{What is StandardScaler?}
+
+\begin{analogybox}[Think of It Like This]
+Imagine you're comparing test scores from two very different exams:
+\begin{itemize}
+    \item \textbf{Math exam:} scores range from 0 to 100
+    \item \textbf{Chemistry exam:} scores range from 0 to 1000
+\end{itemize}
+If you just look at raw numbers, a chemistry score of 500 \textit{looks} way bigger than a math score of 95, even though 95/100 is amazing and 500/1000 is just average.
+
+StandardScaler fixes this by converting every number so that:
+\begin{itemize}
+    \item The \textbf{average} of each feature becomes \textbf{0}
+    \item The \textbf{spread} (standard deviation) of each feature becomes \textbf{1}
+\end{itemize}
+Now both features are on the same playing field. A value of $+2$ means ``2 standard deviations above average'' regardless of whether it originally came from a 0-to-100 scale or a 0-to-10,000 scale.
+\end{analogybox}
+
+\begin{examplebox}[Applied to Our Feature Vectors]
+V-JEPA 2 gives us 1,280 numbers per video. Some of those numbers might naturally range from $-50$ to $+50$, while others might range from $-0.001$ to $+0.001$. Without StandardScaler, the features with big numbers would dominate everything. After StandardScaler, every single one of those 1,280 features has equal influence.
+\end{examplebox}
+
+\subsection{What is the 80/20 Train/Eval Split?}
+
+\begin{keybox}[Splitting the Data]
+We randomly divide all our videos into two groups:
+\begin{itemize}
+    \item \textbf{80\% = Training set} — The classifiers learn from these videos (like homework problems with answer keys)
+    \item \textbf{20\% = Evaluation set} — These videos are \textit{never} shown during training. They're used only at the end to test how well the classifier learned (like the final exam)
+\end{itemize}
+For FineGym: 960 training clips, 240 test clips.\\
+For HMDB51: about 5,403 training clips, 1,351 test clips.
+\end{keybox}
+
+\begin{warnbox}[Zero-Leakage Rule]
+A crucial rule: we compute the StandardScaler statistics (the average and spread) using \textbf{ONLY the training set}. Then we apply those same numbers to the test set. We \textbf{never} peek at test data to compute statistics.
+
+Why? It's like a teacher writing an exam. If the teacher looks at students' homework answers while writing the exam, the exam would be unfairly easy. The test must be completely independent. In machine learning, breaking this rule is called ``data leakage'' and it would make our results meaningless.
+\end{warnbox}
+
+\newpage
+% ============================================================================
+\section{Stage 5 — PCA Dimensionality Reduction (Green Box)}
+% ============================================================================
+
+Below the Feature Preprocessing box, there's another green box: \textbf{``PCA Dimensionality Reduction — 95\% variance retained $\rightarrow$ compact subspace ($k^* \ll D$)''}
+
+\subsection{What is PCA?}
+
+\begin{analogybox}[Think of It Like This]
+Imagine you surveyed 1,000 people with a 1,280-question questionnaire. That's a LOT of data. But many questions are redundant — if someone says they love running, they probably also said they enjoy jogging and like being outdoors. Those 3 questions essentially measure the same thing.
+
+\textbf{PCA (Principal Component Analysis)} finds these redundancies and combines correlated questions into a smaller set of ``super-questions'' that capture the same information. If 1,280 features can be boiled down to 90 ``super-features'' without losing much information, PCA does exactly that.
+\end{analogybox}
+
+\subsection{What Does ``95\% Variance Retained'' Mean?}
+
+\begin{keybox}[The 95\% Rule]
+``Variance'' is a measure of how much useful information is spread across all your features. We keep enough ``super-features'' (principal components) to preserve \textbf{95\% of the total information}. We're okay with losing 5\% because that 5\% is usually just noise — random meaningless fluctuations.
+\end{keybox}
+
+\begin{examplebox}[Real Numbers from the Experiments]
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Dataset + Model} & \textbf{Original Size} & \textbf{After PCA} & \textbf{Reduction} \\
+\midrule
+FineGym + V-JEPA 2 & 1,280 & 90 & 93\% smaller! \\
+FineGym + Qwen2.5-VL & 3,584 & 142 & 96\% smaller! \\
+HMDB51 + V-JEPA 2 & 1,280 & 286 & 78\% smaller \\
+HMDB51 + Qwen2.5-VL & 3,584 & 719 & 80\% smaller \\
+\bottomrule
+\end{tabular}
+\end{center}
+Notice that HMDB51 needs more components (286 and 719) than FineGym (90 and 142). That makes sense — 51 different action classes need more ``descriptive power'' than just 4 classes.
+\end{examplebox}
+
+\begin{warnbox}[HAF-STD Net Skips PCA!]
+Look at the flowchart carefully. There's a \textbf{dashed red arrow} that goes from the Feature Preprocessing box \textit{directly} to HAF-STD Net, \textbf{bypassing} the PCA box entirely. 
+
+Why? HAF-STD Net is specially designed to work with the full, rich, multi-layer 4D feature tensor from V-JEPA 2. Running PCA on it would destroy the temporal and layer structure that HAF-STD Net relies on. It's like trying to compress a 3D sculpture into a flat photo — you'd lose the depth information.
+
+Only the baseline classifiers (Classical ML and Neural Networks) receive the PCA-reduced features.
+\end{warnbox}
+
+\newpage
+% ============================================================================
+\section{Stage 6 — The Classifiers (Three Bottom Boxes)}
+% ============================================================================
+
+Below PCA, the flowchart branches into \textbf{three boxes} — these are the ``judges'' that look at the processed features and make the final decision: ``What action is in this video?''
+
+\subsection{Left Box (Red, Dashed): HAF-STD Net — 4.8M params}
+
+\begin{keybox}[The Star of the Thesis]
+\textbf{HAF-STD Net} stands for \textbf{Hierarchical Adaptive Fusion with Spectral-Temporal Decomposition}. It's the \textbf{novel (brand new) model} proposed in this thesis — the thing that makes this research original.
+
+It has \textbf{4.8 million} trainable parameters and is designed specifically to exploit the unique multi-layer features from V-JEPA 2. It does NOT work with Qwen2.5-VL features (because Qwen doesn't provide multi-layer temporal tensors).
+\end{keybox}
+
+\begin{analogybox}[How HAF-STD Net Works — The Film Critic Analogy]
+Imagine you're a film critic reviewing a gymnastics routine. You don't just watch the final product — you watch it at multiple levels:
+
+\textbf{1. Spectral-Temporal Decomposition (Haar Wavelet):}
+\begin{itemize}
+    \item You split each layer's temporal signal into two streams:
+    \begin{itemize}
+        \item \textbf{Appearance stream} (low-frequency): ``What does the scene generally look like?'' — Captures the static backdrop: the gymnast, the apparatus, the arena. Like a blurry average of neighboring frames.
+        \item \textbf{Motion stream} (high-frequency): ``What's changing?'' — Captures the differences between consecutive frames: the flips, the rotations, the speed of movement. Like the ``motion blur'' trail.
+    \end{itemize}
+    \item Technically, it averages pairs of neighboring time-steps (appearance) and takes their difference (motion). It's the simplest possible wavelet — called the \textbf{Haar wavelet}.
+\end{itemize}
+
+\textbf{2. Depth Velocity:}
+\begin{itemize}
+    \item We compare what Layer 6 ``saw'' vs what Layer 12 ``saw'' vs Layer 18 vs Layer 24.
+    \item The \textit{difference} between consecutive layers tells us how the model's ``understanding'' evolved as it thought deeper. For a vault, the understanding might change dramatically between Layer 6 (``I see a person'') and Layer 24 (``This is a vault with a specific twist''). For a balance beam, the evolution might follow a different pattern.
+    \item These differences are called ``depth velocities'' — how fast is the understanding changing?
+\end{itemize}
+
+\textbf{3. Adaptive Routing (The Smart Mixer):}
+\begin{itemize}
+    \item Across the 4 layers, we extract 4 appearance streams, 4 motion streams, and 3 inter-layer depth velocity streams = \textbf{11 streams total}.
+    \item A small neural network looks at ALL 11 streams and decides: ``For this particular video, how much should I trust each stream?'' Maybe for a vault, the motion stream from Layer 18 is super important. For a floor exercise, the appearance stream from Layer 12 matters more.
+    \item It assigns a weight (importance score) to each stream, and blends them together into one final summary.
+\end{itemize}
+
+\textbf{4. Cosine Similarity Head (The Final Decision):}
+\begin{itemize}
+    \item Instead of the usual approach of multiplying the summary by a weight matrix, HAF-STD Net compares the summary's \textit{direction} (not magnitude) to learned ``ideal direction'' vectors for each class.
+    \item The class whose ideal direction is most aligned with the video's summary wins. It's like pointing at a compass and seeing which labeled direction you're closest to.
+\end{itemize}
+\end{analogybox}
+
+\subsection{Center Box (Green): Classical ML (3)}
+
+\begin{keybox}[Three Traditional Classifiers]
+These are ``old-school'' machine learning models that don't use neural networks:
+\begin{enumerate}[leftmargin=1cm, itemsep=0.3cm]
+    \item \textbf{SVM-RBF (Support Vector Machine with Radial Basis Function kernel):}
+    \begin{itemize}
+        \item Imagine drawing the best possible boundary line between dots of different colors on a piece of paper. SVM finds that boundary, but in 90+ dimensions instead of 2. The ``RBF'' part lets it draw curved boundaries instead of just straight lines.
+    \end{itemize}
+    
+    \item \textbf{Random Forest (500 trees):}
+    \begin{itemize}
+        \item Imagine asking 500 slightly different yes/no questionnaires to classify a video, then taking a majority vote. Each ``tree'' is one questionnaire. By averaging 500 opinions, you get a robust answer — even if some individual trees are wrong, the crowd is usually right.
+    \end{itemize}
+    
+    \item \textbf{Logistic Regression (LogReg):}
+    \begin{itemize}
+        \item The simplest possible classifier. It draws a straight line (or flat plane) between classes. It's like asking: ``If I add up all the features with some weights, does the total lean more towards Class A or Class B?'' Despite being simple, it often works surprisingly well.
+    \end{itemize}
+\end{enumerate}
+\end{keybox}
+
+\subsection{Right Box (Cyan/Blue): Neural Network Classifiers (5)}
+
+\begin{keybox}[Five Neural Network Baselines]
+These are small neural networks trained specifically on our features:
+\begin{enumerate}[leftmargin=1cm, itemsep=0.3cm]
+    \item \textbf{MLP (Multi-Layer Perceptron):} Two layers of neurons (512 then 256). The basic ``vanilla'' neural network.
+    
+    \item \textbf{DeepMLP:} A deeper version with 4 layers (512 $\rightarrow$ 256 $\rightarrow$ 128 $\rightarrow$ output), plus Batch Normalization (keeps numbers stable) and Dropout (randomly turns off 30\% of neurons during training to prevent memorization).
+    
+    \item \textbf{ResMLP:} Same as DeepMLP but with ``skip connections'' — shortcuts that let information jump over layers. Like adding express lanes on a highway. This prevents a problem called ``vanishing gradients'' where deep networks forget what they learned.
+    
+    \item \textbf{Conv1DNet:} Treats the feature vector as a 1D signal (like an audio waveform) and slides small filters across it to find local patterns. Good at spotting clusters of related features that are next to each other.
+    
+    \item \textbf{Mini Transformer:} A tiny version of the same architecture that powers ChatGPT! It uses ``attention'' — the ability to look at different parts of the feature vector and figure out which parts are related to each other.
+\end{enumerate}
+\end{keybox}
+
+\begin{summarybox}[Total Classifier Count]
+\begin{itemize}
+    \item 3 Classical ML + 5 Neural Networks = \textbf{8 baseline classifiers}
+    \item Plus HAF-STD Net = \textbf{9 total classifiers}
+\end{itemize}
+Each of the 9 classifiers is tested with features from \textit{both} V-JEPA 2 and Qwen2.5-VL, on \textit{both} datasets (FineGym and HMDB51). Exception: HAF-STD Net only works with V-JEPA 2 features.
+\end{summarybox}
+
+\newpage
+% ============================================================================
+\section{Stage 7 — How the Neural Networks Learn (Training)}
+% ============================================================================
+
+The flowchart doesn't have a separate box for training, but it's an essential invisible stage between the classifiers and the evaluation. Here's how the neural network classifiers (DeepMLP, ResMLP, Conv1DNet, Transformer, and HAF-STD Net) are trained:
+
+\subsection{The Five Training Tricks}
+
+\begin{keybox}[1. Label Smoothing ($\epsilon = 0.1$)]
+\textbf{Without label smoothing:} During training, we tell the model ``this video is 100\% Vault and 0\% everything else.''
+
+\textbf{With label smoothing:} We say ``this video is 90\% Vault, and there's a tiny 3.3\% chance each that it's Balance Beam, Floor, or Bars.''
+
+Why? Because being 100\% certain about anything is risky. If the model learns to be overly confident, it becomes brittle — like a student who memorizes exact answers instead of understanding the concepts. Label smoothing makes the model ``humble'' and better at handling unexpected inputs.
+\end{keybox}
+
+\begin{keybox}[2. Feature-Space Mixup ($\alpha = 0.2$)]
+During training, we sometimes blend two videos' features together. For example, we might mix 70\% of a vault video's features with 30\% of a floor exercise video's features, and tell the model ``this is 70\% vault and 30\% floor.''
+
+This is like a teacher creating trick questions by combining elements from different topics. It forces the model to learn \textit{gradual} boundaries between classes instead of hard, brittle boundaries.
+\end{keybox}
+
+\begin{keybox}[3. Cosine Annealing Learning Rate]
+The ``learning rate'' controls how big each learning step is. We start with big steps (learning rate = 0.001) and gradually shrink them down to tiny steps (learning rate = 0.000001), following a smooth cosine curve.
+
+It's like learning to park a car: you start by driving toward the spot quickly, then slow down as you get closer so you don't overshoot.
+\end{keybox}
+
+\begin{keybox}[4. AdamW Optimizer]
+The optimizer is the ``engine'' that actually updates the model's parameters. AdamW is a smart optimizer that:
+\begin{itemize}
+    \item Adapts its step size for each parameter individually
+    \item Uses momentum (remembers which direction it was going)
+    \item Adds ``weight decay'' — a gentle pull toward zero that prevents parameters from growing too large (which would mean overfitting/memorization)
+\end{itemize}
+\end{keybox}
+
+\begin{keybox}[5. Early Stopping (Patience = 15)]
+We monitor the model's performance on a validation set after every epoch (one full pass through the training data). If the performance \textit{hasn't improved for 15 consecutive epochs}, we stop training and roll back to the best version.
+
+It's like baking a cake: you keep checking if it's done, and the moment it stops rising and starts burning, you take it out. ``Patience = 15'' means we give it 15 more chances before we decide it's done.
+\end{keybox}
+
+\newpage
+% ============================================================================
+\section{Stage 8 — Comparative Evaluation (Yellow Box at the Bottom)}
+% ============================================================================
+
+All three classifier boxes have arrows pointing down into the final yellow box: \textbf{``Comparative Evaluation — Accuracy, Macro/Weighted F1, MCC, Cohen's $\kappa$''}
+
+\subsection{The Four Report Card Metrics}
+
+\begin{keybox}[1. Accuracy — The Simple Score]
+\textbf{What it means:} Out of all the test videos, what percentage did the classifier get right?
+
+\textbf{Example:} If there are 240 test videos and the classifier correctly identified 216, the accuracy is $\frac{216}{240} = 90\%$.
+
+\textbf{Limitation:} Accuracy can be misleading if classes are imbalanced. Imagine a dataset with 95 cats and 5 dogs. A lazy model that always says ``cat'' gets 95\% accuracy without learning anything! That's why we need the other metrics.
+\end{keybox}
+
+\begin{keybox}[2. Macro F1-Score — The Fair Score (Primary Metric)]
+\textbf{What it means:} F1-Score is a blend of two things:
+\begin{itemize}
+    \item \textbf{Precision:} ``When you said Vault, were you right?'' (avoiding false alarms)
+    \item \textbf{Recall:} ``Did you catch all the Vaults?'' (avoiding missed detections)
+\end{itemize}
+
+``Macro'' means we calculate F1 for \textit{each class separately}, then take the average. This gives every class equal importance — a rare class matters just as much as a common class.
+
+\textbf{This is the primary ranking metric} in the thesis. If we had to pick just one number to compare classifiers, this is it.
+\end{keybox}
+
+\begin{keybox}[3. MCC (Matthews Correlation Coefficient) — The Honest Score]
+\textbf{What it means:} MCC looks at the \textit{entire} confusion matrix — correct predictions AND incorrect predictions — and computes a correlation between predictions and truth.
+\begin{itemize}
+    \item \textbf{MCC = +1.0:} Perfect predictions
+    \item \textbf{MCC = 0.0:} No better than random guessing
+    \item \textbf{MCC = --1.0:} Perfectly wrong (everything backwards)
+\end{itemize}
+
+The big advantage: if a model just predicts the most common class all the time, MCC gives it 0.0 (``you learned nothing''), while accuracy might give it 95\%. MCC is considered the most \textit{honest} single metric.
+\end{keybox}
+
+\begin{keybox}[4. Cohen's Kappa ($\kappa$) — The Chance-Adjusted Score]
+\textbf{What it means:} Kappa asks: ``How much better is this classifier than random guessing?'' It adjusts the accuracy by subtracting the performance you'd expect from pure luck.
+\begin{itemize}
+    \item $\kappa < 0.20$: Slight agreement (barely better than chance)
+    \item $0.41$ -- $0.60$: Moderate agreement
+    \item $0.61$ -- $0.80$: Substantial agreement
+    \item $0.81$ -- $1.00$: Almost perfect agreement
+\end{itemize}
+\end{keybox}
+
+\begin{summarybox}[Why Report Four Metrics?]
+Each metric catches a different type of ``cheating'':
+\begin{itemize}
+    \item \textbf{Accuracy} can be fooled by class imbalance
+    \item \textbf{Macro F1} ensures every class is treated fairly
+    \item \textbf{MCC} catches lazy models that only predict the majority class
+    \item \textbf{Cohen's $\kappa$} explicitly removes the effect of random chance
+\end{itemize}
+If a classifier scores high on ALL four, it's genuinely good — no shortcuts, no tricks.
+\end{summarybox}
+
+\newpage
+% ============================================================================
+\section{The Complete Flow — Following One Video Through the Pipeline}
+% ============================================================================
+
+Let's trace a single vault video clip through every stage of the flowchart:
+
+\begin{yellowbox}[End-to-End Example: One Vault Video]
+\begin{enumerate}[leftmargin=1cm, itemsep=0.5cm]
+    \item \textbf{Stage 1 — Dataset:} Our clip comes from FineGym. It's an 8-second vault routine, filmed at 30 fps = 240 frames total. Its true label is ``Vault (VT).''
+    
+    \item \textbf{Stage 2 — Frame Extraction:} OpenCV opens the video and picks 8 evenly spaced frames: frames 0, 30, 60, 90, 120, 150, 180, 210. Each frame is resized from 1920$\times$1080 to 224$\times$224 pixels. We now have 8 small square images.
+    
+    \item \textbf{Stage 3a — V-JEPA 2:} The 8 frames are fed into V-JEPA 2. It outputs:
+    \begin{itemize}
+        \item For baselines: one vector of 1,280 numbers (final-layer mean-pooled)
+        \item For HAF-STD Net: a rich tensor of shape $4 \times 4 \times 1280$ (4 layers, 4 time-steps, 1280 features each)
+    \end{itemize}
+    
+    \item \textbf{Stage 3b — Qwen2.5-VL:} 4 of the 8 frames are fed into the quantized Qwen2.5-VL. It outputs one vector of 3,584 numbers.
+    
+    \item \textbf{Stage 4 — Preprocessing:} The 1,280-number vector (from V-JEPA 2) and the 3,584-number vector (from Qwen2.5-VL) are each standardized using training-set statistics. The data is split: this video lands in either the training set (80\% chance) or the test set (20\% chance).
+    
+    \item \textbf{Stage 5 — PCA:} For baseline classifiers only: the 1,280-d V-JEPA 2 vector is compressed to 90 numbers. The 3,584-d Qwen2.5-VL vector is compressed to 142 numbers.
+    
+    \item \textbf{Stage 6 — Classification:} All 9 classifiers look at the compressed (or full) features and predict a class label. SVM says ``Vault.'' Random Forest says ``Vault.'' LogReg says ``Vault.'' DeepMLP says ``Floor Exercise'' (wrong!). HAF-STD Net says ``Vault.''
+    
+    \item \textbf{Stage 7 — Training:} (This already happened before testing. The neural networks trained on the 80\% training set using AdamW, label smoothing, Mixup, cosine annealing, and early stopping.)
+    
+    \item \textbf{Stage 8 — Evaluation:} After all test videos are classified, we compute Accuracy, Macro F1, MCC, and Cohen's Kappa for each classifier. We compare the 9 classifiers across 2 models and 2 datasets = a comprehensive comparison table.
+\end{enumerate}
+\end{yellowbox}
+
+\newpage
+% ============================================================================
+\section{Summary — The Flowchart at a Glance}
+% ============================================================================
+
+\begin{summarybox}[The Entire Pipeline in One Paragraph]
+We start with two video datasets — FineGym (1,200 gymnastics clips, 4 classes) and HMDB51 (6,754 action clips, 51 classes). From each video, we extract 8 (or 4) evenly spaced frames and resize them to 224$\times$224. These frames are fed into two frozen AI models: V-JEPA 2 (654M parameters, self-supervised, outputs 1,280-d vectors) and Qwen2.5-VL (7B parameters, vision-language, 4-bit quantized, outputs 3,584-d vectors). The resulting feature vectors are standardized (zero mean, unit variance) and split 80/20 for training and testing. For baseline classifiers, PCA compresses the features to keep 95\% of the information. Nine classifiers — 3 classical (SVM-RBF, Random Forest, Logistic Regression), 5 neural networks (MLP, DeepMLP, ResMLP, Conv1DNet, Transformer), and our novel HAF-STD Net — are trained and evaluated. HAF-STD Net uniquely receives full multi-layer temporal features from V-JEPA 2, bypassing PCA, and uses wavelet decomposition, depth velocity, and adaptive routing to classify actions. All classifiers are compared using four metrics: Accuracy, Macro F1, MCC, and Cohen's Kappa.
+\end{summarybox}
+
+\begin{center}
+\vspace{1cm}
+\Large\bfseries\color{stageblue} Good luck with your thesis defense!
+\end{center}
+
+\end{document}

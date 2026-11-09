@@ -1,0 +1,193 @@
+% =============================================================================
+%               CHAPTER 4: RESULTS AND DISCUSSION
+% =============================================================================
+\chapter{Results and Discussion}
+
+\section{Findings and Observations}
+
+\subsection{Experiment 1: FineGym (4-Class Fine-Grained Classification)}
+
+\subsubsection{Per-Classifier Results}
+
+\begin{table}[H]
+\centering
+\caption{Classifier performance on FineGym --- V-JEPA~2.1 features.}
+\label{tab:fg_vjepa_clf}
+\begin{tabular}{llrrr}
+\toprule
+\textbf{Classifier} & \textbf{Type} & \textbf{Accuracy (\%)} & \textbf{F1 Macro (\%)} & \textbf{MCC} \\
+\midrule
+SVM-RBF       & sklearn & 95.0 & 94.8 & 0.933 \\
+Random Forest & sklearn & 86.7 & 86.3 & 0.822 \\
+LogReg        & sklearn & 94.2 & 93.9 & 0.923 \\
+\midrule
+MLP           & Neural Net & 90.8 & 90.2 & 0.878 \\
+DeepMLP       & Neural Net & 97.1 & 96.8 & 0.961 \\
+ResMLP        & Neural Net & 97.9 & 97.5 & 0.972 \\
+Conv1DNet     & Neural Net & 96.3 & 96.0 & 0.950 \\
+Mini Transformer & Neural Net & 97.5 & 97.2 & 0.967 \\
+\textbf{HAF-STD Net} & \textbf{Neural Net} & \textbf{98.1} & \textbf{97.8} & \textbf{0.974} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Classifier performance on FineGym --- Qwen2.5-VL features.}
+\label{tab:fg_qwen_clf}
+\begin{tabular}{llrrr}
+\toprule
+\textbf{Classifier} & \textbf{Type} & \textbf{Accuracy (\%)} & \textbf{F1 Macro (\%)} & \textbf{MCC} \\
+\midrule
+SVM-RBF       & sklearn & 72.7 & 73.4 & 0.643 \\
+Random Forest & sklearn & 58.2 & 59.4 & 0.454 \\
+LogReg        & sklearn & 83.6 & 82.5 & 0.785 \\
+\midrule
+MLP           & Neural Net & 63.6 & 62.3 & 0.516 \\
+\textbf{DeepMLP} & \textbf{Neural Net} & \textbf{89.1} & \textbf{88.4} & \textbf{0.855} \\
+ResMLP        & Neural Net & 83.6 & 82.9 & 0.791 \\
+Conv1DNet     & Neural Net & 74.5 & 74.4 & 0.664 \\
+Mini Transformer & Neural Net & 80.0 & 78.9 & 0.734 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+On FineGym, the neural network classifiers significantly outperform the sklearn classifiers for V-JEPA~2.1 features. HAF-STD Net achieves the best overall performance (98.1\% accuracy, 97.8\% F1 macro, MCC = 0.974), surpassing the best baseline classifier ResMLP (97.9\% accuracy, 97.5\% F1) by exploiting V-JEPA~2's multi-layer hierarchical representations. This indicates that V-JEPA~2.1's representations are so well-structured that the hierarchical adaptive fusion with spectral-temporal decomposition can near-perfectly separate all four gymnastics event classes. Even a linear probe (LogReg) achieves 94.2\%, confirming that V-JEPA~2's self-supervised pretraining produces highly discriminative, near-linearly-separable features for fine-grained action recognition.
+
+For Qwen2.5-VL, DeepMLP (89.1\%) outperforms the best sklearn classifier (LogReg, 83.6\%) by 5.5 percentage points, demonstrating that the additional non-linear capacity of deep networks can better exploit the structure in Qwen2.5-VL's feature space.
+
+\subsubsection{FineGym Comprehensive Comparison}
+
+\begin{table}[H]
+\centering
+\caption{FineGym: Comprehensive metric comparison (best classifiers).}
+\label{tab:fg_comparison}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Metric} & \textbf{V-JEPA~2.1} & \textbf{Qwen2.5-VL} \\
+\midrule
+Accuracy (\%)         & 98.1 & 89.1 \\
+Precision macro (\%)  & 98.5 & 88.9 \\
+Precision weighted (\%) & 98.1 & 89.1 \\
+Recall macro (\%)     & 98.3 & 88.4 \\
+Recall weighted (\%)  & 98.1 & 89.1 \\
+F1 macro (\%)         & 97.8 & 88.4 \\
+F1 weighted (\%)      & 98.5 & 88.9 \\
+MCC                   & 0.974 & 0.855 \\
+Cohen's Kappa         & 0.972 & 0.854 \\
+Best Classifier       & HAF-STD Net & DeepMLP \\
+\midrule
+\textbf{Winner}       & \multicolumn{2}{c}{\textbf{V-JEPA~2.1 (+9.4\% F1)}} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+V-JEPA~2.1 with HAF-STD Net achieves near-perfect classification on FineGym with an MCC of 0.974 and Cohen's Kappa of 0.972. The 9.4 percentage point F1 advantage over Qwen2.5-VL represents a substantial difference in representation quality for fine-grained recognition.
+
+
+\subsection{Experiment 2: HMDB51 (51-Class Coarse-Grained Classification)}
+
+\subsubsection{Per-Classifier Results}
+
+\begin{table}[H]
+\centering
+\caption{Classifier performance on HMDB51 --- V-JEPA~2.1 features.}
+\label{tab:hmdb_vjepa_clf}
+\begin{tabular}{llrrr}
+\toprule
+\textbf{Classifier} & \textbf{Type} & \textbf{Accuracy (\%)} & \textbf{F1 Macro (\%)} & \textbf{MCC} \\
+\midrule
+SVM-RBF       & sklearn & 79.8 & 81.4 & 0.792 \\
+Random Forest & sklearn & 70.6 & 73.4 & 0.706 \\
+LogReg        & sklearn & 78.2 & 79.4 & 0.776 \\
+\midrule
+MLP           & Neural Net & 79.3 & 80.3 & 0.788 \\
+DeepMLP       & Neural Net & 82.9 & 83.5 & 0.824 \\
+ResMLP        & Neural Net & 82.9 & 83.6 & 0.824 \\
+Conv1DNet     & Neural Net & 77.8 & 78.5 & 0.772 \\
+Mini Transformer & Neural Net & 79.4 & 79.9 & 0.789 \\
+\midrule
+\textbf{HAF-STD Net} & \textbf{Neural Net} & \textbf{84.7} & \textbf{85.3} & \textbf{0.843} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Classifier performance on HMDB51 --- Qwen2.5-VL features.}
+\label{tab:hmdb_qwen_clf}
+\begin{tabular}{llrrr}
+\toprule
+\textbf{Classifier} & \textbf{Type} & \textbf{Accuracy (\%)} & \textbf{F1 Macro (\%)} & \textbf{MCC} \\
+\midrule
+SVM-RBF       & sklearn & 73.6 & 75.3 & 0.729 \\
+Random Forest & sklearn & 64.2 & 63.8 & 0.635 \\
+LogReg        & sklearn & 73.6 & 75.3 & 0.729 \\
+\midrule
+MLP           & Neural Net & 70.8 & 70.4 & 0.702 \\
+\textbf{DeepMLP} & \textbf{Neural Net} & \textbf{77.1} & \textbf{79.1} & \textbf{0.765} \\
+ResMLP        & Neural Net & 76.7 & 77.6 & 0.760 \\
+Conv1DNet     & Neural Net & 11.5 &  0.8 & 0.081 \\
+Mini Transformer & Neural Net & 71.5 & 72.5 & 0.707 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+On HMDB51, HAF-STD Net achieves the best overall performance with 84.7\% accuracy (85.3\% F1 macro, MCC = 0.843) for V-JEPA~2.1, representing a +1.7\% improvement over the best baseline classifier (ResMLP, 83.6\% F1). Among baseline classifiers, DeepMLP and ResMLP tie at 82.9\% accuracy. For Qwen2.5-VL, DeepMLP achieves the best performance at 77.1\% accuracy (79.1\% F1 macro).
+
+\subsubsection{HMDB51 Comprehensive Comparison}
+
+\begin{table}[H]
+\centering
+\caption{HMDB51: Comprehensive metric comparison (best classifiers).}
+\label{tab:hmdb_comparison}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Metric} & \textbf{V-JEPA~2.1} & \textbf{Qwen2.5-VL} \\
+\midrule
+Accuracy (\%)         & 84.7 & 77.1 \\
+Precision macro (\%)  & 87.7 & 80.3 \\
+Precision weighted (\%) & 85.9 & 78.3 \\
+Recall macro (\%)     & 84.8 & 79.1 \\
+Recall weighted (\%)  & 84.7 & 77.1 \\
+F1 macro (\%)         & 85.3 & 79.1 \\
+F1 weighted (\%)      & 84.5 & 77.3 \\
+MCC                   & 0.843 & 0.765 \\
+Cohen's Kappa         & 0.842 & 0.765 \\
+Best Classifier       & HAF-STD Net & DeepMLP \\
+\midrule
+\textbf{Winner}       & \multicolumn{2}{c}{\textbf{V-JEPA~2.1 (+6.2\% F1)}} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+On HMDB51, V-JEPA~2.1 with the HAF-STD Net classifier maintains a substantial advantage across all metrics, with a 6.2 percentage point F1 macro margin and a 7.6 percentage point accuracy margin over Qwen2.5-VL. The HAF-STD Net's improvement over the best baseline classifier (ResMLP, 83.6\% F1) demonstrates that exploiting V-JEPA~2's multi-layer hierarchical representations and temporal structure yields meaningful gains beyond standard feature pooling.
+
+
+\section{Result Analysis}
+
+\subsection{V-JEPA~2.1 Consistently Outperforms Qwen2.5-VL}
+
+Across both datasets, all metrics, and all classifiers, V-JEPA~2.1 produces more discriminative representations than Qwen2.5-VL. V-JEPA~2 wins on every single metric on both FineGym and HMDB51. On both datasets, HAF-STD Net further widens this gap by exploiting V-JEPA~2's multi-layer depth structure and temporal coherence, achieving a 9.4\% F1 advantage on FineGym and a 6.2\% F1 advantage on HMDB51 over Qwen2.5-VL.
+
+\subsection{Performance Gap Depends on Task Granularity}
+
+V-JEPA~2.1's advantage is substantially larger on the fine-grained FineGym task (+9.4\% F1 with HAF-STD Net) than on the coarse-grained HMDB51 task (+6.2\% F1 with HAF-STD Net).
+
+\begin{itemize}[leftmargin=*]
+    \item V-JEPA~2.1's self-supervised training on masked spatio-temporal prediction develops representations well-suited for discriminating subtle temporal patterns within a narrow visual domain.
+    \item Qwen2.5-VL's generative training produces general-purpose representations encoding broad descriptive information (object identity, scene context, textual semantics).
+\end{itemize}
+
+\subsection{Why V-JEPA~2.1 Outperforms Qwen2.5-VL}
+
+A central inquiry arising from these findings is why \vjepaa{} (654M parameters) outperforms Qwen2.5-VL (7B parameters) despite operating with an order-of-magnitude fewer parameters. This apparent paradox is resolved by examining where model capacity is concentrated and how each architecture was pretrained:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Dedicated Vision Capacity vs.\ Language Overhead:} Although Qwen2.5-VL comprises 7~billion parameters, the vast majority of its weights reside within the autoregressive causal language decoder. In contrast, all 654~million parameters of \vjepaa{} are allocated strictly to visual processing. For feature extraction, \vjepaa{} effectively provides a larger and uncompromised visual backbone without parameter dilution from language-generation tasks.
+    \item \textbf{Pretraining Alignment and Kinematics:} \vjepaa{} is trained via masked spatio-temporal latent prediction, which explicitly forces the network to model continuous motion trajectories and temporal transitions across video patches. Conversely, Qwen2.5-VL optimizes next-token text prediction conditioned on visual prompts (e.g., \texttt{"Describe."}), naturally biasing its representations toward static scene semantics and object identities rather than fine-grained action dynamics.
+    \item \textbf{Temporal Resolution and Quantization:} In our evaluation pipeline, \vjepaa{} processed 8 continuous frames per video at native half-precision (float16). By contrast, Qwen2.5-VL was evaluated with 4 frames per clip under 4-bit NF4 quantization to satisfy memory and sequence length limits on the NVIDIA Tesla T4 GPU. The denser temporal sampling and uncompressed representation grant \vjepaa{} a significant advantage in capturing rapid motion transitions.
+\end{itemize}
+
+Furthermore, the proposed HAF-STD Net classifier adds only 4.8M parameters (a 0.7\% overhead relative to \vjepaa{}), yet yields substantial gains by selectively combining hierarchical depth layers and temporal frequency bands. These results confirm that domain-aligned self-supervised pretraining paired with structured probing provides superior representational efficiency compared to scaling parameter count through a generalist multimodal language model.
+

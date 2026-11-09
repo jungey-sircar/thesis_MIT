@@ -1,0 +1,64 @@
+% =============================================================================
+% Standalone Nepali Abstract — compile with XeLaTeX to produce PDF
+% Research Regulation 2025, Appendix H: Abstract in Nepali
+% xelatex abstract_nepali_standalone.tex
+% =============================================================================
+\documentclass[a4paper, 12pt]{article}
+
+% Match thesis geometry (IoST: Top 1in, Bottom 1in, Left 1.5in, Right 1in)
+\usepackage[top=1in, bottom=1in, left=1.5in, right=1in]{geometry}
+\usepackage{setspace}
+\setstretch{1.5}
+
+% Hyphenation control
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\tolerance=9999
+\emergencystretch=3em
+
+% XeLaTeX font setup: Latin (Times New Roman) + Devanagari (Kalimati as per IoST 2025 Appendix H)
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+
+% Devanagari font: Kalimati (explicitly mandated by IoST Research Regulation 2025, Appendix H)
+\newfontfamily\devanagarifont{Kalimati}[
+  Path = ./,
+  Extension = .ttf,
+  Script = Devanagari,
+  AutoFakeBold = 1.5,
+  AutoFakeSlant = 0.2
+]
+
+% Command to switch to Nepali font
+\newcommand{\nep}[1]{{\devanagarifont #1}}
+
+% Suppress page number (the main thesis handles numbering)
+\pagestyle{empty}
+
+\begin{document}
+
+% -----------------------------------------------------------------------------
+% Title: Unicode, Bold, Center aligned, Font size 18
+% -----------------------------------------------------------------------------
+\begin{center}
+{\fontsize{18}{22}\selectfont \textbf{\nep{शोधसार}}}
+\end{center}
+
+\vspace{0.5cm}
+
+% -----------------------------------------------------------------------------
+% Main Body: Unicode, Font size 12, Justified, Line spacing 1.5 (Within 150 words)
+% -----------------------------------------------------------------------------
+\noindent
+\fontsize{12}{18}\selectfont
+\nep{यस शोधप्रबन्धमा भिडियो कार्य पहिचानका लागि स्व-निरीक्षित भिडियो इन्कोडर र दृष्टि-भाषा मोडेलको तुलनात्मक प्रभावकारिता अध्ययन गरिएको छ। मौलिक रूपमा भिन्न शिक्षण प्रतिमान प्रतिनिधित्व गर्ने दुई अत्याधुनिक आधारभूत मोडेलहरू मूल्याङ्कन गरिएका छन्: }V-JEPA 2 (\nep{६५.४ करोड प्यारामिटर}) \nep{र }Qwen2.5-VL (\nep{७ अर्ब प्यारामिटर}) FineGym \nep{र }HMDB51 \nep{बेन्चमार्कहरूमा फ्रोजन-फिचर मूल्याङ्कन प्रोटोकल प्रयोग गरिएको छ। निकालिएका प्रतिनिधित्वहरू नौ वर्गीकरणकर्तामा मूल्याङ्कन गरिएका छन्, जसमा बहु-तह अव्यक्त प्रतिनिधित्वहरू उपयोग गर्न डिजाइन गरिएको नवीन }HAF-STD Net\nep{ समावेश छ। }FineGym\nep{मा, }HAF-STD Net\nep{सँग }V-JEPA 2\nep{ले ९८.१\%} Accuracy \nep{र ९७.८\% }Macro F1 \nep{हासिल गर्‍यो, जसले }Qwen2.5-VL\nep{लाई ९.४ प्रतिशत बिन्दुले पछि पार्‍यो। }HMDB51\nep{मा, }V-JEPA 2\nep{ले ८४.७\%} Accuracy \nep{र ८५.३\% }Macro F1 \nep{हासिल गर्‍यो, जसले }Qwen2.5-VL\nep{लाई ६.२ प्रतिशत बिन्दुले पछि पार्‍यो। नतिजाहरूले देखाउँछन् कि कार्य-विशिष्ट स्व-निरीक्षित भिडियो इन्कोडरहरूले सामान्य-उद्देश्यीय दृष्टि-भाषा मोडेलहरू भन्दा उल्लेखनीय रूपमा बढी विभेदकारी कालिक प्रतिनिधित्वहरू उत्पादन गर्छन्। यसबाहेक, प्रस्तावित }HAF-STD Net\nep{ले फ्रोजन स्व-निरीक्षित भिडियो ब्याकबोनहरूमा उल्लेखनीय कार्यसम्पादन सुधार गर्दछ।}
+
+\vspace{0.8cm}
+
+% -----------------------------------------------------------------------------
+% Keywords: Unicode, Font size 10, Italics (Exactly 5 main keywords as per Appendix H)
+% -----------------------------------------------------------------------------
+\noindent
+{\fontsize{10}{14}\selectfont \textit{\nep{शब्द कुञ्जिका:} Video Understanding, Self-Supervised Learning, Vision-Language Models, Action Recognition, HAF-STD Net}}
+
+\end{document}

@@ -1,0 +1,363 @@
+% =============================================================================
+%              APPENDIX A: SOURCE CODE LISTINGS
+% =============================================================================
+\chapter{Source Code Listings}
+\label{app:source_code}
+
+This appendix provides the complete Python source code for all major components of the experimental pipeline described in Chapter~3. All experiments were implemented in Kaggle Notebooks using Python 3.12 and PyTorch.
+
+\section{Data Acquisition}
+
+\begin{lstlisting}[caption={FineGym clip download with \texttt{yt-dlp} temporal trimming.}, label={lst:fg_download}]
+def download_clip(yt_id, start, end, out_path, max_retries=2):
+    """Download a clip from YouTube using yt-dlp."""
+    if os.path.exists(out_path) and \
+       os.path.getsize(out_path) > 1000:
+        return True # Already downloaded
+    url = f'https://www.youtube.com/watch?v={yt_id}'
+    for attempt in range(max_retries):
+        try:
+            cmd = [
+                'yt-dlp', '--quiet', '--no-warnings',
+                '--download-sections', f'*{start}-{end}',
+                '-f', 'worst[ext=mp4]/worst',
+                '--force-keyframes-at-cuts',
+                '-o', out_path, url
+            ]
+            subprocess.run(
+                cmd, capture_output=True, text=True, timeout=120)
+            if os.path.exists(out_path) and \
+               os.path.getsize(out_path) > 500:
+                return True
+        except (subprocess.TimeoutExpired, Exception):
+            pass
+    return False
+\end{lstlisting}
+
+\begin{lstlisting}[caption={HMDB51 download and local indexing pipeline.}, label={lst:hmdb_download}]
+from huggingface_hub import hf_hub_download
+
+# Download raw zip directly (bypasses schema errors)
+archive_path = hf_hub_download(
+    repo_id="jili5044/hmdb51",
+    filename="hmdb51.zip",
+    repo_type="dataset",
+    local_dir=download_dir
+)
+
+# Extract and index videos by class folder
+with zipfile.ZipFile(archive_path, 'r') as zip_ref:
+    zip_ref.extractall(extract_dir)
+
+# Build sample list from directory structure
+ds = []
+for root, dirs, files in os.walk(extract_dir):
+    for file in files:
+        if file.endswith(('.mp4', '.avi', '.mkv')):
+            video_path = os.path.join(root, file)
+            label_name = os.path.basename(root)
+            ds.append({
+                'video_path': video_path,
+                'label': label_name
+            })
+\end{lstlisting}
+
+\section{Feature Extraction}
+
+\begin{lstlisting}[caption={V-JEPA 2 feature extraction with checkpointing.}, label={lst:vjepa_extraction}]
+from transformers import VJEPA2Model, VJEPA2VideoProcessor
+
+vproc = VJEPA2VideoProcessor.from_pretrained(
+    'facebook/vjepa2-vith-fpc64-256')
+vmodel = VJEPA2Model.from_pretrained(
+    'facebook/vjepa2-vith-fpc64-256',
+    torch_dtype=torch.float16,
+    attn_implementation='sdpa',
+).to(device).eval()
+
+# Feature extraction with checkpointing
+for i in range(start_idx, total):
+    frames = load_frames(clip['path'], 8, 224)
+    inputs = vproc(frames, return_tensors='pt')
+    inputs = {k: v.to(device) for k, v in inputs.items()}
+    with torch.no_grad():
+        with torch.amp.autocast('cuda'):
+            out = vmodel(**inputs)
+            feat = (out.last_hidden_state.mean(dim=1)
+                    .cpu().float().squeeze(0))
+    features.append(feat)
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Qwen2.5-VL 4-bit quantized feature extraction.}, label={lst:qwen_extraction}]
+from transformers import (
+    Qwen2_5_VLForConditionalGeneration,
+    AutoProcessor, BitsAndBytesConfig)
+
+bnb = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.float16,
+    bnb_4bit_quant_type='nf4',
+    bnb_4bit_use_double_quant=True)
+
+qmodel = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+    'Qwen/Qwen2.5-VL-7B-Instruct',
+    quantization_config=bnb,
+    device_map='auto',
+    torch_dtype=torch.float16)
+qproc = AutoProcessor.from_pretrained(
+    'Qwen/Qwen2.5-VL-7B-Instruct')
+
+# Chat template construction for feature extraction
+messages = [{'role': 'user', 'content': [
+    {'type': 'video', 'video': frames},
+    {'type': 'text', 'text': 'Describe.'},
+]}]
+text = qproc.apply_chat_template(
+    messages, tokenize=False, add_generation_prompt=True)
+inputs = qproc(text=[text], videos=[frames],
+               return_tensors='pt', padding=True)
+
+with torch.no_grad():
+    out = qmodel(**inputs, output_hidden_states=True)
+    feat = (out.hidden_states[-1].mean(dim=1)
+            .cpu().float().squeeze(0))
+\end{lstlisting}
+
+\section{Classifier Architectures}
+
+\begin{lstlisting}[caption={ResMLP architecture with residual blocks.}, label={lst:resmlp_arch}]
+class ResBlock(nn.Module):
+    def __init__(self, dim, dropout=0.2):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(dim, dim),
+            nn.BatchNorm1d(dim), nn.GELU(),
+            nn.Dropout(dropout),
+            nn.Linear(dim, dim),
+            nn.BatchNorm1d(dim),
+        )
+        self.act = nn.GELU()
+
+    def forward(self, x):
+        return self.act(x + self.net(x))
+
+class ResMLP(nn.Module):
+    def __init__(self, in_dim, num_classes, hidden=256, n_blocks=3):
+        super().__init__()
+        self.proj = nn.Sequential(
+            nn.Linear(in_dim, hidden),
+            nn.BatchNorm1d(hidden), nn.GELU())
+        self.blocks = nn.Sequential(
+            *[ResBlock(hidden) for _ in range(n_blocks)])
+        self.head = nn.Linear(hidden, num_classes)
+
+    def forward(self, x):
+        return self.head(self.blocks(self.proj(x)))
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Training loop with label smoothing, mixup augmentation, and cosine LR scheduling.}, label={lst:training_loop}]
+LABEL_SMOOTHING = 0.1
+
+def mixup_data(x, y, alpha=0.2):
+    """Feature-space mixup augmentation."""
+    lam = np.random.beta(alpha, alpha)
+    lam = max(lam, 1 - lam)
+    idx = torch.randperm(x.size(0))
+    return lam * x + (1-lam) * x[idx], y, y[idx], lam
+
+def train_model(model, X_tr, y_tr, X_ev, y_ev,
+                epochs=300, lr=1e-3, patience=30):
+    opt = torch.optim.AdamW(
+        model.parameters(), lr=lr, weight_decay=1e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+        opt, T_max=epochs)
+    best_acc, best_state, wait = 0, None, 0
+
+    for epoch in range(epochs):
+        model.train()
+        for xb, yb in dataloader:
+            xb_mix, ya, yb_mix, lam = mixup_data(xb, yb)
+            logits = model(xb_mix)
+            loss_a = F.cross_entropy(
+                logits, ya, label_smoothing=LABEL_SMOOTHING)
+            loss_b = F.cross_entropy(
+                logits, yb_mix, label_smoothing=LABEL_SMOOTHING)
+            loss = lam * loss_a + (1 - lam) * loss_b
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+        scheduler.step()
+
+        # Early stopping on eval accuracy
+        model.eval()
+        with torch.no_grad():
+            preds = model(X_ev).argmax(1)
+            acc = (preds == y_ev).float().mean().item()
+        if acc > best_acc:
+            best_acc = acc
+            best_state = model.state_dict()
+            wait = 0
+        else:
+            wait += 1
+            if wait >= patience: break
+    model.load_state_dict(best_state)
+    return model
+\end{lstlisting}
+
+\section{HAF-STD Net Implementation}
+
+\begin{lstlisting}[caption={HAF-STD Net architecture and spectral-temporal decomposition (HMDB51 configuration).}, label={lst:hafstd_arch}]
+class HaarDWT1D(nn.Module):
+    """1D Haar Discrete Wavelet Transform along temporal axis.
+    Decomposes temporal signal into low-frequency (appearance/trend)
+    and high-frequency (motion/change) components.
+    """
+    def forward(self, x):
+        """x: (B, T, D) -> (low: (B, T//2, D), high: (B, T//2, D))"""
+        if x.shape[1] % 2 != 0:
+            x = F.pad(x, (0, 0, 0, 1))  # pad temporal dim if odd
+        x_even = x[:, 0::2, :]  # Even-indexed temporal positions
+        x_odd = x[:, 1::2, :]   # Odd-indexed temporal positions
+        # Approximation = appearance/trend
+        low = (x_even + x_odd) * 0.5
+        # Detail = motion/change dynamics
+        high = (x_even - x_odd) * 0.5
+        return low, high
+
+
+class HAFSTD_Net(nn.Module):
+    """Hierarchical Adaptive Fusion with Spectral-Temporal Decomposition.
+    Novel architecture for V-JEPA 2.1 on HMDB51 (51 classes).
+    """
+    def __init__(self, embed_dim=1280, num_layers=4, num_classes=51,
+                 hidden=256, dropout=0.3):
+        super().__init__()
+        self.num_layers = num_layers
+        # 11 streams: 4 appearance, 4 motion, 3 depth velocity
+        self.num_streams = (num_layers * 2) + (num_layers - 1)  # 4*2 + 3 = 11
+        self.dwt = HaarDWT1D()
+
+        # Dedicated projection heads (11 total)
+        self.stream_projections = nn.ModuleList([
+            nn.Sequential(
+                nn.Linear(embed_dim, hidden),
+                nn.LayerNorm(hidden),
+                nn.GELU(),
+                nn.Dropout(dropout),
+            )
+            for _ in range(self.num_streams)
+        ])
+
+        # Adaptive routing network over 11 depth x frequency streams
+        self.router = nn.Sequential(
+            nn.Linear(self.num_streams * hidden, hidden),
+            nn.GELU(),
+            nn.Dropout(dropout),
+            nn.Linear(hidden, self.num_streams),
+        )
+
+        # Classification head with cosine similarity
+        self.final_proj = nn.Sequential(
+            nn.Linear(hidden, hidden),
+            nn.LayerNorm(hidden),
+            nn.GELU(),
+            nn.Dropout(dropout),
+        )
+        self.class_weights = nn.Parameter(
+            torch.randn(num_classes, hidden))
+        self.scale = nn.Parameter(torch.tensor(16.0))
+
+    def forward(self, x):
+        """x: (B, num_layers=4, T, D=1280)"""
+        B = x.shape[0]
+        streams = []
+
+        # 1. Appearance & Motion streams (4 layers x 2 = 8 streams)
+        for k in range(self.num_layers):
+            layer_feat = x[:, k, :, :]  # (B, T, D)
+            low, high = self.dwt(layer_feat)
+            appearance = low.mean(dim=1)  # low-freq = appearance
+            motion = high.mean(dim=1)     # high-freq = motion dynamics
+            streams.append(self.stream_projections[k * 2](appearance))
+            streams.append(self.stream_projections[k * 2 + 1](motion))
+
+        # 2. Depth Representation Velocity streams (3 inter-layer deltas)
+        for k in range(self.num_layers - 1):
+            next_layer = x[:, k + 1, :, :].mean(dim=1)
+            curr_layer = x[:, k, :, :].mean(dim=1)
+            velocity = next_layer - curr_layer
+            streams.append(self.stream_projections[8 + k](velocity))
+
+        # Stack all 11 streams: (B, 11, hidden)
+        all_streams = torch.stack(streams, dim=1)
+
+        # 3. Adaptive Routing
+        flat = all_streams.reshape(B, -1)
+        routing_weights = torch.softmax(self.router(flat), dim=-1)
+        fused = (all_streams * routing_weights.unsqueeze(-1)).sum(dim=1)
+
+        # 4. Cosine Similarity Classification
+        fused = self.final_proj(fused)
+        fused_norm = F.normalize(fused, p=2, dim=-1)
+        weight_norm = F.normalize(self.class_weights, p=2, dim=-1)
+        logits = self.scale * fused_norm @ weight_norm.T
+        return logits
+\end{lstlisting}
+
+\begin{lstlisting}[caption={4D Tensor Mixup and Training Harness for HAF-STD Net on HMDB51.}, label={lst:hafstd_train}]
+def train_hafstd_model(model, X_tr_4d, y_tr, X_ev_4d, y_ev,
+                       epochs=300, lr=1e-3, batch_size=64,
+                       patience=30, use_mixup=True):
+    """Train HAF-STD Net on 4D per-frame features (N, layers, T, D)."""
+    model = model.to(device)
+    opt = torch.optim.AdamW(
+        model.parameters(), lr=lr, weight_decay=1e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+        opt, T_max=epochs)
+
+    Xt = torch.tensor(X_tr_4d, dtype=torch.float32)
+    yt = torch.tensor(y_tr, dtype=torch.long)
+    Xe = torch.tensor(X_ev_4d, dtype=torch.float32).to(device)
+    ye = torch.tensor(y_ev, dtype=torch.long).to(device)
+
+    dl = DataLoader(
+        TensorDataset(Xt, yt), batch_size=batch_size, shuffle=True)
+    best_acc, best_state, wait = 0, None, 0
+
+    for epoch in range(epochs):
+        model.train()
+        for xb, yb in dl:
+            xb, yb = xb.to(device), yb.to(device)
+            if use_mixup and xb.size(0) > 1:
+                lam = max(np.random.beta(0.2, 0.2), 0.5)
+                idx = torch.randperm(xb.size(0))
+                xb_mix = lam * xb + (1 - lam) * xb[idx]
+                logits = model(xb_mix)
+                loss_a = F.cross_entropy(
+                    logits, yb, label_smoothing=LABEL_SMOOTHING)
+                loss_b = F.cross_entropy(
+                    logits, yb[idx], label_smoothing=LABEL_SMOOTHING)
+                loss = lam * loss_a + (1 - lam) * loss_b
+            else:
+                loss = F.cross_entropy(
+                    model(xb), yb, label_smoothing=LABEL_SMOOTHING)
+            opt.zero_grad(); loss.backward(); opt.step()
+        scheduler.step()
+
+        model.eval()
+        with torch.no_grad():
+            acc = (model(Xe).argmax(1) == ye).float().mean().item()
+        if acc > best_acc:
+            best_acc = acc
+            best_state = {
+                k: v.cpu().clone()
+                for k, v in model.state_dict().items()
+            }
+            wait = 0
+        else:
+            wait += 1
+            if wait >= patience: break
+    model.load_state_dict(
+        {k: v.to(device) for k, v in best_state.items()})
+    return model
+\end{lstlisting}

@@ -1,0 +1,1053 @@
+% =============================================================================
+% LINE-BY-LINE CODE EXPLANATION — hmdbvljepavlms.ipynb
+% V-JEPA 2 vs Qwen2.5-VL on HMDB51 (51 Action Classes)
+% =============================================================================
+\documentclass[a4paper, 12pt]{article}
+
+\usepackage[top=1in, bottom=1in, left=1.25in, right=1in]{geometry}
+\usepackage{times}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{longtable}
+
+\onehalfspacing
+
+% Page style
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textit{HMDB51 Notebook --- Code Explanation}}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{14pt}
+
+% Section formatting
+\titleformat{\section}
+  {\normalfont\fontsize{14}{17}\bfseries}{}{0em}{}
+\titleformat{\subsection}
+  {\normalfont\fontsize{12}{14}\bfseries}{}{0em}{}
+
+% Code listing style
+\definecolor{codebg}{RGB}{248,248,248}
+\definecolor{codegreen}{RGB}{0,128,0}
+\definecolor{codepurple}{RGB}{128,0,128}
+\definecolor{codegray}{RGB}{100,100,100}
+\definecolor{codeblue}{RGB}{0,0,180}
+\definecolor{codeorange}{RGB}{200,80,0}
+
+\lstset{
+  language=Python,
+  backgroundcolor=\color{codebg},
+  basicstyle=\small\ttfamily,
+  breaklines=true,
+  breakatwhitespace=false,
+  frame=single,
+  rulecolor=\color{black!30},
+  numbers=left,
+  numberstyle=\tiny\color{codegray},
+  keywordstyle=\color{codeblue}\bfseries,
+  commentstyle=\color{codegreen}\itshape,
+  stringstyle=\color{codeorange},
+  showstringspaces=false,
+  tabsize=4,
+  xleftmargin=2em,
+  framexleftmargin=1.5em,
+  morekeywords={as, True, False, None, with, from, import},
+}
+
+% Custom environment for explanations
+\newenvironment{explanation}{%
+  \par\smallskip
+  \noindent\textcolor{blue!70!black}{\textbf{Explanation:}}\\
+  \noindent
+}{\par\medskip}
+
+\begin{document}
+
+% =============================================================================
+% TITLE PAGE
+% =============================================================================
+\begin{titlepage}
+\centering
+\vspace*{3cm}
+{\Huge\bfseries Line-by-Line Code Explanation\par}
+\vspace{0.8cm}
+{\LARGE\texttt{hmdbvljepavlms.ipynb}\par}
+\vspace{1.5cm}
+{\Large V-JEPA 2 vs Qwen2.5-VL\par}
+{\Large HMDB51 --- Human Motion Database\par}
+\vspace{1cm}
+{\large 51 Action Classes | 6,754 Videos\par}
+\vspace{2cm}
+{\large Thesis: \textit{Enhancing Self-Supervised Video Representations with HAF-STD Net: A Comparative Evaluation Against VLM for Action Recognition}\par}
+\vspace{1cm}
+{\large Author: Erize Rai\par}
+{\large Roll No: 8025006\par}
+\vfill
+{\large\today\par}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% =============================================================================
+% OVERVIEW
+% =============================================================================
+\section{Overview}
+
+This document provides a detailed line-by-line explanation of every code cell in the \texttt{hmdbvljepavlms.ipynb} Jupyter Notebook. The notebook benchmarks two vision models---\textbf{V-JEPA~2} (654M parameters) and \textbf{Qwen2.5-VL} (7B parameters)---on the \textbf{HMDB51} dataset, a large-scale action recognition benchmark with 51 human action categories and 6,754 video clips.
+
+\textbf{Experimental setup:}
+\begin{itemize}[nosep]
+  \item \textbf{Dataset}: HMDB51 --- 6,754 videos across 51 action classes
+  \item \textbf{Method}: Frozen backbone features + traditional ML classifiers (no fine-tuning)
+  \item \textbf{Platform}: Kaggle (GPU T4, 15.6 GB)
+  \item \textbf{V-JEPA 2}: Feature extraction took $\sim$32 minutes (3.5 vid/s)
+  \item \textbf{Qwen2.5-VL}: Feature extraction took $\sim$56 minutes (2.0 vid/s)
+\end{itemize}
+
+\textbf{Key difference from FineGym notebook:} This notebook processes a larger dataset (6,754 vs.\ 1,200 clips) with significantly more classes (51 vs.\ 4), and downloads the dataset from Hugging Face Hub as a zip archive rather than from YouTube.
+
+% =============================================================================
+% CELL 1: Package Installation
+% =============================================================================
+\newpage
+\section{Cell 1: Package Installation}
+
+\begin{lstlisting}
+!pip install -q transformers accelerate bitsandbytes
+    peft datasets huggingface_hub
+    opencv-python-headless scikit-learn
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{!} --- Executes a shell command from within the Jupyter notebook.
+  \item \texttt{pip install -q} --- Installs Python packages quietly (minimal output).
+  \item \textbf{Packages installed:}
+  \begin{itemize}[nosep]
+    \item \texttt{transformers} --- Hugging Face library for loading V-JEPA~2 and Qwen2.5-VL models and their processors.
+    \item \texttt{accelerate} --- Enables efficient model loading with device mapping and mixed-precision support.
+    \item \texttt{bitsandbytes} --- 4-bit quantization library for fitting the 7B-parameter Qwen model into GPU memory.
+    \item \texttt{peft} --- Parameter-Efficient Fine-Tuning library (dependency; not directly used for training).
+    \item \texttt{datasets} --- Hugging Face datasets library (not used directly due to schema validation issues; dataset is loaded manually).
+    \item \texttt{huggingface\_hub} --- Client for downloading files from Hugging Face repositories.
+    \item \texttt{opencv-python-headless} --- OpenCV without GUI; used for video frame extraction.
+    \item \texttt{scikit-learn} --- ML classifiers and evaluation metrics.
+  \end{itemize}
+  \item \textbf{Note:} Unlike the FineGym notebook, \texttt{yt-dlp} is \textit{not} needed here because HMDB51 is distributed as a downloadable archive, not as YouTube links.
+\end{itemize}
+\end{explanation}
+
+% =============================================================================
+% CELL 2: Imports and GPU Setup
+% =============================================================================
+\newpage
+\section{Cell 2: Imports and GPU Setup}
+
+\begin{lstlisting}
+import torch, sys, os, time, json, gc, random, tempfile
+import numpy as np
+import torch.nn as nn
+from pathlib import Path
+from collections import Counter
+from PIL import Image
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{torch} --- PyTorch deep learning framework for model inference, tensor operations, and GPU management.
+  \item \texttt{sys} --- System-specific parameters and functions.
+  \item \texttt{os} --- Operating system interface for file/directory operations.
+  \item \texttt{time} --- Time measurement for speed/ETA calculations during feature extraction.
+  \item \texttt{json} --- JSON serialization for saving results.
+  \item \texttt{gc} --- Garbage collector; explicitly called after unloading large models to reclaim memory.
+  \item \texttt{random} --- Random number generation for reproducibility.
+  \item \texttt{tempfile} --- Temporary file creation; used by \texttt{load\_frames\_from\_bytes} to write video bytes to a temporary file for OpenCV to read.
+  \item \texttt{numpy} (as \texttt{np}) --- Numerical computing for array operations.
+  \item \texttt{torch.nn} (as \texttt{nn}) --- PyTorch's neural network module.
+  \item \texttt{Path} --- Object-oriented filesystem paths.
+  \item \texttt{Counter} --- Counts occurrences of items; used for class distribution analysis.
+  \item \texttt{Image} (from PIL) --- Creates PIL Image objects from NumPy frame arrays.
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+from sklearn.metrics import (
+    accuracy_score, precision_score, recall_score,
+    f1_score, matthews_corrcoef, cohen_kappa_score,
+    classification_report, confusion_matrix,
+    top_k_accuracy_score,
+)
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.ensemble import (RandomForestClassifier,
+    GradientBoostingClassifier, StackingClassifier)
+from sklearn.neural_network import MLPClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.decomposition import PCA
+import cv2
+\end{lstlisting}
+
+\begin{explanation}
+\textbf{Scikit-learn evaluation metrics:}
+\begin{itemize}[nosep]
+  \item \texttt{accuracy\_score} --- Fraction of correct predictions.
+  \item \texttt{precision\_score} --- True positives / (True positives + False positives).
+  \item \texttt{recall\_score} --- True positives / (True positives + False negatives).
+  \item \texttt{f1\_score} --- Harmonic mean of precision and recall: $F_1 = 2 \cdot \frac{P \cdot R}{P + R}$.
+  \item \texttt{matthews\_corrcoef} --- MCC; balanced measure even with unequal class sizes. Range: $[-1, +1]$.
+  \item \texttt{cohen\_kappa\_score} --- Agreement measure accounting for chance: $\kappa = \frac{p_o - p_e}{1 - p_e}$.
+  \item \texttt{classification\_report} --- Text report with precision, recall, F1, and support per class.
+  \item \texttt{confusion\_matrix} --- $N \times N$ matrix of true vs.\ predicted labels.
+  \item \texttt{top\_k\_accuracy\_score} --- Checks if true label is among the top-$k$ predicted classes (important for 51-class problems).
+\end{itemize}
+
+\textbf{Additional import vs.\ FineGym:}
+\begin{itemize}[nosep]
+  \item \texttt{GradientBoostingClassifier} --- Imported here (not in FineGym) but ultimately not used in the classifier dictionary. It builds trees sequentially, where each tree corrects the errors of the previous one.
+\end{itemize}
+
+All other imports (StandardScaler, SVC, RandomForest, MLP, LogReg, PCA, cv2) serve the same purposes as in the FineGym notebook.
+\end{explanation}
+
+\begin{lstlisting}
+device = torch.device('cuda' if
+    torch.cuda.is_available() else 'cpu')
+if device.type == 'cuda':
+    gpu = torch.cuda.get_device_name(0)
+    props = torch.cuda.get_device_properties(0)
+    mem = getattr(props, 'total_memory', None) or
+          getattr(props, 'total_mem', 0)
+    print(f'GPU: {gpu} ({mem/1e9:.1f} GB)')
+else:
+    print('WARNING: No GPU!')
+
+SAVE_DIR = '/kaggle/working'
+os.makedirs(SAVE_DIR, exist_ok=True)
+print(f'Output: {SAVE_DIR}')
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{torch.device('cuda' if ...)} --- Selects GPU if available, otherwise CPU.
+  \item GPU detection and reporting: prints ``GPU: Tesla T4 (15.6 GB)''.
+  \item \texttt{SAVE\_DIR = '/kaggle/working'} --- Kaggle's persistent output directory. Files saved here are preserved between sessions and included in the notebook's output artifact.
+  \item \texttt{os.makedirs(SAVE\_DIR, exist\_ok=True)} --- Creates the directory if it doesn't exist.
+\end{itemize}
+\end{explanation}
+
+% =============================================================================
+% CELL 3: Constants and Frame Loading
+% =============================================================================
+\newpage
+\section{Cell 3: Constants, Class Definitions, and Frame Loading}
+
+\begin{lstlisting}
+SEED = 42
+NUM_FRAMES = 8
+IMG_SIZE = 224
+TRAIN_SPLIT = 0.8
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{SEED = 42} --- Global random seed for reproducibility.
+  \item \texttt{NUM\_FRAMES = 8} --- Number of frames to sample from each video for V-JEPA~2.
+  \item \texttt{IMG\_SIZE = 224} --- Spatial resolution of each frame ($224 \times 224$ pixels).
+  \item \texttt{TRAIN\_SPLIT = 0.8} --- 80/20 train/evaluation split ratio.
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+HMDB51_CLASSES = [
+    'brush_hair','cartwheel','catch','chew','clap',
+    'climb','climb_stairs','dive','draw_sword',
+    'dribble','drink','eat','fall_floor','fencing',
+    'flic_flac','golf','handstand','hit','hug',
+    'jump','kick','kick_ball','kiss','laugh','pick',
+    'pour','pullup','punch','push','pushup',
+    'ride_bike','ride_horse','run','shake_hands',
+    'shoot_ball','shoot_bow','shoot_gun','sit',
+    'situp','smile','smoke','somersault','stand',
+    'swing_baseball','sword','sword_exercise','talk',
+    'throw','turn','walk','wave',
+]
+NUM_CLASSES = len(HMDB51_CLASSES)
+print(f'{NUM_CLASSES} action classes')
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{HMDB51\_CLASSES} --- Complete list of 51 action categories in the HMDB51 dataset, ordered alphabetically. Each action represents a distinct human motion captured in short video clips.
+  \item The position of each class in this list serves as its integer label (index 0--50).
+  \item \texttt{NUM\_CLASSES = 51} --- Total number of classification categories, significantly more than FineGym's 4.
+  \item \textbf{Dataset context}: HMDB51 (Human Motion DataBase) is a widely-used action recognition benchmark collected from movies, YouTube, and other web sources.
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+def load_frames_from_bytes(video_bytes, n_frames=8,
+                           size=224):
+    with tempfile.NamedTemporaryFile(suffix='.avi',
+                                    delete=False) as f:
+        f.write(video_bytes)
+        tmp = f.name
+    try:
+        cap = cv2.VideoCapture(tmp)
+        if not cap.isOpened(): return None
+        total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        if total < 1: cap.release(); return None
+        idxs = np.linspace(0, total - 1, n_frames,
+                           dtype=int)
+        frames = []
+        for i in idxs:
+            cap.set(cv2.CAP_PROP_POS_FRAMES, i)
+            ok, fr = cap.read()
+            if not ok:
+                fr = np.zeros((size, size, 3),
+                              dtype=np.uint8)
+            fr = cv2.cvtColor(fr, cv2.COLOR_BGR2RGB)
+            fr = cv2.resize(fr, (size, size))
+            frames.append(Image.fromarray(fr))
+        cap.release()
+        return frames
+    finally:
+        os.unlink(tmp)
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \textbf{Key difference from FineGym:} This function accepts raw \textit{bytes} instead of a file path, because the HMDB51 videos are read from disk as binary data.
+  \item \texttt{tempfile.NamedTemporaryFile(suffix='.avi', delete=False)} --- Creates a temporary file with \texttt{.avi} extension. \texttt{delete=False} prevents automatic deletion so OpenCV can read it.
+  \item \texttt{f.write(video\_bytes)} --- Writes the raw video bytes to the temporary file.
+  \item \texttt{cv2.VideoCapture(tmp)} --- Opens the temporary video file for frame extraction.
+  \item \texttt{cap.isOpened()} --- Checks if the video file was successfully opened.
+  \item \texttt{cv2.CAP\_PROP\_FRAME\_COUNT} --- Gets the total number of frames.
+  \item \texttt{np.linspace(0, total-1, n\_frames, dtype=int)} --- Computes \texttt{n\_frames} evenly-spaced frame indices spanning the entire video.
+  \item For each index: seeks to that frame, reads it, converts BGR$\to$RGB, resizes to $224 \times 224$, and wraps as a PIL Image.
+  \item If frame reading fails, a black placeholder (zero-filled array) is used.
+  \item \texttt{finally: os.unlink(tmp)} --- Always deletes the temporary file, even if an exception occurs. This prevents disk space from filling up over 6,754 videos.
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+torch.manual_seed(SEED)
+np.random.seed(SEED)
+random.seed(SEED)
+\end{lstlisting}
+
+\begin{explanation}
+Seeds all three random number generators (PyTorch, NumPy, Python) with \texttt{SEED=42} for reproducible results.
+\end{explanation}
+
+% =============================================================================
+% CELL 4: Download HMDB51 from Hugging Face
+% =============================================================================
+\newpage
+\section{Cell 4: Download HMDB51 Dataset from Hugging Face}
+
+\begin{lstlisting}
+import os
+import zipfile
+from huggingface_hub import hf_hub_download
+from collections import Counter
+
+download_dir = "/kaggle/working/hmdb51_raw"
+extract_dir = "/kaggle/working/hmdb51_dataset"
+os.makedirs(download_dir, exist_ok=True)
+os.makedirs(extract_dir, exist_ok=True)
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{zipfile} --- Python's built-in ZIP archive handling module.
+  \item \texttt{hf\_hub\_download} --- Hugging Face Hub function that downloads individual files from a repository.
+  \item \texttt{download\_dir} --- Directory for the raw downloaded ZIP archive ($\sim$2.12 GB).
+  \item \texttt{extract\_dir} --- Directory where the ZIP contents will be extracted.
+  \item Both directories are created in the persistent \texttt{/kaggle/working/} location.
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+archive_path = hf_hub_download(
+    repo_id="jili5044/hmdb51",
+    filename="hmdb51.zip",
+    repo_type="dataset",
+    local_dir=download_dir
+)
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{hf\_hub\_download} --- Downloads a specific file from a Hugging Face repository.
+  \item \texttt{repo\_id="jili5044/hmdb51"} --- The Hugging Face dataset repository containing HMDB51.
+  \item \texttt{filename="hmdb51.zip"} --- The specific file to download (the raw ZIP archive). This approach \textit{bypasses} the Hugging Face \texttt{datasets} library's schema validation, which can fail on complex video datasets.
+  \item \texttt{repo\_type="dataset"} --- Specifies this is a dataset repository (not a model).
+  \item \texttt{local\_dir=download\_dir} --- Saves the file to the download directory.
+  \item \textbf{Why not use \texttt{datasets.load\_dataset()}?} The HMDB51 dataset on Hugging Face had schema validation errors (\texttt{DatasetGenerationError}), so this manual download approach is used as a workaround.
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+with zipfile.ZipFile(archive_path, 'r') as zip_ref:
+    zip_ref.extractall(extract_dir)
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{zipfile.ZipFile(archive\_path, 'r')} --- Opens the downloaded ZIP file in read mode.
+  \item \texttt{zip\_ref.extractall(extract\_dir)} --- Extracts all contents to the extraction directory. The ZIP contains a folder structure: \texttt{hmdb51/\{action\_class\}/\{video.avi\}}.
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+video_classes = []
+for root, dirs, files in os.walk(extract_dir):
+    for file in files:
+        if file.endswith(('.mp4', '.avi', '.mkv')):
+            classname = os.path.basename(root)
+            video_classes.append(classname)
+
+counts = Counter(video_classes)
+print(f'Classes: {len(counts)}')
+for name in sorted(counts.keys()):
+    print(f'  {name:<20} Samples: {counts[name]:>4}')
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{os.walk(extract\_dir)} --- Recursively traverses all directories and files under the extraction path.
+  \item For each video file (checking extensions \texttt{.mp4}, \texttt{.avi}, \texttt{.mkv}), the parent directory name is treated as the action class label.
+  \item \texttt{os.path.basename(root)} --- Extracts just the folder name (e.g., ``handstand'', ``brush\_hair'').
+  \item \texttt{Counter} tallies how many videos belong to each class.
+  \item This verification step confirms all 51 classes were successfully extracted.
+\end{itemize}
+\textbf{Output:} 51 structural categories found, with sample counts ranging from 102 (catch, kiss, smile, throw) to 548 (walk).
+\end{explanation}
+
+% =============================================================================
+% CELL 5: Build Local Dataset List
+% =============================================================================
+\newpage
+\section{Cell 5: Construct Dataset as Local File Paths}
+
+\begin{lstlisting}
+extract_dir = "/kaggle/working/hmdb51_dataset"
+
+ds = []
+for root, dirs, files in os.walk(extract_dir):
+    for file in files:
+        if file.endswith(('.mp4', '.avi', '.mkv')):
+            video_path = os.path.join(root, file)
+            label_name = os.path.basename(root)
+            ds.append({
+                'video_path': video_path,
+                'label': label_name
+            })
+
+print(f"Created 'ds' list with {len(ds)} video paths.")
+print(f"Sample: {ds[0]}")
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \textbf{Purpose:} Creates a flat Python list (\texttt{ds}) of dictionaries, each containing a video file path and its class label string.
+  \item This replaces what would normally be a Hugging Face \texttt{Dataset} object, working around the \texttt{DatasetGenerationError}.
+  \item \texttt{os.walk(extract\_dir)} --- Recursively walks through the extracted dataset directories.
+  \item For each video file:
+  \begin{itemize}[nosep]
+    \item \texttt{video\_path} --- Full absolute path to the video file.
+    \item \texttt{label\_name} --- The parent folder name, which is the action class (e.g., ``handstand'').
+  \end{itemize}
+  \item Each sample is stored as a dictionary: \texttt{\{'video\_path': '...', 'label': '...'\}}.
+  \item \textbf{Why this approach?} This manual file listing gives full control over data access without relying on the Hugging Face datasets library's schema validation, which was failing.
+\end{itemize}
+\textbf{Output:} ``Created a local `ds' list containing 6754 video paths.'' Sample: \texttt{\{'video\_path': '/kaggle/working/hmdb51\_dataset/hmdb51/handstand/Outdoor-Turnen\_handstand\_f\_cm\_np1\_fr\_med\_0.avi', 'label': 'handstand'\}}.
+\end{explanation}
+
+% =============================================================================
+% CELL 6: V-JEPA 2 Feature Extraction
+% =============================================================================
+\newpage
+\section{Cell 6: V-JEPA 2 Feature Extraction (6,754 Videos)}
+
+\begin{lstlisting}
+from transformers import VJEPA2Model,
+                         VJEPA2VideoProcessor
+
+VJEPA_FEAT_PATH = os.path.join(SAVE_DIR,
+    'vjepa2_hmdb51_features.pt')
+VJEPA_CKPT_PATH = os.path.join(SAVE_DIR,
+    'vjepa2_hmdb51_ckpt.pt')
+CKPT_EVERY = 500
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{VJEPA2Model} --- V-JEPA~2 (Video Joint Embedding Predictive Architecture 2) by Meta. A self-supervised vision transformer trained by predicting masked video patches. No text supervision is used during training.
+  \item \texttt{VJEPA2VideoProcessor} --- Handles video preprocessing (normalization, resizing, tensor conversion).
+  \item \texttt{CKPT\_EVERY = 500} --- Save a checkpoint every 500 videos (vs.\ 100 in FineGym), appropriate for the larger dataset.
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+if os.path.exists(VJEPA_FEAT_PATH):
+    print(f'V-JEPA features COMPLETE')
+    vjepa_data = torch.load(VJEPA_FEAT_PATH,
+        map_location='cpu', weights_only=True)
+else:
+    vjepa_proc = VJEPA2VideoProcessor.from_pretrained(
+        'facebook/vjepa2-vith-fpc64-256')
+    vjepa_model = VJEPA2Model.from_pretrained(
+        'facebook/vjepa2-vith-fpc64-256',
+        torch_dtype=torch.float16,
+        attn_implementation='sdpa',
+    ).to(device).eval()
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \textbf{Skip if done:} Checks for previously-saved features to avoid redundant extraction.
+  \item \texttt{from\_pretrained('facebook/vjepa2-vith-fpc64-256')} --- Loads the pre-trained model from Hugging Face:
+  \begin{itemize}[nosep]
+    \item \texttt{vith} --- Vision Transformer Huge (654M parameters).
+    \item \texttt{fpc64} --- Supports up to 64 frames per clip.
+    \item \texttt{256} --- 256-pixel resolution.
+  \end{itemize}
+  \item \texttt{torch\_dtype=torch.float16} --- Half-precision inference for 50\% memory reduction.
+  \item \texttt{attn\_implementation='sdpa'} --- PyTorch 2.0's Scaled Dot-Product Attention; uses Flash Attention when available for $O(N)$ memory complexity instead of $O(N^2)$.
+  \item \texttt{.to(device).eval()} --- Moves to GPU and sets to inference mode (no dropout, no gradient tracking).
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+    # Resume from checkpoint if exists
+    features, labels, start_idx = [], [], 0
+    if os.path.exists(VJEPA_CKPT_PATH):
+        ckpt = torch.load(VJEPA_CKPT_PATH, ...)
+        features = list(ckpt['features'].unbind(0))
+        labels = ckpt['labels'].tolist()
+        start_idx = int(ckpt['next_idx'])
+        del ckpt; gc.collect()
+    else:
+        print(f'  Starting fresh (0/{len(ds)})')
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \textbf{Checkpoint resume:} If a partial checkpoint exists, previously extracted features and labels are loaded, and processing continues from where it left off.
+  \item \texttt{ckpt['features'].unbind(0)} --- Splits the 2D tensor \texttt{[N, 1280]} back into a list of \texttt{N} individual 1280-dim vectors.
+  \item \texttt{ckpt['labels'].tolist()} --- Converts label tensor to a Python list.
+  \item \texttt{del ckpt; gc.collect()} --- Frees checkpoint memory immediately.
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+    for i in range(start_idx, total):
+        sample = ds[i]
+        video_path = sample['video_path']
+        label_name = sample['label']
+
+        if label_name in HMDB51_CLASSES:
+            label_id = HMDB51_CLASSES.index(label_name)
+        else:
+            label_id = int(label_name) if
+                label_name.isdigit() else 0
+
+        with open(video_path, 'rb') as f:
+            vbytes = f.read()
+
+        frames = load_frames_from_bytes(vbytes,
+            NUM_FRAMES, IMG_SIZE)
+        if frames is None: errors += 1; continue
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \textbf{Main extraction loop} processes all 6,754 videos sequentially.
+  \item \texttt{sample['video\_path']} --- Gets the absolute file path from the dataset list.
+  \item \texttt{sample['label']} --- Gets the string class name (e.g., ``handstand'').
+  \item \texttt{HMDB51\_CLASSES.index(label\_name)} --- Converts the string label to its integer index (0--50). For example, ``brush\_hair'' $\to$ 0, ``wave'' $\to$ 50.
+  \item \textbf{Fallback label mapping:} If the label name isn't in the predefined list (edge case), tries parsing it as an integer; defaults to 0.
+  \item \texttt{open(video\_path, 'rb')} --- Opens the video file in binary read mode.
+  \item \texttt{f.read()} --- Reads the entire video file into memory as bytes.
+  \item \texttt{load\_frames\_from\_bytes} --- Extracts 8 uniformly-spaced frames from the video bytes (via the temporary file method described in Cell~3).
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+        inputs = vjepa_proc(frames,
+                            return_tensors='pt')
+        inputs = {k: v.to(device)
+                  for k, v in inputs.items()}
+
+        with torch.no_grad(),
+             torch.amp.autocast('cuda'):
+            out = vjepa_model(**inputs)
+            feat = out.last_hidden_state.mean(dim=1)
+                   .cpu().float().squeeze(0)
+
+        features.append(feat)
+        labels.append(label_id)
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{vjepa\_proc(frames, return\_tensors='pt')} --- Preprocesses the 8 PIL Image frames: normalizes pixel values to the model's expected range, converts to a batch tensor of shape \texttt{[1, 8, 3, 224, 224]}.
+  \item \texttt{\{k: v.to(device)\}} --- Moves all input tensors (pixel values, attention masks) to GPU.
+  \item \texttt{torch.no\_grad()} --- Disables gradient computation; saves memory and speeds up inference.
+  \item \texttt{torch.amp.autocast('cuda')} --- Automatic mixed precision: uses FP16 for most operations, FP32 where numerically necessary.
+  \item \texttt{vjepa\_model(**inputs)} --- Forward pass through V-JEPA~2.
+  \item \texttt{out.last\_hidden\_state} --- Shape \texttt{[1, num\_patches, 1280]}. V-JEPA~2 divides each frame into patches and produces a 1280-dimensional embedding for each spatiotemporal patch.
+  \item \texttt{.mean(dim=1)} --- Global average pooling across all patches, producing a single 1280-dim vector that summarizes the entire video.
+  \item \texttt{.cpu().float().squeeze(0)} --- Moves to CPU, converts to FP32, removes batch dimension. Result: a 1-D tensor of shape \texttt{[1280]}.
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+        # Progress tracking every 100 videos
+        if (i + 1) % 100 == 0:
+            elapsed = time.time() - t0
+            done = i - start_idx + 1
+            speed = done / elapsed
+            eta = (total - i - 1) / speed / 60
+            print(f'  [{i+1}/{total}] {len(features)}'
+                  f' extracted | {speed:.1f} vid/s |'
+                  f' ETA: {eta:.0f}min')
+
+        # Checkpoint every 500 videos
+        if (i + 1) % CKPT_EVERY == 0:
+            torch.save({
+                'features': torch.stack(features),
+                'labels': torch.tensor(labels),
+                'next_idx': i + 1,
+            }, VJEPA_CKPT_PATH)
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \textbf{Progress reporting} every 100 videos: shows count, extraction speed (vid/s), and estimated time remaining.
+  \item \textbf{Checkpointing} every 500 videos: saves all features extracted so far, labels, and the next index. This is critical for the $\sim$32 minute extraction because Kaggle kernels can time out.
+  \item \texttt{torch.stack(features)} --- Combines the list of 1280-dim vectors into a 2D tensor \texttt{[N, 1280]}.
+  \item \texttt{torch.tensor(labels, dtype=torch.long)} --- Creates a 1D integer tensor of labels.
+\end{itemize}
+\end{explanation}
+
+After the loop, final features are saved and the checkpoint file is deleted. The model and processor are explicitly deleted and GPU cache is cleared.
+
+\textbf{Output:} V-JEPA DONE: 6754 videos | 1280-dim | 31.8min | 0 errors. Processing speed: $\sim$3.5 vid/s.
+
+% =============================================================================
+% CELL 7: Qwen2.5-VL Feature Extraction
+% =============================================================================
+\newpage
+\section{Cell 7: Qwen2.5-VL Feature Extraction (6,754 Videos)}
+
+\begin{lstlisting}
+from transformers import
+    Qwen2_5_VLForConditionalGeneration,
+    AutoProcessor, BitsAndBytesConfig
+
+QWEN_FEAT_PATH = os.path.join(SAVE_DIR,
+    'qwen25vl_hmdb51_features.pt')
+QWEN_CKPT_PATH = os.path.join(SAVE_DIR,
+    'qwen25vl_hmdb51_ckpt.pt')
+CKPT_EVERY = 500
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{Qwen2\_5\_VLForConditionalGeneration} --- Qwen2.5-VL 7B Instruct model by Alibaba. An autoregressive vision-language model that can generate text conditioned on visual inputs (images/videos).
+  \item \texttt{AutoProcessor} --- Automatically loads the correct tokenizer and image/video processor for Qwen.
+  \item \texttt{BitsAndBytesConfig} --- Configuration for 4-bit weight quantization.
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+bnb = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.float16,
+    bnb_4bit_quant_type='nf4',
+    bnb_4bit_use_double_quant=True,
+)
+qwen_model = Qwen2_5_VLForConditionalGeneration
+    .from_pretrained(
+    'Qwen/Qwen2.5-VL-7B-Instruct',
+    quantization_config=bnb,
+    device_map='auto',
+    torch_dtype=torch.float16,
+)
+qwen_proc = AutoProcessor.from_pretrained(
+    'Qwen/Qwen2.5-VL-7B-Instruct')
+qwen_model.eval()
+qwen_dev = next(qwen_model.parameters()).device
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \textbf{4-bit quantization configuration:}
+  \begin{itemize}[nosep]
+    \item \texttt{load\_in\_4bit=True} --- Quantizes all linear layer weights from FP16 (16 bits) to 4 bits, reducing model size from $\sim$14 GB to $\sim$3.5 GB.
+    \item \texttt{bnb\_4bit\_compute\_dtype=torch.float16} --- During forward pass, weights are dequantized to FP16 for computation (maintains numerical stability).
+    \item \texttt{bnb\_4bit\_quant\_type='nf4'} --- NormalFloat4; a data type optimized for normally-distributed neural network weights (empirically better than uniform INT4).
+    \item \texttt{bnb\_4bit\_use\_double\_quant=True} --- ``Nested quantization'': the quantization constants (scale factors) are themselves quantized, saving an additional $\sim$0.4 bits per parameter.
+  \end{itemize}
+  \item \texttt{device\_map='auto'} --- Automatically distributes model layers across available GPUs; overflows to CPU RAM if GPU memory is insufficient.
+  \item \texttt{qwen\_model.eval()} --- Sets to evaluation mode (disables dropout).
+  \item \texttt{next(qwen\_model.parameters()).device} --- Determines which device the model's first parameter resides on (typically \texttt{cuda:0}).
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+    frames = load_frames_from_bytes(vbytes, 4, IMG_SIZE)
+
+    messages = [{'role': 'user', 'content': [
+        {'type': 'video', 'video': frames},
+        {'type': 'text', 'text': 'Describe.'},
+    ]}]
+    text = qwen_proc.apply_chat_template(messages,
+        tokenize=False, add_generation_prompt=True)
+    inputs = qwen_proc(text=[text], videos=[frames],
+        return_tensors='pt', padding=True)
+    inputs = {k: v.to(qwen_dev)
+              if hasattr(v, 'to') else v
+              for k, v in inputs.items()}
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \textbf{4 frames} per video (vs.\ 8 for V-JEPA): Qwen's vision encoder generates many tokens per frame, so fewer frames are used to stay within GPU memory limits.
+  \item \texttt{messages} --- Chat-format input following Qwen's expected structure:
+  \begin{itemize}[nosep]
+    \item \texttt{'type': 'video'} --- Provides the video frames as visual context.
+    \item \texttt{'type': 'text', 'text': 'Describe.'} --- A minimal text prompt. The actual text content doesn't matter much since we extract hidden states, not generated text.
+  \end{itemize}
+  \item \texttt{apply\_chat\_template} --- Formats the messages into Qwen's chat format with special tokens:
+  \begin{verbatim}
+    <|im_start|>system\nYou are a helpful assistant.
+    <|im_end|>\n<|im_start|>user\n<|video|>
+    Describe.<|im_end|>\n<|im_start|>assistant\n
+  \end{verbatim}
+  \item \texttt{qwen\_proc(text=..., videos=...)} --- Tokenizes text and processes video frames into pixel value tensors, creating \texttt{input\_ids}, \texttt{attention\_mask}, and \texttt{pixel\_values}.
+  \item \texttt{hasattr(v, 'to')} --- Some inputs may be non-tensor types (e.g., lists); only tensors are moved to GPU.
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+    with torch.no_grad():
+        out = qwen_model(**inputs,
+                         output_hidden_states=True)
+        feat = out.hidden_states[-1].mean(dim=1)
+               .cpu().float().squeeze(0)
+
+    features.append(feat)
+    labels.append(label_id)
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{torch.no\_grad()} --- Disables gradient tracking for inference efficiency.
+  \item \texttt{output\_hidden\_states=True} --- Instructs the model to return the hidden states from \textit{all} transformer layers, not just the final logits. Without this flag, only the output logits for next-token prediction would be returned.
+  \item \texttt{out.hidden\_states} --- A tuple of tensors, one per transformer layer. Each has shape \texttt{[1, seq\_len, 3584]} where 3584 is Qwen's hidden dimension.
+  \item \texttt{out.hidden\_states[-1]} --- Selects the \textit{last layer's} hidden states, which contain the most semantically rich representations.
+  \item \texttt{.mean(dim=1)} --- Mean-pools across the entire sequence (both text and visual tokens), producing a single 3584-dimensional feature vector per video.
+  \item \texttt{.cpu().float().squeeze(0)} --- Moves to CPU, converts to FP32 for compatibility with scikit-learn, and removes batch dimension.
+  \item \textbf{Note:} The 3584-dim features from Qwen are $2.8\times$ larger than V-JEPA's 1280-dim features, reflecting the larger model capacity.
+\end{itemize}
+\end{explanation}
+
+The progress reporting (every 50 videos) and checkpointing (every 500 videos) follow the same pattern as V-JEPA~2.
+
+\textbf{Output:} Qwen DONE: 6754 videos | 3584-dim | 56.3min | 0 errors. Processing speed: $\sim$2.0 vid/s (slower than V-JEPA due to the larger model and text token processing overhead).
+
+% =============================================================================
+% CELL 8: Load Features and Split Data
+% =============================================================================
+\newpage
+\section{Cell 8: Load Features and Create Train/Eval Split}
+
+\begin{lstlisting}
+vjepa_data = torch.load(VJEPA_FEAT_PATH,
+    map_location='cpu', weights_only=True)
+qwen_data = torch.load(QWEN_FEAT_PATH,
+    map_location='cpu', weights_only=True)
+
+vjepa_feat = vjepa_data['features'].numpy()
+qwen_feat = qwen_data['features'].numpy()
+vjepa_labels = vjepa_data['labels'].numpy()
+qwen_labels = qwen_data['labels'].numpy()
+
+n = min(len(vjepa_labels), len(qwen_labels))
+vjepa_feat, qwen_feat = vjepa_feat[:n], qwen_feat[:n]
+labels = vjepa_labels[:n]
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item Both feature files are loaded into CPU memory.
+  \item \texttt{.numpy()} converts PyTorch tensors to NumPy arrays, which scikit-learn requires.
+  \item \texttt{n = min(...)} --- Ensures both models have exactly the same number of samples (6,754 in this case, since both had 0 errors).
+  \item Both feature arrays and the label array are truncated to \texttt{n} samples.
+\end{itemize}
+\textbf{Output:} V-JEPA features: (6754, 1280) | Qwen features: (6754, 3584) | 51 classes.
+\end{explanation}
+
+\begin{lstlisting}
+n_tr = int(n * TRAIN_SPLIT)
+perm = np.random.RandomState(SEED).permutation(n)
+tr_idx, ev_idx = perm[:n_tr], perm[n_tr:]
+y_tr, y_ev = labels[tr_idx], labels[ev_idx]
+print(f'Train: {len(tr_idx)} | Eval: {len(ev_idx)}')
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{n\_tr = int(6754 * 0.8) = 5403} --- 5,403 training samples, 1,351 evaluation samples.
+  \item \texttt{np.random.RandomState(SEED).permutation(n)} --- Creates a deterministic random permutation for reproducible splits. Using a separate \texttt{RandomState} object ensures the split is independent of prior random operations.
+  \item \texttt{tr\_idx}, \texttt{ev\_idx} --- Index arrays for training and evaluation.
+  \item \texttt{y\_tr}, \texttt{y\_ev} --- Corresponding label arrays.
+\end{itemize}
+\textbf{Output:} Train: 5403 | Eval: 1351.
+\end{explanation}
+
+% =============================================================================
+% CELL 9: Run Classifiers and Compare
+% =============================================================================
+\newpage
+\section{Cell 9: Classifier Training and Evaluation}
+
+\begin{lstlisting}
+def run_classifiers(X_tr, y_tr, X_ev, y_ev, name):
+    scaler = StandardScaler()
+    X_tr_s = scaler.fit_transform(X_tr)
+    X_ev_s = scaler.transform(X_ev)
+    pca = PCA(n_components=0.95, random_state=SEED)
+    X_tr_p = pca.fit_transform(X_tr_s)
+    X_ev_p = pca.transform(X_ev_s)
+    print(f'  PCA: {X_tr_s.shape[1]} -> '
+          f'{X_tr_p.shape[1]} dims')
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \textbf{Feature preprocessing pipeline (same as FineGym):}
+  \item \texttt{StandardScaler} --- Standardizes each feature dimension to zero mean and unit variance: $z_j = \frac{x_j - \mu_j}{\sigma_j}$. This is critical because:
+  \begin{itemize}[nosep]
+    \item SVM's RBF kernel measures distances in feature space; unscaled features bias the kernel.
+    \item PCA finds directions of maximum variance; unscaled features skew the principal components.
+  \end{itemize}
+  \item \texttt{fit\_transform(X\_tr)} --- Computes statistics from training data and transforms it.
+  \item \texttt{transform(X\_ev)} --- Applies the \textit{same} transformation to evaluation data (prevents data leakage).
+  \item \texttt{PCA(n\_components=0.95)} --- Finds the minimum number of principal components that explain $\geq 95\%$ of the total variance:
+  \begin{itemize}[nosep]
+    \item V-JEPA: $1280 \to 286$ dimensions (77.7\% reduction).
+    \item Qwen: $3584 \to 509$ dimensions (85.8\% reduction).
+  \end{itemize}
+  \item PCA serves dual purposes: (1) reduces computational cost for classifiers, and (2) removes noisy, low-variance feature dimensions.
+  \item \textbf{Note:} The \texttt{name} parameter is added for identification (not present in FineGym version).
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+    classifiers = {
+        'SVM-RBF': SVC(kernel='rbf', C=10,
+            gamma='scale', class_weight='balanced',
+            random_state=SEED, probability=True),
+        'RandomForest': RandomForestClassifier(
+            n_estimators=500,
+            class_weight='balanced',
+            random_state=SEED, n_jobs=-1),
+        'MLP': MLPClassifier(
+            hidden_layer_sizes=(512, 256),
+            max_iter=1000, alpha=1e-4,
+            random_state=SEED, early_stopping=True,
+            learning_rate='adaptive'),
+        'LogReg': LogisticRegression(C=1.0,
+            class_weight='balanced', max_iter=1000,
+            random_state=SEED,
+            multi_class='multinomial'),
+    }
+\end{lstlisting}
+
+\begin{explanation}
+Same four classifiers as FineGym, with identical hyperparameters:
+
+\begin{enumerate}[nosep]
+  \item \textbf{SVM-RBF}: $C=10$, RBF kernel with $\gamma = \frac{1}{d \cdot \text{Var}(X)}$. With 51 classes, this uses one-vs-one strategy ($\binom{51}{2} = 1275$ binary classifiers). \texttt{probability=True} enables Platt scaling for probability estimates (needed for top-5 accuracy).
+
+  \item \textbf{Random Forest}: 500 trees, balanced class weights (inversely proportional to frequency). Handles the class imbalance in HMDB51 (e.g., ``walk'' has 548 samples vs.\ ``throw'' has 102).
+
+  \item \textbf{MLP}: Architecture: input $\to$ 512 neurons $\to$ 256 neurons $\to$ 51 outputs. \texttt{early\_stopping=True} reserves 10\% of training data for validation and stops when validation loss stops improving for 10 consecutive epochs.
+
+  \item \textbf{Logistic Regression}: Multinomial softmax over 51 classes. Uses L2 regularization with $C=1.0$.
+\end{enumerate}
+\end{explanation}
+
+\begin{lstlisting}
+    # Additional metric: Top-5 Accuracy
+    if prob is not None:
+        try:
+            t5 = top_k_accuracy_score(y_ev, prob,
+                k=5, labels=range(NUM_CLASSES))
+        except: t5 = 'N/A'
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \textbf{Top-5 accuracy} is computed for HMDB51 (not in FineGym) because with 51 classes, a model may rank the correct class among its top predictions even when the top-1 prediction is wrong.
+  \item \texttt{top\_k\_accuracy\_score(y\_ev, prob, k=5)} --- Checks whether the true label appears among the 5 classes with the highest predicted probabilities.
+  \item \texttt{labels=range(NUM\_CLASSES)} --- Ensures all 51 classes are considered even if some are absent from the evaluation set.
+  \item This metric provides a more forgiving assessment: useful when distinguishing similar actions (e.g., ``climb'' vs.\ ``climb\_stairs'') is genuinely ambiguous.
+\end{itemize}
+\end{explanation}
+
+The function returns the best classifier name, a comprehensive metrics dictionary, and a per-class classification report.
+
+\textbf{V-JEPA 2 Results (HMDB51):}
+\begin{itemize}[nosep]
+  \item DeepMLP: 80.8\% accuracy, 94.1\% top-5, 81.7\% F1 Macro, 0.804 MCC (Best Classifier)
+  \item PCA reduced features from 1280 to 286 dimensions
+\end{itemize}
+
+\textbf{Qwen2.5-VL Results (HMDB51):}
+\begin{itemize}[nosep]
+  \item DeepMLP: 75.4\% accuracy, 90.6\% top-5, 77.7\% F1 Macro, 0.748 MCC (Best Classifier)
+  \item PCA reduced features from 3584 to 719 dimensions
+\end{itemize}
+
+% =============================================================================
+% CELL 10: Final Comparison
+% =============================================================================
+\newpage
+\section{Cell 10: Final Comparison and Results Summary}
+
+This cell produces the final side-by-side comparison table with the following structure:
+
+\begin{lstlisting}
+print('FINAL COMPARISON -- HMDB51 (51 Action Classes)')
+
+def row(name, v1, v2, pct=True):
+    if pct:
+        print(f'  {name:<25} {v1*100:>17.1f}%
+               {v2*100:>17.1f}%')
+    else:
+        print(f'  {name:<25} {v1:>18.3f}
+               {v2:>18.3f}')
+
+row('Accuracy', vj_m['accuracy'], qw_m['accuracy'])
+row('Top-5 Accuracy', vj_m.get('top5_accuracy', 0),
+    qw_m.get('top5_accuracy', 0))
+row('Precision (macro)', ...)
+row('F1 (macro)', ...)
+row('MCC', ..., pct=False)
+row("Cohen's Kappa", ..., pct=False)
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item \texttt{row()} --- Helper function that prints a formatted comparison row with two model values side-by-side.
+  \item \texttt{pct=True} --- Multiplies values by 100 and adds \% suffix.
+  \item \texttt{pct=False} --- Prints raw decimal values (used for MCC and Cohen's Kappa).
+  \item \texttt{vj\_m.get('top5\_accuracy', 0)} --- Safely retrieves top-5 accuracy (may not exist if probability estimation failed).
+  \item All metrics are printed in a tabular format for easy comparison between V-JEPA~2 and Qwen2.5-VL.
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+winner = 'V-JEPA 2' if vj_f1 > qw_f1
+         else 'Qwen2.5-VL'
+margin = abs(vj_f1 - qw_f1) * 100
+print(f'WINNER: {winner} (by {margin:.1f}% F1)')
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item Compares the macro F1-scores of both models.
+  \item Declares the model with higher F1 as the winner.
+  \item Reports the margin of victory as a percentage point difference.
+\end{itemize}
+\end{explanation}
+
+\begin{lstlisting}
+results = {
+    'dataset': 'HMDB51',
+    'task': '51-class action recognition',
+    'classes': HMDB51_CLASSES,
+    'num_videos': n,
+    'train': len(tr_idx),
+    'eval': len(ev_idx),
+    'vjepa2': {'params': '654M',
+        'best_clf': vj_name, ...},
+    'qwen25vl': {'params': '7B',
+        'best_clf': qw_name, ...},
+    'winner': winner,
+}
+results_path = os.path.join(SAVE_DIR,
+    'hmdb51_comparison.json')
+json.dump(results, open(results_path, 'w'), indent=2)
+\end{lstlisting}
+
+\begin{explanation}
+\begin{itemize}[nosep]
+  \item All experimental results are serialized into a structured JSON file containing:
+  \begin{itemize}[nosep]
+    \item Dataset metadata (name, task, class list, sample counts).
+    \item Per-model results (best classifier, all metric values).
+    \item The overall winner.
+  \end{itemize}
+  \item \texttt{json.dump(..., indent=2)} --- Pretty-prints the JSON with 2-space indentation for readability.
+  \item This file serves as a machine-readable record of the experiment for further analysis or inclusion in the thesis.
+\end{itemize}
+\end{explanation}
+
+% =============================================================================
+% KEY DIFFERENCES FROM FINEGYM
+% =============================================================================
+\newpage
+\section{Key Differences Between HMDB51 and FineGym Notebooks}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{4.5cm} p{4.5cm} p{4.5cm}}
+\toprule
+\textbf{Aspect} & \textbf{FineGym} & \textbf{HMDB51} \\
+\midrule
+Dataset source & YouTube (via yt-dlp) & Hugging Face Hub (ZIP) \\
+Number of classes & 4 & 51 \\
+Number of videos & 1,200 & 6,754 \\
+Video loading & \texttt{load\_frames\_from\_file()} & \texttt{load\_frames\_from\_bytes()} \\
+Checkpoint frequency & Every 100 clips & Every 500 videos \\
+Top-5 accuracy & Not computed & Computed \\
+GradientBoosting & Not imported & Imported (unused) \\
+Extraction time (V-JEPA) & $\sim$minutes & $\sim$32 minutes \\
+Extraction time (Qwen) & $\sim$minutes & $\sim$56 minutes \\
+Train/Eval split & 960/240 & 5403/1351 \\
+PCA dims (V-JEPA) & 1280 $\to$ 70 & 1280 $\to$ 286 \\
+PCA dims (Qwen) & 3584 $\to$ 97 & 3584 $\to$ 509 \\
+\bottomrule
+\end{tabular}
+\caption{Comparison of notebook design differences.}
+\end{table}
+
+\section{Summary of the Experimental Pipeline}
+
+Both notebooks follow the same five-step pipeline:
+
+\begin{enumerate}
+  \item \textbf{Environment Setup:} Install dependencies, configure GPU, set hyperparameters.
+  \item \textbf{Data Acquisition:} Download and prepare the video dataset (YouTube clips for FineGym, ZIP archive for HMDB51).
+  \item \textbf{V-JEPA~2 Feature Extraction:} Load the frozen V-JEPA~2 ViT-H model, extract mean-pooled 1280-dim features from each video, with checkpointing for crash recovery.
+  \item \textbf{Qwen2.5-VL Feature Extraction:} Load the 4-bit quantized Qwen2.5-VL 7B model, construct chat-format inputs with video frames and a minimal text prompt, extract mean-pooled 3584-dim hidden states from the last transformer layer.
+  \item \textbf{Classification and Comparison:} Standardize features, apply PCA, train four traditional ML classifiers (SVM, Random Forest, MLP, Logistic Regression), evaluate with comprehensive metrics (accuracy, precision, recall, F1, MCC, Cohen's Kappa, confusion matrices), and declare the winner.
+\end{enumerate}
+
+\end{document}

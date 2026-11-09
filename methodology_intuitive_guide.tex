@@ -1,0 +1,410 @@
+\documentclass[a4paper, 11pt]{article}
+
+% --- Page Geometry ---
+\usepackage[top=0.85in, bottom=0.85in, left=0.9in, right=0.9in]{geometry}
+\usepackage{times}
+\usepackage{setspace}
+\onehalfspacing
+
+% --- Math & Symbols ---
+\usepackage{amsmath, amssymb, amsfonts}
+
+% --- Tables & Formatting ---
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{array}
+
+% --- Colors & Graphics ---
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,fit}
+
+% --- Callout Boxes & Styling ---
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\setlist{noitemsep, topsep=2pt}
+
+% --- Hyperlinks ---
+\usepackage[colorlinks=true, linkcolor=blue!70!black, urlcolor=blue!70!black, citecolor=blue!70!black]{hyperref}
+
+% --- Color Palette ---
+\definecolor{primaryblue}{RGB}{20, 45, 110}
+\definecolor{secondaryblue}{RGB}{41, 128, 185}
+\definecolor{accentdark}{RGB}{44, 62, 80}
+\definecolor{boxgreen}{RGB}{30, 130, 60}
+\definecolor{boxorange}{RGB}{195, 95, 20}
+\definecolor{boxpurple}{RGB}{115, 45, 145}
+\definecolor{boxred}{RGB}{175, 35, 35}
+
+% --- Custom Themed Boxes ---
+\newtcolorbox{examplebox}[1][Concrete Real-World Example]{%
+  enhanced,
+  colback=orange!4!white,
+  colframe=boxorange,
+  arc=2.5mm,
+  boxrule=1.1pt,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  colbacktitle=boxorange,
+  title={#1},
+  top=3.5mm, bottom=3mm, left=4mm, right=4mm,
+  breakable
+}
+
+\newtcolorbox{conceptbox}[1][How It Works in Plain English]{%
+  enhanced,
+  colback=blue!3!white,
+  colframe=primaryblue,
+  arc=2.5mm,
+  boxrule=1.1pt,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  colbacktitle=primaryblue,
+  title={#1},
+  top=3.5mm, bottom=3mm, left=4mm, right=4mm,
+  breakable
+}
+
+\newtcolorbox{defensebox}[1][What to Say to Your Examiners]{%
+  enhanced,
+  colback=green!4!white,
+  colframe=boxgreen,
+  arc=2.5mm,
+  boxrule=1.1pt,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  colbacktitle=boxgreen,
+  title={#1},
+  top=3.5mm, bottom=3mm, left=4mm, right=4mm,
+  breakable
+}
+
+% --- Header & Footer Configuration ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textsf{\color{gray}Master's Thesis: Intuitive Methodology Guide (Figure 3)}}
+\fancyhead[R]{\small\textsf{\color{gray}Erize Rai (8025006)}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% =============================================================================
+\begin{document}
+
+% --- Title Banner ---
+\begin{center}
+  {\fontsize{18}{22}\selectfont \textbf{\color{primaryblue}THE INTUITIVE METHODOLOGY GUIDE}}\\[4pt]
+  {\fontsize{12}{15}\selectfont \textbf{\color{accentdark}A Detailed, Plain-English Walkthrough with Concrete Real-World Examples}}\\[3pt]
+  {\fontsize{10}{13}\selectfont Central Department of Computer Science and Information Technology}\\
+  {\fontsize{10}{13}\selectfont Institute of Science and Technology (IoST), Tribhuvan University, Nepal}\\[5pt]
+  \rule{\textwidth}{1.2pt}\\[4pt]
+  \textbf{Candidate:} Erize Rai \quad$|$ \quad \textbf{Roll No:} 8025006 \quad$|$ \quad \textbf{Date:} NOVEMBER, 2026\\
+  \textbf{Thesis:} \textit{Enhancing Self-Supervised Video Representations with HAF-STD Net: A Comparative Evaluation Against VLM for Action Recognition}\\
+  \textbf{Supervisor:} Asst. Prof. Dr. Dhiraj Kedar Pandey\\
+  \rule{\textwidth}{0.6pt}
+\end{center}
+
+\vspace{0.2cm}
+\tableofcontents
+\newpage
+
+% =============================================================================
+\section{The Core Story of Your Research (The 1-Minute Pitch)}
+% =============================================================================
+
+\begin{conceptbox}[The Big Question Your Thesis Solves]
+Imagine you want an AI to watch a short video of a gymnast performing a vault and accurately name what she is doing. Today, you have two fundamentally different AI giants you could use:
+\begin{enumerate}
+    \item \textbf{The Video-Native AI (V-JEPA 2):} Trained purely by watching raw video. It has no idea what English words are. Instead, parts of the video were hidden from it, and it spent millions of compute hours learning physical motion, gravity, velocity, and how human bodies move through space and time.
+    \item \textbf{The Language-Vision AI (Qwen2.5-VL):} Over $10\times$ larger ($7\text{ Billion parameters}$). It learned by looking at photos and reading their captions. It is great at chatting, identifying objects, and describing scenes in English.
+\end{enumerate}
+\textbf{The Research Question:} When we keep both models completely frozen (no fine-tuning, no cheating) and ask them to turn videos into numbers, \textbf{which brain understands human action better?} 
+
+And once we get those numbers, \textbf{can we build a smart, lightweight classifier (HAF-STD Net) that separates motion from background to achieve near-perfect recognition?}
+\end{conceptbox}
+
+% =============================================================================
+\section{Stage 1: The Videos We Used (FineGym vs. HMDB51)}
+% =============================================================================
+
+\begin{conceptbox}[Why Two Complementary Benchmarks?]
+If you only test an AI on one dataset, you don't know if your results are real or just luck. We deliberately picked two datasets that test completely opposite challenges:
+\end{conceptbox}
+
+\subsection{FineGym: The "No-Cheating" Gymnastics Test}
+\begin{itemize}
+    \item \textbf{Dataset Size:} 1,200 video clips (exactly 300 clips for each of the 4 apparatus events: Vault, Uneven Bars, Balance Beam, and Floor Exercise).
+    \item \textbf{Why It Is "Cheat-Proof":} In normal datasets, an AI doesn't actually look at the person; it cheats using the background. For example, if it sees water, it guesses \textit{"swimming"}. If it sees a soccer goalpost, it guesses \textit{"kicking a ball"}.
+    \item In FineGym, \textbf{all four events happen in the exact same gym arena, on the same mat, with the same lighting, and the gymnasts wear similar leotards}. 
+    \item The AI \textbf{cannot} use the background. To tell a Vault apart from a Floor Exercise, it has to track the gymnast's limbs, body flight, flips, and apparatus interaction in split-second detail.
+\end{itemize}
+
+\subsection{HMDB51: The "Real-World Chaos" Test}
+\begin{itemize}
+    \item \textbf{Dataset Size:} 6,754 video clips across 51 diverse everyday actions (chewing, smiling, clapping, jumping, sword fighting, kicking, hugging).
+    \item \textbf{Why It Is Hard:} These videos come from old movies and amateur internet clips. The camera shakes, people get blocked behind furniture, lighting changes suddenly, and video quality is grainy.
+    \item It tests whether the AI can recognize broad semantic actions under messy, real-world conditions.
+\end{itemize}
+
+% =============================================================================
+\section{Stage 2: Frame Extraction with Concrete Examples}
+% =============================================================================
+
+\begin{conceptbox}[Why Not Send the Whole Video File?]
+A standard 8-second video recorded at 30 frames per second contains $8 \times 30 = \mathbf{240\text{ individual image frames}}$. 
+If you tried to feed all 240 high-resolution images into a deep neural network at once, the computer's graphics card (GPU) would instantly run out of memory and crash.
+\end{conceptbox}
+
+\begin{examplebox}[Concrete Example: Sampling a 240-Frame Vault Video]
+Suppose we have a video clip of a gymnast performing a Vault routine. The video has exactly \textbf{240 frames} (Frame 0 to Frame 239), lasting 8 seconds:
+
+\begin{itemize}
+    \item \textbf{Why Consecutive Frames (Frames 0, 1, 2, 3, 4, 5, 6, 7) Completely Fail:}
+    At 30 frames per second, frames 0 to 7 cover only $7 / 30 = \mathbf{0.23\text{ seconds}}$! In the first 0.23 seconds, the gymnast is just raising her hand to salute the judges. The AI would never see her run, never see her jump on the springboard, and never see the vault!
+    
+    \item \textbf{Uniform Sampling across the Full Video for V-JEPA 2 ($T=8$ frames):}
+    We use the uniform step formula: $t_k = \left\lfloor k \cdot \frac{240}{8} \right\rfloor = k \cdot 30$. The video is sliced at:
+    \begin{enumerate}
+        \item \textbf{Frame 0 (0.00s):} Gymnast salutes the judges at the start of the runway.
+        \item \textbf{Frame 30 (1.00s):} Gymnast takes her first accelerating running strides down the runway.
+        \item \textbf{Frame 60 (2.00s):} Sprinting at peak horizontal velocity.
+        \item \textbf{Frame 90 (3.00s):} The hurdle jump: feet slam into the springboard.
+        \item \textbf{Frame 120 (4.00s):} Hands hit the vault table; explosive vertical repulsion.
+        \item \textbf{Frame 150 (5.00s):} Peak aerial height: multiple body twists and somersaults in mid-air.
+        \item \textbf{Frame 180 (6.00s):} Descending toward the mat, opening out body shape to spot landing.
+        \item \textbf{Frame 210 (7.00s):} Feet touch down on the landing mat; knees absorb impact.
+    \end{enumerate}
+    \textbf{Result:} In just 8 images, V-JEPA~2 captures the entire story of the vault from start to finish!
+
+    \item \textbf{Uniform Sampling for Qwen2.5-VL ($T=4$ frames):}
+    Using the step formula with $T=4$: $t_k = k \cdot \frac{240}{4} = k \cdot 60$:
+    \begin{enumerate}
+        \item \textbf{Frame 0 (0.00s):} Start of the runway.
+        \item \textbf{Frame 60 (2.00s):} Mid-sprint acceleration.
+        \item \textbf{Frame 120 (4.00s):} Hands repelling off the vault table.
+        \item \textbf{Frame 180 (6.00s):} Descending through the air toward the mat.
+    \end{enumerate}
+\end{itemize}
+Every single extracted frame is then resized to a neat square of \textbf{$224 \times 224$ pixels} so all images have identical dimensions.
+\end{examplebox}
+
+% =============================================================================
+\section{Stage 3: The Two AI Backbones (Turning Video into Numbers)}
+% =============================================================================
+
+\begin{conceptbox}[What Does "Feature Extraction" Mean?]
+Computers cannot understand colors or pixels directly. An AI model acts like a mathematical blender: you feed in the 8 image frames, and after passing through dozens of attention layers, the model outputs a \textbf{dense list of numbers} (a feature vector). 
+
+These numbers describe what happened in the video. If two videos are both "Vaults", their numbers will be close to each other. If one video is a "Floor Exercise" and the other is a "Vault", their numbers will be very far apart.
+\end{conceptbox}
+
+\subsection{Backbone 1: V-JEPA 2 (The Video Specialist)}
+\begin{itemize}
+    \item \textbf{Size:} 654 Million parameters (ViT-Huge).
+    \item \textbf{How It Looks at Video (3D Tubelets):} Instead of looking at 2D flat photo patches, V-JEPA 2 looks at \textbf{3D tubelets of size $2 \text{ frames} \times 16 \times 16 \text{ pixels}$}. 
+    \item \textit{Analogy:} Imagine taking a cookie cutter of size $16 \times 16$ pixels and punching it through 2 consecutive video frames. It tracks how that tiny patch (e.g., the gymnast's elbow or the springboard edge) shifted over time.
+    \item \textbf{Output for Baseline Classifiers:} It condenses the entire video into a single list of \textbf{1,280 numbers} (global average pooling).
+    \item \textbf{Output for HAF-STD Net:} Because V-JEPA 2 has 32 layers of "thinking", we also tapped into its brain at 4 depths:
+    \begin{itemize}
+        \item \textit{Layer 6 (25\% Depth):} Sees basic edges, mat boundaries, and lighting.
+        \item \textit{Layer 12 (50\% Depth):} Sees body parts (arms, legs, torso, fiberglass rails).
+        \item \textit{Layer 18 (75\% Depth):} Sees body poses (tucked, arched, inverted, rotating).
+        \item \textit{Layer 24 (100\% Depth):} Sees complete semantic actions (vault flight, dismount).
+    \end{itemize}
+    This gives HAF-STD Net a rich 4-layer temporal tensor of numbers to work with.
+\end{itemize}
+
+\subsection{Backbone 2: Qwen2.5-VL (The Giant Vision-Language Model)}
+\begin{itemize}
+    \item \textbf{Size:} 7 Billion parameters ($10.7\times$ larger than V-JEPA 2!).
+    \item \textbf{How It Looks at Video:} It takes the 4 frames and cuts each frame into 256 patches. That produces $4 \times 256 = \mathbf{1,024\text{ visual tokens}}$.
+    \item We wrap these tokens in a conversation prompt: \texttt{<user> [Video] Describe. <assistant>}.
+    \item It processes the video using its language transformer and outputs a list of \textbf{3,584 numbers} (mean-pooled hidden states).
+    \item \textbf{Why 4-bit NF4 Quantization Was Necessary:} At full precision, loading a 7B model takes 14 GB of GPU memory. That left almost zero room to actually process the video on our 16 GB Tesla T4 GPU. Using 4-bit NF4 compressed the model into 4.5 GB, allowing it to run smoothly with zero memory crashes.
+\end{itemize}
+
+% =============================================================================
+\section{Stage 4: Preprocessing \& PCA (Cleaning and Squeezing Numbers)}
+% =============================================================================
+
+\subsection{StandardScaler (Giving Every Number an Equal Voice)}
+\begin{examplebox}[Why Standardization Matters]
+Imagine an AI outputs two feature numbers for a video:
+\begin{itemize}
+    \item Feature 1 measures overall brightness: value = \textbf{$+450.0$}
+    \item Feature 2 measures how fast an ankle is twisting: value = \textbf{$+0.02$}
+\end{itemize}
+If you feed these raw numbers into a classifier, the classifier will think Feature 1 is thousands of times more important simply because the number is bigger! It will completely ignore the ankle twist!
+
+\textbf{StandardScaler} fixes this: it subtracts the average and divides by the spread. Both features now have an average of $0$ and a standard deviation of $1$. The ankle twist and the brightness now have an equal voice.
+
+\textbf{No Cheating Rule:} We calculate the averages \textbf{only on the training videos}, never on the test videos!
+\end{examplebox}
+
+\subsection{PCA Dimensionality Reduction (The Smart Zipper)}
+\begin{examplebox}[Why We Squeeze 1,280 Numbers Down to 90]
+A list of 1,280 numbers has a lot of repetition. If number \#45 tracks the mat color and number \#46 also tracks the mat color, having both is redundant.
+
+\textbf{PCA (Principal Component Analysis)} acts like a smart zipper:
+\begin{itemize}
+    \item It looks for which combinations of numbers have the most variation.
+    \item It keeps only the top principal directions that explain \textbf{95\% of all the information in the video}.
+    \item On FineGym: V-JEPA 2's 1,280 numbers are squeezed down to just \textbf{90 numbers}!
+    \item On HMDB51: 1,280 numbers are squeezed down to \textbf{286 numbers} (because 51 actions need more variety to describe than 4 events).
+\end{itemize}
+This prevents simple classifiers from getting overwhelmed by thousands of numbers (the "curse of dimensionality").
+\end{examplebox}
+
+\subsection{The Red Dashed Arrow: Why HAF-STD Net Bypassed PCA}
+\begin{conceptbox}[Why Our Model Kept the Uncompressed Numbers]
+In Figure 3 of your thesis, you will see a red dashed line showing that **HAF-STD Net skips PCA**. 
+
+\textbf{The Intuitive Reason:}
+Baseline classifiers only look at a single flat list of numbers per video. 
+
+However, HAF-STD Net needs to see:
+\begin{enumerate}
+    \item How the video changes \textbf{over time} (from frame to frame).
+    \item How the AI's thoughts change \textbf{across layers} (from layer 6 to layer 24).
+\end{enumerate}
+If you run PCA on a multi-layer video tensor, PCA shuffles all the numbers together like a deck of cards. It would scramble the chronological order of the frames and the vertical order of the layers! 
+
+Therefore, HAF-STD Net must receive the raw, un-shuffled numbers to perform its temporal wavelet filtering.
+\end{conceptbox}
+
+% =============================================================================
+\section{Stage 5: The Classifiers (Who Makes the Final Guess?)}
+% =============================================================================
+
+We feed the numbers into **9 different classifiers** to see who can guess the action best:
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\textbf{Classifier} & \textbf{Type} & \textbf{How It Thinks in Plain English} \\
+\midrule
+\textbf{LogReg} & Classical & Draws a simple straight line (flat plane) between classes. If this scores high, the features are already linearly separated! \\
+\textbf{SVM-RBF} & Classical & Draws flexible, curved boundaries in high dimensions around each action cluster. \\
+\textbf{Random Forest} & Classical & A voting panel of 100 decision trees asking yes/no questions about feature values. \\
+\midrule
+\textbf{MLP} & Neural Net & A basic 2-layer neural network with 512 and 256 neurons learning non-linear patterns. \\
+\textbf{DeepMLP} & Neural Net & A 4-layer deeper network that progressively refines features: $1024 \rightarrow 512 \rightarrow 256 \rightarrow 128$. \\
+\textbf{ResMLP} & Neural Net & Uses "residual skip-connections" (jumping over layers) so deep signals don't fade out. \\
+\textbf{Conv1DNet} & Neural Net & Slides a 1D filter across adjacent feature dimensions looking for local combinations. \\
+\textbf{MiniTransformer} & Neural Net & Uses self-attention to let all feature dimensions talk to each other simultaneously. \\
+\midrule
+\textbf{HAF-STD Net} & \textbf{Our Proposed Model} & Decomposes multi-layer features into motion, appearance, and layer speed streams! \\
+\bottomrule
+\end{tabularx}
+\caption{The 9 downstream classifiers evaluated in the thesis.}
+\end{table}
+
+% =============================================================================
+\section{Stage 6: How HAF-STD Net Works (The Secret Sauce)}
+% =============================================================================
+
+Our proposed model, \textbf{HAF-STD Net} (Hierarchical Adaptive Fusion with Spectral-Temporal Decomposition), has only \textbf{4.8 Million parameters} (less than 1\% of V-JEPA 2's size). 
+
+Instead of just looking at one flat summary, it splits the video features into \textbf{three specialized streams}:
+
+\begin{examplebox}[Concrete Example: Watching a Floor Exercise Routine]
+Imagine a video of a gymnast performing a triple flip on the floor:
+
+\begin{enumerate}
+    \item \textbf{Stream 1: The Appearance Stream (Slow Scenery):}
+    \begin{itemize}
+        \item It \textbf{averages} pairs of consecutive frames: $a_t = \frac{h_1 + h_2}{2}$.
+        \item When you average frames of a gymnast flipping at high speed, the flipping body blurs away into a transparent ghost, but the \textbf{blue competition floor and apparatus boundaries stay razor sharp}!
+        \item This stream answers: \textit{"What environment and equipment is she on?"}
+    \end{itemize}
+
+    \item \textbf{Stream 2: The Motion Dynamics Stream (Fast Action):}
+    \begin{itemize}
+        \item It \textbf{subtracts} pairs of consecutive frames: $d_t = \frac{h_1 - h_2}{2}$.
+        \item Because the blue floor mat does not move, subtracting the frames cancels it out completely ($mat - mat = 0$)!
+        \item The background disappears into pitch black, leaving \textbf{only the moving gymnast's limbs, rotations, and velocity glowing brightly}!
+        \item This stream answers: \textit{"How fast and in what direction is the body moving?"} (Achieved with simple Haar wavelets—requiring zero extra learnable parameters!).
+    \end{itemize}
+
+    \item \textbf{Stream 3: The Depth-Velocity Stream (Brain Speed):}
+    \begin{itemize}
+        \item It subtracts layer 6 from layer 12, layer 12 from 18, and layer 18 from 24: $\mathbf{v} = \mathbf{z}_{l+1} - \mathbf{z}_l$.
+        \item This tracks \textbf{how fast the AI's internal understanding changes} from simple edges to complex gymnastics concepts as signals climb up through the network.
+    \end{itemize}
+
+    \item \textbf{The Adaptive Router (The Traffic Controller):}
+    \begin{itemize}
+        \item An internal mini-network looks at all 12 sub-streams ($4\text{ layers} \times 3\text{ streams}$) and dynamically decides: \textit{"For this fast Floor tumbling pass, give 70\% weight to the Motion Stream! For a static Vault pause, give 60\% weight to Appearance!"}
+    \end{itemize}
+
+    \item \textbf{The Cosine Head (Direction over Size):}
+    \begin{itemize}
+        \item Instead of measuring how big the numbers are, it measures the **angle** between the video feature and the 4 event prototypes on a sphere. This prevents loud, bright videos from overpowering subtle, dark videos.
+    \end{itemize}
+\end{enumerate}
+\end{examplebox}
+
+% =============================================================================
+\section{Stage 7: How We Scored the Models (Why Not Just Accuracy?)}
+% =============================================================================
+
+\begin{conceptbox}[Why Accuracy Can Lie in Multiclass Datasets]
+Imagine an exam with 51 questions. 
+Question 1 appears 50 times (an easy common action like "walking"), and Questions 2 through 51 appear only 1 time each.
+
+If a lazy AI always guesses "walking" for every single video:
+\begin{itemize}
+    \item It gets 50 out of 100 questions right $\rightarrow$ **Accuracy = 50.0\%!** It looks like an average student!
+    \item But in reality, the model is completely blind: it got an F on all 50 other actions!
+\end{itemize}
+\end{conceptbox}
+
+\begin{examplebox}[Why Macro F1 and MCC Are Your Heroes]
+To prevent this, we used:
+\begin{enumerate}
+    \item \textbf{Macro F1-Score (Our Primary Score):}
+    It calculates the score for each of the 51 classes individually, and then takes the plain unweighted average. A model \textbf{cannot} get a high Macro F1 score unless it correctly recognizes the rare, difficult actions too!
+    \item \textbf{Matthews Correlation Coefficient (MCC):}
+    A gold-standard metric from genetics and statistics. It checks all correct and incorrect predictions together:
+    \begin{itemize}
+        \item $\text{MCC} = +1.0$: Absolute perfection.
+        \item $\text{MCC} = 0.0$: Pure random luck (the lazy AI that always guesses the same thing gets a flat $0.0$).
+    \end{itemize}
+    Our model scored **$0.974$ on FineGym** and **$0.843$ on HMDB51**, proving mathematically that our results are genuine high-precision action recognition, not luck.
+\end{enumerate}
+\end{examplebox}
+
+% =============================================================================
+\section{The Final Verdict (What the Numbers Proved)}
+% =============================================================================
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{l r r X}
+\toprule
+\textbf{Dataset} & \textbf{V-JEPA 2 + HAF-STD Net} & \textbf{Qwen2.5-VL (Best)} & \textbf{The Plain-English Meaning} \\
+\midrule
+\textbf{FineGym} & \textbf{97.8\% Macro F1} (98.1\% Acc) & 88.4\% Macro F1 (89.1\% Acc) & V-JEPA 2 wins by \textbf{+9.4\% F1} on subtle motion! \\
+\textbf{HMDB51}  & \textbf{85.3\% Macro F1} (84.7\% Acc) & 79.1\% Macro F1 (77.1\% Acc) & V-JEPA 2 wins by \textbf{+6.2\% F1} on coarse actions! \\
+\bottomrule
+\end{tabularx}
+\caption{Final comparative results between the two paradigms.}
+\end{table}
+
+\begin{defensebox}[The 3 Big Conclusions You Present to the Examiners]
+\begin{enumerate}
+    \item \textbf{Video-Native Training Beats Giant Language Models:} Even though Qwen2.5-VL had $7\text{ Billion parameters}$ (over $10\times$ more than V-JEPA 2), V-JEPA 2 won decisively on both datasets. An AI trained on video motion understands action far better than an AI trained on photo descriptions.
+    \item \textbf{Motion vs. Background Gap is Largest on Fine Actions:} The performance gap between the two models was much larger on FineGym ($+9.4\%$) than on HMDB51 ($+6.2\%$). Why? Because in FineGym, you can't cheat using the background; you must understand pure motion!
+    \item \textbf{Smart Probing Unlocks Hidden Power:} Our proposed HAF-STD Net beat all 8 standard classifiers on both datasets, proving that decomposing video into appearance, motion, and layer-depth velocity unlocks the true power of frozen self-supervised backbones.
+\end{enumerate}
+\end{defensebox}
+
+\end{document}

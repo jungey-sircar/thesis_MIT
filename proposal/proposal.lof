@@ -1,0 +1,8 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Flowchart depicting the proposed multi-stage experimental methodology pipeline. Solid arrows indicate the shared baseline path where mean-pooled features from both models undergo StandardScaler normalization and PCA dimensionality reduction before evaluation by 11 classifiers. Dashed red arrows indicate the HAF-STD Net path, which routes V-JEPA~2.1's multi-layer temporal features through StandardScaler normalization but bypasses PCA.}}{8}{figure.caption.5}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Architecture of V-JEPA~2.1 self-supervised pretraining framework showing the dual x-Encoder and y-Encoder pipeline with multi-level fusion, mask-denoising prediction, and stop-gradient targets \citep {murlabadia2026vjepa21}.}}{11}{figure.caption.7}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Architecture of Qwen2.5-VL vision-language model illustrating the Vision Encoder with Conv3D patch embedding, window attention, and native resolution input processing, feeding into the Qwen2.5 LM Decoder with MRoPE temporal alignment \citep {qwen2025qwen3vl}.}}{12}{figure.caption.8}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Gantt Chart illustrating the 14-week proposed research timeline.}}{16}{figure.caption.9}%

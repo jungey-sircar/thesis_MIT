@@ -1,0 +1,21 @@
+% =============================================================================
+%                         APPENDIX G: ABSTRACT
+% =============================================================================
+
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Abstract}
+
+\begin{center}
+{\fontsize{16}{20}\selectfont \textbf{Abstract}}
+\end{center}
+
+\vspace{0.5cm}
+
+\noindent
+This thesis investigates the comparative effectiveness of self-supervised video encoder and vision-language model for video action recognition. Two state-of-the-art foundation models representing fundamentally different learning paradigms were evaluated: V-JEPA~2.1 (654M parameters), a self-supervised video encoder from Meta AI trained via masked spatio-temporal prediction in latent space, and Qwen2.5-VL (7B parameters), an autoregressive vision-language model from Alibaba Cloud. A frozen-feature evaluation protocol was employed on two complementary benchmarks: FineGym (4-class fine-grained gymnastics classification, 1,200 clips) and HMDB51 (51-class coarse-grained action recognition, 6,754 videos). The extracted representations were evaluated across nine classifiers, including three classical machine learning algorithms, five neural network classifiers, and a novel HAF-STD Net (Hierarchical Adaptive Fusion with Spectral-Temporal Decomposition) architecture designed to exploit multi-layer latent representations. On FineGym, V-JEPA~2.1 paired with HAF-STD Net achieved 98.1\% accuracy and 97.8\% macro F1, outperforming Qwen2.5-VL's best result (89.1\% accuracy, 88.4\% macro F1 with DeepMLP) by a 9.4 percentage point F1 margin. On HMDB51, V-JEPA~2.1 with HAF-STD Net achieved 84.7\% accuracy and 85.3\% macro F1, surpassing Qwen2.5-VL's best result (77.1\% accuracy, 79.1\% macro F1 with DeepMLP) by a 6.2 percentage point F1 margin. The results demonstrate that task-specialized self-supervised video encoders produce substantially more discriminative temporal representations than general-purpose VLMs, despite operating with an order of magnitude fewer parameters. Furthermore, the proposed HAF-STD Net shows that decomposing multi-layer latent representations into hierarchical appearance, motion, and depth-velocity streams through adaptive routing yields significant performance gains for frozen self-supervised video backbones.
+
+\vspace{0.8cm}
+\noindent
+{\fontsize{10}{13}\selectfont \textit{Keywords: Video Understanding, Self-Supervised Learning, Vision-Language Models, V-JEPA 2.1, Qwen2.5-VL, Action Recognition, HAF-STD Net}}
+

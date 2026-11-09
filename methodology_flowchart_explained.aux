@@ -1,0 +1,35 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}The Big Picture — What Is This Flowchart About?}{2}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Stage 1 — The Datasets (Top Two Blue Boxes)}{3}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Box 1: FineGym — 1,200 clips, 4 event classes}{3}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Box 2: HMDB51 — 6,754 clips, 51 action classes}{4}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Stage 2 — Frame Extraction (Green Box)}{6}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Why Can't We Just Feed the Whole Video?}{6}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}How Frame Extraction Works}{6}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Step 2a: Open the Video (OpenCV VideoCapture)}{6}{subsubsection.3.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Step 2b: Pick Evenly Spaced Frames (Uniform Temporal Sampling)}{7}{subsubsection.3.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}Step 2c: Resize to 224 × 224 Pixels}{8}{subsubsection.3.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Stage 3 — Feature Extraction (Two Orange Boxes)}{9}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Left Orange Box: V-JEPA 2 (654M)}{9}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Right Orange Box: Qwen2.5-VL (7B)}{11}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}The ``Frozen'' Concept — Why We Don't Retrain These Models}{12}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Stage 4 — Feature Preprocessing (Green Box)}{14}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}What is StandardScaler?}{14}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}What is the 80/20 Train/Eval Split?}{15}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Stage 5 — PCA Dimensionality Reduction (Green Box)}{16}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}What is PCA?}{16}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}What Does ``95\% Variance Retained'' Mean?}{16}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Stage 6 — The Classifiers (Three Bottom Boxes)}{18}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Left Box (Red, Dashed): HAF-STD Net — 4.8M params}{18}{subsection.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Center Box (Green): Classical ML (3)}{20}{subsection.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Right Box (Cyan/Blue): Neural Network Classifiers (5)}{20}{subsection.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8}Stage 7 — How the Neural Networks Learn (Training)}{22}{section.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}The Five Training Tricks}{22}{subsection.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9}Stage 8 — Comparative Evaluation (Yellow Box at the Bottom)}{24}{section.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}The Four Report Card Metrics}{24}{subsection.9.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10}The Complete Flow — Following One Video Through the Pipeline}{26}{section.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {11}Summary — The Flowchart at a Glance}{28}{section.11}\protected@file@percent }
+\gdef \@abspage@last{29}

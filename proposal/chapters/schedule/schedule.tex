@@ -1,0 +1,76 @@
+% =============================================================================
+%    CHAPTER 4: WORK PLAN AND EXPECTED OUTCOMES
+% =============================================================================
+\chapter{Work Plan and Expected Outcomes}
+
+\section{Work Plan of the Study}
+
+The proposed research will be conducted over a 14-week timeline. Figure~\ref{fig:gantt_chart} illustrates the Gantt chart detailing the proposed project phases and execution timeline.
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{ganttchart}[
+    hgrid,
+    vgrid,
+    x unit=0.55cm,
+    y unit title=0.6cm,
+    y unit chart=0.6cm,
+    title height=1,
+    bar/.style={fill=blue!40},
+    bar label font=\small,
+    title label font=\small,
+    milestone label font=\small,
+    group label font=\small\bfseries,
+]{1}{14}
+    \gantttitle{Weeks}{14} \\
+    \gantttitlelist{1,...,14}{1} \\
+
+    \ganttbar{Literature Survey \& Analysis}{1}{3} \\
+    \ganttbar{Proposal Preparation \& Defense}{3}{4} \\
+    \ganttbar{Dataset Ingestion \& Sampling}{5}{6} \\
+    \ganttbar{Feature Extraction (V-JEPA 2 \& Qwen2.5-VL)}{6}{8} \\
+    \ganttbar{Classifier Probing \& HAF-STD Net}{8}{10} \\
+    \ganttbar{Comparative Analysis \& Validation}{10}{11} \\
+    \ganttbar{Thesis Documentation \& Drafting}{11}{13} \\
+    \ganttbar{Final Review \& Defense Submission}{13}{14}
+\end{ganttchart}%
+}
+\caption{Gantt Chart illustrating the 14-week proposed research timeline.}
+\label{fig:gantt_chart}
+\end{figure}
+
+Table~\ref{tab:schedule} details the core activities and milestones planned for each phase of the research.
+
+\begin{table}[H]
+\centering
+\caption{Detailed timeline breakdown and major project milestones.}
+\label{tab:schedule}
+\begin{tabular}{llp{7.5cm}}
+\toprule
+\textbf{Phase} & \textbf{Timeline} & \textbf{Description of Activities} \\
+\midrule
+Literature Survey & Weeks 1--3 & Comprehensive literature review of SSL video encoders, VLMs, fine-grained activity benchmarks, and gap analysis. \\
+Proposal Defense & Weeks 3--4 & Preparation, submission, and defense of the Master's thesis proposal document. \\
+Data Acquisition & Weeks 5--6 & Automated ingestion of FineGym clips via \texttt{yt-dlp} and extraction of HMDB51 dataset from Hugging Face Hub. \\
+Feature Extraction & Weeks 6--8 & Batch extraction of multi-layer and global features from \vjepaa{} and \qwenvl{} on Kaggle Tesla T4 GPU. \\
+Classifier & Weeks 8--10 & Feature standardization, PCA fitting, training 8 baseline classifiers (3 classical ML + 5 neural network classifiers) and developing the \textbf{HAF-STD Net} architecture. \\
+Statistical Analysis & Weeks 10--11 & Cross-granularity performance comparison, HAF-STD Net vs baseline probe ablation, error matrix evaluation. \\
+Documentation & Weeks 11--13 & Comprehensive drafting of Master's thesis chapters, figures, tables, and appendices. \\
+Thesis Submission & Weeks 13--14 & Plagiarism verification, peer review, supervisor approval, and final thesis defense submission. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Expected Outcomes}
+
+The primary expected outcomes of this research project include:
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Empirical Feature Quality Evaluation:} Quantitative performance benchmarks comparing frozen representations from self-supervised video encoders (\vjepaa{}, 654M) against vision-language models (\qwenvl{}, 7B).
+    \item \textbf{Proposed Classifier Contribution (HAF-STD Net):} A classification architecture (4.8M parameters) combining 1D Haar wavelet spectral-temporal decomposition, depth representation velocity, and adaptive routing for frozen self-supervised backbones.
+    \item \textbf{Granularity-Dependent Representation Insights:} Detailed comparative evidence demonstrating how self-supervised latent prediction vs.\ multimodal language pre-training performs across fine-grained (FineGym) vs.\ coarse-grained (HMDB51) action classification.
+    \item \textbf{Parameter Efficiency Analysis:} Practical guidelines establishing whether compact, video-specialized encoders can outperform general-purpose 7B vision-language models on specialized motion tasks.
+    \item \textbf{Classifier Compatibility Assessment:} Identification of optimal classical machine learning models and neural network classifiers (ResMLP, DeepMLP, HAF-STD Net) for downstream representation spaces.
+    \item \textbf{Publication Artifacts:} A complete Master's thesis report, open-source experimental codebase, and clean dataset feature benchmarks for future research.
+\end{enumerate}
+

@@ -1,0 +1,32 @@
+\contentsline {section}{\numberline {1}V-JEPA 2: Turning Video into Tokens}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Equation 1 --- Spatiotemporal Tokenization (Eq.~3.1)}{2}{subsection.1.1}%
+\contentsline {section}{\numberline {2}V-JEPA 2: How It Learns (Training Objectives)}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Equation 2 --- Exponential Moving Average / EMA (Eq.~3.2)}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Equation 3 --- Vision Transformer Block (Eq.~3.3)}{5}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Equation 4 --- V-JEPA 2 Training Objective (Eq.~3.4)}{6}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Equation 5 --- Dense Per-Token Prediction Loss (Eq.~3.5)}{7}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Equation 6 --- Context Loss (Eq.~3.6)}{7}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Equation 7 --- Total V-JEPA 2.1 Loss (Eq.~3.7)}{8}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}Equation 8 --- Multi-Layer Feature Extraction (Eq.~3.8)}{8}{subsection.2.7}%
+\contentsline {section}{\numberline {3}Qwen2.5-VL: The Vision-Language Model}{10}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Equation 9 --- Patch Embedding (Eq.~3.9)}{10}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Equation 10 --- Window Attention (Eq.~3.10)}{10}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Equation 11 --- Multimodal Rotary Position Embedding / MRoPE (Eq.~3.11)}{11}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Equation 12 --- Visual-Language Fusion (Eq.~3.12)}{12}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Equation 13 --- Language Model Training Objective (Eq.~3.13)}{13}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Equation 14 --- NF4 Quantization (Eq.~3.14)}{14}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.7}Equation 15 --- Qwen Feature Extraction (Eq.~3.15)}{14}{subsection.3.7}%
+\contentsline {section}{\numberline {4}Feature Preprocessing: Frozen Protocol and PCA}{16}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Equation 16 --- Frozen Feature Protocol}{16}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Equation 17 --- Standardization (Eq.~3.16)}{17}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Equations 18--20 --- PCA (Eqs.~3.17--3.19)}{17}{subsection.4.3}%
+\contentsline {section}{\numberline {5}HAF-STD Net: The Novel Classifier}{20}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Equation 21 --- Haar Wavelet Transform}{20}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Equation 22 --- Depth Representation Velocity}{21}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Equation 23 --- Adaptive Routing Fusion}{21}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Equation 24 --- Cosine Similarity Classification Head}{22}{subsection.5.4}%
+\contentsline {section}{\numberline {6}Training Techniques}{24}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Equation 25 --- Label Smoothing}{24}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Equation 26 --- Feature-Space Mixup}{24}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Equation 27 --- 4D Mixup for HAF-STD Net}{25}{subsection.6.3}%
+\contentsline {section}{\numberline {7}Complete Equation Index}{26}{section.7}%

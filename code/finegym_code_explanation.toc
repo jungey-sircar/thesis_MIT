@@ -1,0 +1,10 @@
+\contentsline {section}{\numberline {1}Overview}{2}{section.1}%
+\contentsline {section}{\numberline {2}Cell 1: Package Installation}{3}{section.2}%
+\contentsline {section}{\numberline {3}Cell 2: Imports and Configuration}{4}{section.3}%
+\contentsline {section}{\numberline {4}Cell 3: Download FineGym Annotations}{9}{section.4}%
+\contentsline {section}{\numberline {5}Cell 4: Download Video Clips and Build Dataset}{11}{section.5}%
+\contentsline {section}{\numberline {6}Cell 5: V-JEPA 2 Feature Extraction}{14}{section.6}%
+\contentsline {section}{\numberline {7}Cell 6: Qwen2.5-VL Feature Extraction}{18}{section.7}%
+\contentsline {section}{\numberline {8}Cell 7: Load Features and Create Train/Eval Split}{20}{section.8}%
+\contentsline {section}{\numberline {9}Cell 8: Run Classifiers and Compare}{21}{section.9}%
+\contentsline {section}{\numberline {10}Cell 9: Final Comparison Table}{23}{section.10}%

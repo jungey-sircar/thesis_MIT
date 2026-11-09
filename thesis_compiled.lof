@@ -1,0 +1,10 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1}{\ignorespaces Architecture of V-JEPA~2.1 self-supervised pretraining framework showing the dual x-Encoder and y-Encoder pipeline with multi-level fusion, mask-denoising prediction, and stop-gradient targets \citep {murlabadia2026vjepa21}.}}{15}{figure.caption.13}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Architecture of Qwen2.5-VL vision-language model illustrating the Vision Encoder with Conv3D patch embedding, window attention, and native resolution input processing, feeding into the Qwen2.5 LM Decoder with MRoPE temporal alignment \citep {qwen2025qwen3vl}.}}{18}{figure.caption.14}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Methodology flowchart showing the experimental pipeline.}}{19}{figure.caption.15}%
+\contentsline {figure}{\numberline {4}{\ignorespaces Architecture of the proposed HAF-STD Net classifier.}}{24}{figure.caption.16}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }

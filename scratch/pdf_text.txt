@@ -1,0 +1,818 @@
+=== PAGE 1 ===
+Master’s Program                                                                                                          
+20                                Institute of Science and Technology, TU 
+ 
+ 
+ 
+             Photoplate 6: SEM image of sample before carbonization 
+10.8 
+Equations: All equations should be typed using MathType or similar 
+style. Equations should have equation numbers numbered 
+sequentially throughout the thesis. For example: 
+RsT = a  expbT  …….. (i) 
+10.9 
+Color Pages:  
+a) Color graphics, photographs, etc. can be used when appropriate. 
+However, all copies of the thesis must be identical. 
+b) The color images must be clear with high resolution prints.  
+10.10 References and Citations 
+The referencing and citations should be followed as APA 7th edition or as 
+appropriate to subject of research but should be same throughout the 
+subject. 
+The reference can be cited either narratively (author's name as part of the 
+sentence) or parenthetically (author's name in parenthesis after the 
+sentence). 
+The typical style of writing references and citations in APA format is as 
+follows: 
+ 
+
+
+=== PAGE 2 ===
+                                                                                    Research Regulation, 2025  
+                            Institute of Science and Technology, TU                       21 
+ 
+Books 
+a) One Author: 
+[Surname], [Initial uppercase letter of author’s name]. [(Year)]. [Title of 
+the Book]. [Publication, Place]. 
+Kimmerer, R. W. (2021). Gathering Moss: A Natural and Cultural 
+History of Mosses. Penguin Books Limited, London, UK. 
+Citation in the text: (Kimmerer, 2021) or Kimmerer (2021) blends 
+with ……. 
+b) Two Authors: 
+Michaels, P. J., & Balling, R. C. (2000). The satanic gases: Clearing the 
+air about global warming. Washington, DC: Cato Institute. 
+Citation in the text: (Michaels & Balling, 2000) or Michaels and Balling 
+(2000) stated that… 
+c) Two editors (instead of authors): 
+Burley. J., and Harris, J. (Eds.). (2002). A companion to genethics: 
+philosophy and the genetic revolution. Blackwell. 
+Citation in the text: (Burley & Harris, 2002) or Burley and Harris (2002) 
+studied the multifaceted …… 
+d) Multiple Authors: 
+Pretsch, E., Bunhlmann, P., and Badertscher, M. (2009). Structure 
+Determination of Organic Compounds – Tables of Spectral Data (4th 
+ed.). Springer-Verlag GmbH, Heidelberg, Berlin, Germany. 
+Citation in the text: (Pretsch, et al., 2009) or Pretsch, et al. (2009) 
+explained ……. 
+Papp, S., Weidinger, W., Munro, K., Ortner, B., Cadonna, A., Langs, G., 
+Licandro, R., … , Zauner, G. (2022). The Handbook of Data Science 
+and AI: Generate Value from Data with Machine Learning and Data 
+Analytics. Hanser Publications. 
+Citation in the text: … (Papp, et al., 2022) or Papp et al. (2022) … 
+e) e-book: 
+Zou, X. and Zhu, G. (2019). Carbon-based membranes: In Microporous 
+materials for separation membranes.   
+
+
+=== PAGE 3 ===
+Master’s Program                                                                                                          
+22                                Institute of Science and Technology, TU 
+ 
+ 
+https://onlinelibrary.wiley.com/doi/book/10.1002/9783527343997. 
+Citation in the text: ... (Zou & Zhu, 2019) or Zou and Zhu (2019) 
+examined the use of … 
+Journal Articles: 
+a) Single Author: 
+Corey, E. J. (2002). Catalytic enantioselective Diels-Alder reactions: 
+Methods, mechanistics fundamentals, pathways, and applications. 
+Angewandte Chemie International Edition, 15(10), 1650-1667. 
+Citation in the text: (Corey, 2002) or Corey (2002) pointed out that ……. 
+b) Two Authors: 
+Hoover, D. L., & Smith, W. K. (2025). The growing threat of multiyear 
+droughts. Science, 387(6731), 246-247. DOI: 10.1126/science.adu7419 
+Citation in the text: (Dahal & Adhikari, 2012) or Dahal and Adhikari 
+(2012) studied the diffusion of …… 
+c) Multiple Authors: 
+Bhattarai, D. P., Aryal, S., Shrestha, K. R., Mishra, P. K., Shrestha, T., Homagai, 
+P. L., Oli, H. B., & Shrestha, R. L. (2025). Study of the electrochemical 
+performance of Zanthoxylum armatum seed-derived potassium hydroxide-
+assisted activated carbon as a negatrode material for supercapacitor 
+applications. 
+Materials 
+Advances, 
+6, 
+1635 
+– 
+1646. 
+https://doi.org/10.1039/D4MA00980K 
+Citation in the text: (Bhattarai et al., 2025) or Bhattarai, et al. (2025) 
+reported ……. 
+Ramirez-Ortiz, G., Valencia-Méndez, O., Hernández, L., González-
+Mendoza, T., & López Pérez, A. (2025). Conservation of fish diversity 
+in protected sites and adjacent fishing areas of the Southern Mexican 
+Pacific Ocean. PLoS One 20(6): e0324155. https://doi.org/10.1371/ 
+journal.pone.0324155 
+Citation in the text: ((Ramirez-Ortiz et al., 2025) or Ramirez-Ortiz, et al. 
+(2025) reported ……. 
+d) Journal article with the same author and publication year: 
+
+
+=== PAGE 4 ===
+                                                                                    Research Regulation, 2025  
+                            Institute of Science and Technology, TU                       23 
+ 
+Bednarik, R. G. (2003a). A figurine from the African Acheulian. Current 
+Anthropology, 44(3), 405-413. 
+Bednarik, R. G. (2003b). Seafaring in the Pleistocene. Cambridge 
+Archaeological Journal, 13(1), 41-66. 
+e) e-Journal  
+Im, M. S., Khovanov, M., & Ostrik, V. (2025).  Universal construction in 
+monoidal and non-monoidal settings, the Brauer envelope, and 
+pseudocharacters. Theory and Applications of Categories, 44(2), 15 – 
+83.  
+http://www.tac.mta.ca/tac/volumes/44/2/44-02.pdf 
+Citation in the text: (Im et al., 2020) or Im et al. (2012) … 
+Ph.D. / Master’s Thesis 
+Chaudhary, D. K. (2023). Study on Electrical and optical properties of 
+Zinc oxide semiconductor for gas sensor application (Doctoral 
+thesis). Institute of Science and Technology, Tribhuvan University, 
+Kathmandu, Nepal. 
+Acharya, K. (2019). Temporal pattern of litter decomposition and 
+nutrient dynamics of different ecosystems on the southern slope of 
+Shivapuri-Nagarjun National Park (M. Sc. Thesis) Central 
+Department of Botany, Institute of Science and Technology, 
+Tribhuvan University, Kathmandu, Nepal. 
+Conference proceedings 
+Bonacin, R., Nabuca, O. F., & Pierozzi, I. (2014). Modeling the impacts 
+of agriculture on water resources: Semantic interoperability issues. 
+In S. M. Reddy (Ed.), Proceedings of the 23rd IEEE International 
+WETICE Conference (June 23–25, 2014, Parma) (pp. 447–452). 
+CPS. https://doi.org/10.1109/WETICE.2014.17 
+Publication in the web  
+World Health Organization (WHO). (2021, June 15). Laboratory 
+biosafety guidance related to coronavirus disease (COVID-19): 
+
+
+=== PAGE 5 ===
+Master’s Program                                                                                                          
+24                                Institute of Science and Technology, TU 
+ 
+ 
+Interim 
+guidance. 
+World 
+Health 
+Organization. 
+https://www.who.int/publications/i/item/WHO-WPEGIH-2021.1 
+11. Appendices 
+     An appendix should include materials that supplement the main text of    
+     the thesis. It may include: 
+ Supplementary original data, summary tabulations 
+ Questionnaires 
+ Ethical approval letter and consent forms 
+ Illustrative materials  
+ Detailed derivation of equations  
+ Other relevant information  
+All appendices must be numbered consecutively (Appendix A, 
+Appendix B...or Appendix 1, Appendix 2…). 
+The number Appendix A (or B, C) and the title of the Appendix must 
+be bold and centered.  
+All appendices must be cited in the text (as for Tables and Figures). 
+ 
+12. Effectiveness of the Guideline 
+      This guideline will be effective from 5th Manshir, 2082 onwards. 
+      
+ 
+
+
+=== PAGE 6 ===
+                                                                                    Research Regulation, 2025  
+                            Institute of Science and Technology, TU                       25 
+ 
+Appendix 
+  
+Appendix A: Format of cover page of thesis proposal 
+[Title of the Thesis Proposal] 
+Comment: Capitalize each word except article and preposition, Bold, Font 
+size 18, Center aligned 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+A Thesis proposal submitted to the 
+Department of … [Name of the Department] / 
+                               [Name of the campus] / Campus 
+for approval 
+Comment: Capitalize each word except article and preposition, Font size 
+14, Bold, Center aligned 
+ 
+ 
+By 
+Comment: Center, not bold, Font size 14 
+[Full Name of the Student] 
+Symbol No…. 
+T.U. Registration No….. 
+Comment: Center, Capitalize each word, Bold, Font size 14 
+[Month, YYYY] 
+Comment: Center, All caps, Bold, Font size 14 
+ 
+   [Logo of T.U.] 
+(Comment: Center, size 2"2") 
+
+
+=== PAGE 7 ===
+Master’s Program                                                                                                          
+26                                Institute of Science and Technology, TU 
+ 
+ 
+Appendix B: Format of title and cover pages sample of thesis 
+[Title of the Thesis] 
+Comment: Times New Roman, Capitalize each word, Bold, Center aligned, 
+Font size 18 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+A thesis submitted for the partial fulfillment of the requirements for 
+the Master of Science (M. Sc.) Degree in … [Name of subject]… 
+Comment: Times New Roman, Capitalize each word, Bold, Center aligned, 
+Font size 14 
+Submitted to the 
+the Central Department of … [Name of the Department] /                          
+/ [Name of the campus]… 
+Institute of Science and Technology 
+Tribhuvan University 
+NEPAL 
+Comment: Times New Roman, Capitalize each word, Bold, Center aligned, 
+Font size 14 
+By 
+Comment: Times New Roman, Capitalize each word, Bold, Center aligned, 
+Font size 14 
+[Full Name of the Student] 
+Exam Roll No.…, T.U. Registration No… 
+Comment: Times New Roman, Capitalize each word, Bold, Center aligned, 
+Font size 14 
+[Month, YYYY] 
+Comment: Times New Roman, Upper case, Bold, Center aligned, Font size 
+14 
+[Logo of T.U.] 
+(Comment: Center, 
+size 2"2") 
+
+
+=== PAGE 8 ===
+                                                                                    Research Regulation, 2025  
+                            Institute of Science and Technology, TU                       27 
+ 
+Appendix C: Declaration from the student  
+ 
+Declaration 
+Comment: Times New Roman, Capitalize each word, Bold, Center aligned, 
+Font size 16 
+This thesis entitled “… [Title, bold faced letter] …” which is being 
+submitted to the Department of …[Name of the department]…, …[Name of 
+the Campus]…, Institute of Science and Technology (IoST), Tribhuvan 
+University, Nepal for the partial fulfillment of the requirement to the Master 
+of Science Degree in …[Name of subject]… has been carried out by me 
+under the supervision of …[Name of supervisor, bold faced letter]… and 
+co-supervision of …[Name of co-supervisor, if any]… at Central  
+Department of … [Name of the department]…, … [Name of the 
+Campus/Institute]… Campus. This work is original and has not been 
+submitted earlier in part or full in this or any other form to any other 
+institution for the award of any degree. 
+Comment: Times New Roman, Font size 12, Justified, Line spacing 1.5 
+ 
+[Signature] 
+---------------- 
+[Name of the student] 
+Comment: Times New Roman, Bold faced, Left aligned, Font size 12, 
+Line spacing 1.5 
+ 
+Date: [Month] DD, YYYY 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 9 ===
+Master’s Program                                                                                                          
+28                                Institute of Science and Technology, TU 
+ 
+ 
+Appendix D: Recommendation from the supervisor  
+Recommendation  
+Comment: Times New Roman, Capitalize each word, Bold, Center aligned, 
+Font size 16 
+This is to recommend that …[Name of student, bold] has carried out the 
+thesis entitled “…[Title, bold]…” For the partial fulfillment of the 
+requirement of M. Sc. In …[Subject]… under my/our supervision.  To 
+my/our knowledge, this work has not been submitted to any other institution 
+for any academic degree. He / She has fulfilled all the requirements of 
+the  …[Name of the department]…, [Name of the campus}…, Institute of 
+Science and Technology (IoST), Tribhuvan University, Nepal for the 
+submission of the thesis for the Master of Science degree in …[Name of 
+subject]…  
+Comment: Times New Roman, Font size 12, Justified, Line spacing 1.5 
+ 
+--------------------- 
+Supervisor (Comment: Times New Roman, Left aligned, Bold, Font size 
+12) 
+[Name of Supervisor] 
+[….Designation ….] 
+[Department], [Campus/Institute] 
+Tribhuvan University, Kathmandu Nepal 
+Comment: Times New Roman, Left aligned, Font size 12 
+ 
+--------------------- 
+Co-Supervisor (if any) 
+[Name of Co-Supervisor]  
+Comment: Times New Roman, Bold, Left aligned, Font size 12 
+[….Designation ….] 
+[Department], [Campus/Institute] 
+Tribhuvan University, Kathmandu Nepal 
+Comment: Times New Roman, Left aligned, Font size 12 
+[Month DD, YYYY] 
+Comment: Times New Roman, Bold, Center aligned, Font size 12 
+
+
+=== PAGE 10 ===
+                                                                                    Research Regulation, 2025  
+                            Institute of Science and Technology, TU                       29 
+ 
+Appendix E: Letter of approval  
+(This should be in Department / Campus letter head) 
+Letter of Approval 
+Comment: Times New Roman, Capitalize each word, Bold, Center aligned, 
+Font size 16 
+ 
+The thesis work entitled …[Title of the Thesis in Boldface Letters]… 
+submitted at the …[Name of Department]…, ...[Name of Campus]…, 
+Institute of Science and Technology, Tribhuvan University by [….Name of 
+Student in Boldface Letters] has been accepted for the partial fulfillment 
+of M. Sc. in …………………. 
+(Comment: Time New Roman, Font size: 12, Justified, Line space: 1.5) 
+ 
+--------------------- 
+------------------ 
+External Examiner                                                        Internal Examiner  
+[Name of External Examiner]                      [Name of Internal Examiner] 
+Designation 
+Designation 
+Comment: Times New Roman, Bold, Font size 12 
+[Department] 
+[Department] 
+[Affiliated Campus/Institute]                                             [Campus/Institute] 
+Kathmandu, Nepal                                                        Tribhuvan University 
+                                                                                          Kathmandu, Nepal 
+Comment: Times New Roman, Font size 12 
+ 
+--------------------- 
+------------------ 
+Supervisor                                                                  Co-Supervisor (if any) 
+[Name of Supervisor]                                           [Name of Co-Supervisor]  
+Designation 
+Designation 
+[Department] 
+[Department] 
+[Name of Campus/Institute]                                             [Affiliated Institute] 
+Tribhuvan University                                                      Tribhuvan University  
+Kathmandu, Nepal                                                           Kathmandu, Nepal
+ 
+ 
+
+
+=== PAGE 11 ===
+Master’s Program                                                                                                          
+30                                Institute of Science and Technology, TU 
+ 
+ 
+--------------------- 
+------------------ 
+Coordinator (In case of Campus)                        Head of the Department 
+[Name of the Coordinator]                       [Name of Head of  Department] 
+[Department]                                                                   [Department] 
+[Campus/Institute]                                                       [Campus/Institute] 
+Tribhuvan University                                                   Kathmandu, Nepal 
+Kathmandu, Nepal 
+ 
+ 
+ 
+ 
+[Month, YYYY] 
+
+
+=== PAGE 12 ===
+                                                                                    Research Regulation, 2025  
+                            Institute of Science and Technology, TU                       31 
+ 
+Appendix F: Acknowledgements 
+ 
+Acknowledgements 
+Comment: Times New Roman, Capitalize each word, Bold, Center aligned, 
+Font size 16.  
+ 
+Text: Not more than 1 page 
+Comment: Times New Roman, Justified, Font size 12, line spacing within 
+a paragraph 1.5, spacing between two paragraph 2.0 
+ 
+ 
+ 
+-------------------------------- 
+(Name of student) 
+ 
+[Month, YYYY] 
+ 
+ 
+ 
+
+
+=== PAGE 13 ===
+Master’s Program                                                                                                          
+32                                Institute of Science and Technology, TU 
+ 
+ 
+Appendix G: Abstract 
+Abstract 
+Comment: Times New Roman, Capitalize each word, Bold, Center aligned, 
+Font size 16 
+ 
+Text: Not more than 350 words 
+Comment: Times New, Roman, Font size 12, Justified, Line spacing 1.5) 
+ 
+Keywords: (Five Keywords], ..., ..., ..., ...  
+Comment: Times New Roman, Font size 10, Italics. 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 14 ===
+                                                                                    Research Regulation, 2025  
+                            Institute of Science and Technology, TU                       33 
+ 
+Appendix H: Abstract in Nepali 
+ 
+शोधसार 
+Comment: Unicode, Bold, Center aligned, Font size 18 
+ 
+मुल पाठ: १५० शब्द भित्र समेभिनेगरी लेख्नुपने, मौभलक लेखन हुनुपने, गुगल वा एआईबाि उल्था गरेको हुनु हुँदैन 
+Comment: Unicode, Font size 12, Justified, Line spacing 1.5 
+ 
+शब्द कुञ्जिका :  प ाँच वट  मुख्य शब्दहरू (प्राभवभिक शब्दहरू उल्था गनु जरुरी छैन)  
+Comment: Unicode, Font size 10, Italics. 
+ 
+Note:  
+The content of  शोधसार should be as per the 
+guideline provided by Research Committee of IoST, 
+TU. The contents of the guideline is as follows. 
+ 
+नेपाली भाषामा सार लेख्ने सम्बन्धमा 
+ 
+नेपाली भाषाको व्याकरण प्रयोग गने । 
+ 
+नेपाली बृहत् शब्दकोश (प्रकाशक: नेपाल प्रज्ञा प्रततष्ठान, नेपाल) मा 
+रहेका प्राविधधक शब्दहरू मात्र प्रयोग गने । अन्य अङ्ग्रेजी शब्दहरू 
+अङ्ग्रेजी भाषामै लेख्न सककने । 
+ 
+कुनै पतन Language Translator Tool (Google, Chat GPT etc.) प्रयोग 
+गरी अनुिाद गनन नहुने । 
+ 
+Dissertation /Thesis मा रहेको Abstract को शब्द अनुिाद नगरी भाि 
+अनुिाद गने । 
+ 
+सार (Abstract) लाई नेपाली युतनकोडमा (कालीमाटी फन्टमा) १२ 
+साइजमा टाइप गरेको हुनुपने । 
+ 
+ 
+
+
+=== PAGE 15 ===
+Master’s Program                                                                                                          
+34                                Institute of Science and Technology, TU 
+ 
+ 
+Appendix I: Abbreviations and acronyms 
+ 
+List of Abbreviations and Acronyms 
+Comment: Times New Roman, Capitalize each word, Bold, Center aligned, 
+Font size 16 
+ 
+Write your abbreviations and acronyms here. 
+Comment: Times New Roman, Font size 12, line spacing 1.5, entries 
+should be alphabetical order 
+ 
+Examples: 
+ 
+FTIR 
+: Fourier Transforms Infrared Spectroscopy 
+GC-MS 
+: Gas Chromatography-Mass Spectroscopy 
+LPG 
+: Liquefied Petroleum Gases 
+SEM 
+: Scanning Electron Microscopy] 
+ 
+ 
+ 
+
+
+=== PAGE 16 ===
+                                                                                    Research Regulation, 2025  
+                            Institute of Science and Technology, TU                       35 
+ 
+Appendix J: Symbols 
+ 
+List of Symbols (if any) 
+Comment: Times New Roman, Capitalize each word, Bold, Center aligned, 
+Font size 16 
+ 
+Write the symbols use in the body text here. 
+Comment: Times New Roman, Font size 12, line spacing 1.5, entries 
+should be alphabetical order 
+ 
+Examples: 
+ 
+γ 
+Activity Coefficient 
+µ 
+Dipole moment 
+ε 
+Relative Dielectric Constant] 
+ 
+ 
+ 
+
+
+=== PAGE 17 ===
+Master’s Program                                                                                                          
+36                                Institute of Science and Technology, TU 
+ 
+ 
+Appendix K: Tables 
+ 
+List of Tables 
+Comment: Times New Roman, Capitalize each word, Bold, Center 
+aligned, Font size 16 
+ 
+ 
+ 
+Page No. 
+ 
+ 
+Table 1: [Table caption] 
+Page no.  
+Table 2: [Table caption] 
+Page no. 
+ 
+ 
+Comment: Times New Roman, Only Table no. in Bold, Table caption not 
+bold, Justified, Font size 12, line spacing 1.5 
+ 
+ 
+
+
+=== PAGE 18 ===
+                                                                                    Research Regulation, 2025  
+                            Institute of Science and Technology, TU                       37 
+ 
+Appendix L: Figures 
+ 
+List of Figures 
+Comment: Times New Roman, Capitalize each word, Bold, Center aligned, 
+Font size 16 
+ 
+ 
+ 
+Page No. 
+ 
+ 
+Figure 1: [Figure caption] 
+Page no.  
+Figure 2: [Figure caption] 
+Page no. 
+ 
+ 
+Comment: Times New Roman, Only Figure no. in Bold, Figure caption not 
+bold, Justified, Font size 12, line spacing 1.5 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 19 ===
+Master’s Program                                                                                                          
+38                                Institute of Science and Technology, TU 
+ 
+ 
+Appendix M: Table of contents 
+ 
+Table of Contents 
+Comment: Times New Roman, Capitalize each word, Bold, Center aligned, 
+Font size 16 
+                                                                                                         Page No. 
+Inner Cover Page 
+i 
+Declaration 
+ii 
+Recommendation  
+iii 
+Letter of Approval  
+iv 
+Acknowledgements 
+v 
+Abstract                                                                                                                             vi 
+ शोिसार 
+vii 
+Abbreviations and Acronyms 
+viii 
+List of Symbols 
+ix 
+List of Tables 
+x 
+List of Figures 
+xi 
+Table of Contents                                                                                        xii 
+Chapter 1 (Times New Roman, Capitalize each, bold, Font size 14, line 
+spacing 2) 
+1. Introduction (Times New Roman, Capitalize each, bold, Font size 14, 
+line spacing 2) 
+1 
+1.1. General introduction / Background (Times New Roman, sentence 
+case,   size 12, spacing 1.5) 
+1 
+1.2. Objectives 
+page no. 
+1.2.1 General objective 
+page no. 
+1.2.2 Specific objectives                                                page no.  
+1.3. Rationale 
+page no. 
+1.4. Significance                                                                        page no. 
+1.5. Limitations                                                                         page no.      
+1.6. [Subheading] (if any)                                                        page no.  
+ 
+
+
+=== PAGE 20 ===
+                                                                                    Research Regulation, 2025  
+                            Institute of Science and Technology, TU                       39 
+ 
+Chapter 2  
+2. Literature Review 
+page no. 
+4.1. Subheading (if any) 
+page no. 
+4.2. Subheading (if any)  etc… 
+page no. 
+Chapter 3  
+3. Materials and Methods 
+page no. 
+3.1. Materials 
+page no. 
+3.1.1. Subheading, (if any) 
+page no. 
+3.1.2. Subheading, (if any),  etc…. 
+page no. 
+3.2. Methods   
+page no. 
+3.2.1. Subheading, (if any) 
+page no. 
+3.2.2. Subheading, (if any) 
+page no. 
+Chapter 4  
+4. Results and Discussion 
+page no. 
+4.1. Subheading, (if any) 
+page no. 
+4.2. Subheading, (if any), etc. … 
+page no. 
+Chapter 5  
+5. Conclusion and Recommendations 
+page no. 
+6.1. Conclusions 
+page no. 
+6.2. Recommendations for Further Work/Future Prospects 
+page no. 
+References (Times New Roman, Capitalize each, bold, Font size 14, line 
+spacing 2) 
+page no. 
+Appendix (Times New Roman, Capitalize each, bold, Font size 14, line 
+spacing 2) 
+ 
+ 
+ 
+
+
+=== PAGE 21 ===
+Master’s Program                                                                                                          
+40                                Institute of Science and Technology, TU 
+ 
+ 
+Appendix N: Mark ledger of the thesis student 
+ 
+Date: ……/…/… 
+To, 
+The Office of Dean,  
+M. Sc. Exam Section, 
+Tribhuvan University, 
+Kathmandu, Nepal. 
+ 
+Subject: Marks of M. Sc. Thesis  
+Sir / Madam, 
+Marks obtained by Mr. / Ms. ………………..……….. (Batch ……..) for the 
+evaluation 
+of 
+Thesiss 
+conducted 
+at 
+the 
+Department 
+of ……………., ……………………. Campus for the partial fulfillment of 
+M. Sc. in ……… has been forwarded. The details are as follows: 
+Year/Semester:
+ 
+Course Code:  
+Full Marks:  
+Pass Marks:  
+Title of Thesis:  
+ 
+Date of submission: …………………….. (BS)/ …………………. (AD) 
+Date of viva-voce: ……………………… (BS)/ ………………….. (AD) 
+S.N. 
+Symbol 
+No. 
+T.U. Regd. 
+No. 
+Name of Student 
+GPA 
+Grade 
+1. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Plagiarism Report Summary: Similarity Index … …..percent using 
+Thenticate Software. 
+(Original Plagiarism Report obtained from iThenticate is attached 
+herewith) 
+
+
+=== PAGE 22 ===
+                                                                                    Research Regulation, 2025  
+                            Institute of Science and Technology, TU                       41 
+ 
+Name and Signature of the members of the Evaluation Committee/Board: 
+ 
+External Examiner : 
+… Name … 
+… Signature … 
+Internal Examiner : 
+… Name … 
+… Signature … 
+Supervisor: 
+… Name … 
+… Signature … 
+Head of the Department/Coordinator : 
+… Name … 
+… Signature … 
+ 
+……….………………. 
+[Name] 
+Head of the Department/Coordinator 
+…[Name of Campus]…  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+                                 
+
+

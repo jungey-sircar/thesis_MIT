@@ -1,0 +1,32 @@
+\contentsline {section}{\numberline {1}End-to-End Methodology Timeline \& Key Concepts}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Why OpenCV and How it Works}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Why Float16 and SDPA in V-JEPA~2}{3}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}What is 4-bit NF4 Quantization in Qwen2.5-VL?}{4}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}What are Frozen Features and When Does Freezing Occur?}{5}{subsection.1.4}%
+\contentsline {section}{\numberline {2}Feature Preprocessing: StandardScaler}{6}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Why Feature Preprocessing is Mandatory}{6}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Mathematical Formulation}{6}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Data Leakage: Why Fit on Train Split Only?}{6}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Linear Algebra Foundations: Eigenvectors and Eigenvalues}{8}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Matrix Multiplication as Geometric Transformation}{8}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}The Fundamental Eigen-Equation}{8}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}How to Find Eigenvalues: The Characteristic Equation}{9}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Why the Covariance Matrix Guarantees Perfect Properties}{9}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Principal Component Analysis (PCA) Step-by-Step}{11}{section.4}%
+\contentsline {subsection}{\numberline {4.1}The Core Optimization Goal of PCA}{11}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}The Complete 5-Step PCA Algorithm}{12}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}The 95\% Variance Retention Rule (Eq. 3.20)}{12}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Dimensionality Reduction Results in the Thesis}{13}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Step-by-Step Worked Numerical Walkthrough}{14}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Initial Data Matrix}{14}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Step 1: Compute Means and Standard Deviations}{14}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Step 2: Construct Standardized Matrix $\tilde {\mathbf {Z}}$}{14}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Step 3: Compute the Covariance Matrix $\mathbf {C}$}{15}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Step 4: Solve the Characteristic Equation for Eigenvalues}{15}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.6}Step 5: Solve for the Eigenvectors}{16}{subsection.5.6}%
+\contentsline {subsection}{\numberline {5.7}Step 6: Apply 95\% Cutoff and Project Data}{16}{subsection.5.7}%
+\contentsline {section}{\numberline {6}Architectural Rationale: Why Baseline Classifiers Use PCA but HAF-STD Net Bypasses It}{18}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Why Baseline Classifiers Strictly Require PCA}{18}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Why HAF-STD Net Deliberately Bypasses PCA}{19}{subsection.6.2}%
+\contentsline {section}{\numberline {7}Quick Reference \& Examination Defense Cheat Sheet}{20}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Top 5 Defense Questions \& Bulletproof Answers}{20}{subsection.7.1}%
